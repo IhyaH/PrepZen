@@ -82,6 +82,7 @@
             -khtml-user-drag: none;
             -moz-user-drag: none;
             -o-user-drag: none;
+            user-drag: none;
             pointer-events: none;
         }
         
@@ -160,19 +161,15 @@
                 <div id="question-type-selector" class="flex justify-center flex-wrap gap-2 sm:gap-4 mb-6">
                     <button data-type="单选题" class="type-btn bg-green-100 text-green-700 font-semibold py-2 px-4 rounded-full hover:bg-green-200 transition-all">
                         <i class="fas fa-dot-circle mr-1"></i>单选题
-                        <span class="ml-1 text-xs bg-white bg-opacity-30 rounded-full px-2 py-1" id="single-count">0</span>
                     </button>
                     <button data-type="多选题" class="type-btn bg-blue-100 text-blue-700 font-semibold py-2 px-4 rounded-full hover:bg-blue-200 transition-all">
                         <i class="fas fa-check-square mr-1"></i>多选题
-                        <span class="ml-1 text-xs bg-white bg-opacity-30 rounded-full px-2 py-1" id="multiple-count">0</span>
                     </button>
                     <button data-type="判断题" class="type-btn bg-purple-100 text-purple-700 font-semibold py-2 px-4 rounded-full hover:bg-purple-200 transition-all">
                         <i class="fas fa-question-circle mr-1"></i>判断题
-                        <span class="ml-1 text-xs bg-white bg-opacity-30 rounded-full px-2 py-1" id="judgement-count">0</span>
                     </button>
                     <button data-type="all" class="type-btn active-type-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full hover:bg-gray-300 transition-all">
                         <i class="fas fa-list mr-1"></i>全部题型
-                        <span class="ml-1 text-xs bg-white bg-opacity-30 rounded-full px-2 py-1" id="all-count">0</span>
                     </button>
                 </div>
             </div>
@@ -614,19 +611,11 @@
                 if (bankInfo.hasPassword) {
                     passwordHint.textContent = bankInfo.passwordHint;
                     showPasswordSection();
-                } else {
-                    // 如果不需要密码，则直接更新题型数量
-                    updateQuestionTypeCounts();
                 }
                 
             } catch (error) {
                 console.error('Failed to initialize bank info:', error);
                 alert('加载题库信息失败，请刷新页面重试');
-                // 更新题型数量为0
-                document.getElementById('single-count').textContent = '0';
-                document.getElementById('multiple-count').textContent = '0';
-                document.getElementById('judgement-count').textContent = '0';
-                document.getElementById('all-count').textContent = '0';
             }
         }
         
@@ -667,7 +656,6 @@
                 // 验证成功
                 currentBankPassword = password;
                 hidePasswordSection();
-                updateQuestionTypeCounts();
                 
             } catch (error) {
                 if (error.message === 'INVALID_PASSWORD') {
@@ -696,39 +684,6 @@
         
         // 页面加载时初始化
         initializeBankInfo();
-        
-        // 更新题型数量显示
-        async function updateQuestionTypeCounts() {
-            try {
-                const bankToLoad = selectedQuestionBank;
-                // 使用 getQuestionBankInfo 获取题目总数，而不是加载所有题目
-                const bankInfo = await questionLoader.getQuestionBankInfo(bankToLoad);
-                
-                // 为了获取每种题型的数量，仍然需要加载完整的题目数据
-                // 但这次是在密码验证成功后，或者题库不需要密码的情况下
-                // 这里的逻辑需要调整，确保在未验证密码时也能获取到题型数量
-                // 暂时先使用 loadQuestions，如果 loadQuestions 失败，则显示0
-                const data = await questionLoader.loadQuestions(bankToLoad, currentBankPassword);
-                const questions = data.questions;
-                
-                const singleCount = questions.filter(q => q.type === '单选题').length;
-                const multipleCount = questions.filter(q => q.type === '多选题').length;
-                const judgementCount = questions.filter(q => q.type === '判断题').length;
-                const allCount = questions.length;
-                
-                document.getElementById('single-count').textContent = singleCount;
-                document.getElementById('multiple-count').textContent = multipleCount;
-                document.getElementById('judgement-count').textContent = judgementCount;
-                document.getElementById('all-count').textContent = allCount;
-            } catch (error) {
-                console.error('更新题型数量失败:', error);
-                // 显示默认值0，避免页面崩溃
-                document.getElementById('single-count').textContent = '0';
-                document.getElementById('multiple-count').textContent = '0';
-                document.getElementById('judgement-count').textContent = '0';
-                document.getElementById('all-count').textContent = '0';
-            }
-        }
         
         questionCountSelector.addEventListener('click', (e) => {
             if (e.target.classList.contains('count-btn')) {
@@ -809,7 +764,6 @@
             } finally {
                 startBtn.disabled = false;
                 startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>开始答题';
-                updateQuestionTypeCounts();
             }
         });
         
@@ -833,8 +787,7 @@
             initQuiz([...wrongAnswers], true);
         });
         
-        // 源代码保护措施 - 暂时禁用以进行调试
-        /*
+        // 源代码保护措施
         (function() {
             'use strict';
             
@@ -847,7 +800,7 @@
             // 禁用常用开发者工具快捷键
             document.addEventListener('keydown', function(e) {
                 // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
-                if (e.key === 'F12' ||
+                if (e.key === 'F12' || 
                     (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
                     (e.ctrlKey && e.key === 'u')) {
                     e.preventDefault();
@@ -986,10 +939,9 @@
             }, 1000);
             
         })();
-        */
         
         // Set current year in footer
-        // document.getElementById('current-year').textContent = new Date().getFullYear(); // 暂时注释，避免TypeError
+        document.getElementById('current-year').textContent = new Date().getFullYear();
 
     </script>
 
