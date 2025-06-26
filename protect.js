@@ -46,20 +46,7 @@
                         if (!document.getElementById('debugger-warning')) {
                             const warning = document.createElement('div');
                             warning.id = 'debugger-warning';
-                            warning.style.cssText = `
-                                position: fixed;
-                                top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -50%);
-                                background: #ff4444;
-                                color: white;
-                                padding: 20px;
-                                border-radius: 8px;
-                                z-index: 1000000;
-                                font-size: 16px;
-                                text-align: center;
-                                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                            `;
+                            warning.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000000; font-size: 16px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);';
                             warning.innerHTML = '检测到调试器，请关闭后继续';
                             document.body.appendChild(warning);
                             
@@ -102,21 +89,7 @@
                             if (!document.getElementById('devtools-warning')) {
                                 const warning = document.createElement('div');
                                 warning.id = 'devtools-warning';
-                                warning.style.cssText = `
-                                    position: fixed;
-                                    top: 0;
-                                    left: 0;
-                                    width: 100%;
-                                    height: 100%;
-                                    background: rgba(0,0,0,0.9);
-                                    color: white;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    font-size: 24px;
-                                    z-index: 999999;
-                                    text-align: center;
-                                `;
+                                warning.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; z-index: 999999; text-align: center;';
                                 warning.innerHTML = '<div>请关闭开发者工具后刷新页面<br><small style="font-size: 16px; margin-top: 10px; display: block;">Press F5 to refresh</small></div>';
                                 document.body.appendChild(warning);
                             }
