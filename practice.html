@@ -95,7 +95,8 @@
             -khtml-user-drag: none;
             -moz-user-drag: none;
             -o-user-drag: none;
-            user-drag: none;
+            /* `user-drag` 是非标准属性，已被移除，使用 `-webkit-user-drag` 替代 */
+            -webkit-user-drag: none;
             pointer-events: none;
         }
         
@@ -736,11 +737,14 @@
                 // 根据选择的题库动态加载题目数据
                 const data = await questionLoader.loadQuestions(selectedQuestionBank, currentBankPassword);
                 questionsData = data.questions;
-                 
-                 if (questionsData.length === 0) {
-                     alert('没有可用的题目！');
-                     return;
-                 }
+                
+                // 更新题型数量显示
+                updateQuestionTypeCounts(questionsData);
+                
+                if (questionsData.length === 0) {
+                    alert('没有可用的题目！');
+                    return;
+                }
                 
                 let questionSet;
                 let filteredQuestions = [...questionsData];
