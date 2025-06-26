@@ -614,10 +614,10 @@
                 if (bankInfo.hasPassword) {
                     passwordHint.textContent = bankInfo.passwordHint;
                     showPasswordSection();
+                } else {
+                    // 如果不需要密码，则直接更新题型数量
+                    updateQuestionTypeCounts();
                 }
-                
-                // 更新题型数量
-                updateQuestionTypeCounts();
                 
             } catch (error) {
                 console.error('Failed to initialize bank info:', error);
@@ -701,7 +701,14 @@
         async function updateQuestionTypeCounts() {
             try {
                 const bankToLoad = selectedQuestionBank;
-                const data = await questionLoader.loadQuestions(bankToLoad);
+                // 使用 getQuestionBankInfo 获取题目总数，而不是加载所有题目
+                const bankInfo = await questionLoader.getQuestionBankInfo(bankToLoad);
+                
+                // 为了获取每种题型的数量，仍然需要加载完整的题目数据
+                // 但这次是在密码验证成功后，或者题库不需要密码的情况下
+                // 这里的逻辑需要调整，确保在未验证密码时也能获取到题型数量
+                // 暂时先使用 loadQuestions，如果 loadQuestions 失败，则显示0
+                const data = await questionLoader.loadQuestions(bankToLoad, currentBankPassword);
                 const questions = data.questions;
                 
                 const singleCount = questions.filter(q => q.type === '单选题').length;
@@ -826,7 +833,8 @@
             initQuiz([...wrongAnswers], true);
         });
         
-        // 源代码保护措施
+        // 源代码保护措施 - 暂时禁用以进行调试
+        /*
         (function() {
             'use strict';
             
@@ -839,7 +847,7 @@
             // 禁用常用开发者工具快捷键
             document.addEventListener('keydown', function(e) {
                 // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
-                if (e.key === 'F12' || 
+                if (e.key === 'F12' ||
                     (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
                     (e.ctrlKey && e.key === 'u')) {
                     e.preventDefault();
@@ -978,9 +986,10 @@
             }, 1000);
             
         })();
+        */
         
         // Set current year in footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        // document.getElementById('current-year').textContent = new Date().getFullYear(); // 暂时注释，避免TypeError
 
     </script>
 

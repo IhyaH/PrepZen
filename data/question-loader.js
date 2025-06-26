@@ -21,30 +21,39 @@ class QuestionLoader {
         }
 
         try {
+            console.log(`Attempting to load questions for subject: ${subject}`);
             const response = await fetch(`./data/${subject}-questions.json`);
             if (!response.ok) {
+                console.error(`HTTP error for ${subject}: status ${response.status}`);
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
             const data = await response.json();
+            console.log(`Successfully fetched data for ${subject}. Data keys: ${Object.keys(data)}`);
             
             // 验证数据格式
             if (!data.questions || !Array.isArray(data.questions)) {
+                console.error(`Invalid question data format for ${subject}: questions array missing or not an array.`);
                 throw new Error('Invalid question data format');
             }
+            console.log(`Questions array length for ${subject}: ${data.questions.length}`);
             
             // 密码验证
             if (data.password) {
                 if (!password) {
+                    console.log(`Password required for ${subject}, but not provided.`);
                     throw new Error('PASSWORD_REQUIRED');
                 }
                 if (password !== data.password) {
+                    console.log(`Invalid password for ${subject}.`);
                     throw new Error('INVALID_PASSWORD');
                 }
+                console.log(`Password verified for ${subject}.`);
             }
             
             // 缓存验证通过的数据
             this.cache.set(cacheKey, data);
+            console.log(`Data cached for ${subject}.`);
             
             return data;
         } catch (error) {
