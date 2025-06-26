@@ -65,8 +65,9 @@
             
             setInterval(detectDebugger, 2000);
             
-            // 检测开发者工具（通过窗口内外尺寸差异）
+            // 改进的开发者工具检测（减少误报）
             let devToolsDetected = false;
+            let initialSizeDiff = null;
             
             function checkDevTools() {
                 try {
@@ -75,14 +76,34 @@
                         return;
                     }
                     
-                    const widthThreshold = 200;
-                    const heightThreshold = 200;
+                    // 检测移动设备，移动设备跳过检测
+                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                                   window.innerWidth <= 768;
                     
-                    // 检测开发者工具是否打开（内外窗口尺寸差异）
+                    if (isMobile) {
+                        return;
+                    }
+                    
                     const heightDiff = window.outerHeight - window.innerHeight;
                     const widthDiff = window.outerWidth - window.innerWidth;
                     
-                    if (heightDiff > heightThreshold || widthDiff > widthThreshold) {
+                    // 首次运行时记录初始差值（浏览器UI造成的正常差值）
+                    if (initialSizeDiff === null) {
+                        initialSizeDiff = {
+                            height: heightDiff,
+                            width: widthDiff
+                        };
+                        return;
+                    }
+                    
+                    // 计算相对于初始状态的变化
+                    const heightChange = Math.abs(heightDiff - initialSizeDiff.height);
+                    const widthChange = Math.abs(widthDiff - initialSizeDiff.width);
+                    
+                    // 更严格的阈值：只有当尺寸变化超过300px时才认为是开发者工具
+                    const threshold = 300;
+                    
+                    if (heightChange > threshold || widthChange > threshold) {
                         if (!devToolsDetected) {
                             devToolsDetected = true;
                             // 显示警告而不是直接清空页面
@@ -107,8 +128,10 @@
                 }
             }
             
-            // 每2秒检测一次，减少频率
-            setInterval(checkDevTools, 2000);
+            // 延迟启动检测，给页面加载时间
+            setTimeout(function() {
+                setInterval(checkDevTools, 3000); // 每3秒检测一次
+            }, 2000);
             
         })();
     `);
