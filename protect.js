@@ -45,19 +45,51 @@
                 }
             }, 1000);
             
-            // 检测窗口大小变化
-            let lastOuterWidth = window.outerWidth;
-            let lastOuterHeight = window.outerHeight;
+            // 检测开发者工具（通过窗口内外尺寸差异）
+            let devToolsDetected = false;
             
-            setInterval(function() {
-                if (Math.abs(window.outerWidth - lastOuterWidth) > threshold ||
-                    Math.abs(window.outerHeight - lastOuterHeight) > threshold) {
-                    // 窗口大小异常变化
-                    document.body.innerHTML = '';
+            function checkDevTools() {
+                const widthThreshold = 160;
+                const heightThreshold = 160;
+                
+                // 检测开发者工具是否打开（内外窗口尺寸差异）
+                if (window.outerHeight - window.innerHeight > heightThreshold ||
+                    window.outerWidth - window.innerWidth > widthThreshold) {
+                    if (!devToolsDetected) {
+                        devToolsDetected = true;
+                        // 显示警告而不是直接清空页面
+                        const warning = document.createElement('div');
+                        warning.id = 'devtools-warning';
+                        warning.style.cssText = `
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(0,0,0,0.9);
+                            color: white;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 24px;
+                            z-index: 999999;
+                            text-align: center;
+                        `;
+                        warning.innerHTML = '<div>请关闭开发者工具后刷新页面<br><small style="font-size: 16px; margin-top: 10px; display: block;">Press F5 to refresh</small></div>';
+                        document.body.appendChild(warning);
+                    }
+                } else {
+                    // 开发者工具已关闭，移除警告
+                    const warning = document.getElementById('devtools-warning');
+                    if (warning) {
+                        warning.remove();
+                        devToolsDetected = false;
+                    }
                 }
-                lastOuterWidth = window.outerWidth;
-                lastOuterHeight = window.outerHeight;
-            }, 500);
+            }
+            
+            // 每2秒检测一次，减少频率
+            setInterval(checkDevTools, 2000);
             
         })();
     `);

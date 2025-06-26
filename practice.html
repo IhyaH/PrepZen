@@ -663,33 +663,93 @@
                 }
             });
             
-            // 检测开发者工具（答题页面更严格）
+            // 检测开发者工具（答题页面优化版本）
             let devtools = {open: false, orientation: null};
-            const threshold = 160;
+            const widthThreshold = 250;  // 增加阈值，减少误判
+            const heightThreshold = 250;
             let warningCount = 0;
+            let lastWarningTime = 0;
             
-            setInterval(function() {
-                if (window.outerHeight - window.innerHeight > threshold || 
-                    window.outerWidth - window.innerWidth > threshold) {
+            function checkDevToolsInPractice() {
+                const heightDiff = window.outerHeight - window.innerHeight;
+                const widthDiff = window.outerWidth - window.innerWidth;
+                const currentTime = Date.now();
+                
+                // 更严格的检测条件，避免误判
+                if (heightDiff > heightThreshold || widthDiff > widthThreshold) {
                     if (!devtools.open) {
                         devtools.open = true;
-                        warningCount++;
                         
-                        if (warningCount >= 3) {
-                            // 多次尝试打开开发者工具，清空页面
-                            document.body.innerHTML = '<div style="text-align:center;padding:50px;font-size:24px;color:red;">检测到异常操作，页面已被保护</div>';
-                        } else {
-                            document.body.style.display = 'none';
-                            alert(`警告 ${warningCount}/3: 请关闭开发者工具后刷新页面`);
+                        // 限制警告频率，避免频繁弹窗
+                        if (currentTime - lastWarningTime > 5000) { // 5秒内不重复警告
+                            warningCount++;
+                            lastWarningTime = currentTime;
+                            
+                            // 使用更友好的提示方式
+                            const warning = document.createElement('div');
+                            warning.id = 'practice-dev-warning';
+                            warning.style.cssText = `
+                                position: fixed;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                background: rgba(239, 68, 68, 0.95);
+                                color: white;
+                                padding: 20px 30px;
+                                border-radius: 12px;
+                                z-index: 10000;
+                                font-size: 16px;
+                                text-align: center;
+                                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+                                backdrop-filter: blur(10px);
+                                max-width: 400px;
+                            `;
+                            
+                            if (warningCount >= 3) {
+                                warning.innerHTML = `
+                                    <div style="margin-bottom: 15px;">🚫</div>
+                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">访问受限</div>
+                                    <div>检测到多次尝试打开开发者工具</div>
+                                    <div style="margin-top: 10px; font-size: 14px; opacity: 0.9;">请刷新页面重新开始</div>
+                                `;
+                                // 禁用页面交互但不清空内容
+                                document.body.style.pointerEvents = 'none';
+                                document.body.style.userSelect = 'none';
+                            } else {
+                                warning.innerHTML = `
+                                    <div style="margin-bottom: 15px;">⚠️</div>
+                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">检测到开发者工具</div>
+                                    <div>警告 ${warningCount}/3</div>
+                                    <div style="margin-top: 10px; font-size: 14px; opacity: 0.9;">请关闭开发者工具继续答题</div>
+                                `;
+                            }
+                            
+                            document.body.appendChild(warning);
+                            
+                            // 5秒后自动移除警告（如果开发者工具已关闭）
+                            setTimeout(() => {
+                                if (!devtools.open && warning.parentNode) {
+                                    warning.remove();
+                                }
+                            }, 5000);
                         }
                     }
                 } else {
                     devtools.open = false;
+                    // 移除警告并恢复页面交互
+                    const warning = document.getElementById('practice-dev-warning');
+                    if (warning) {
+                        warning.remove();
+                    }
                     if (warningCount < 3) {
-                        document.body.style.display = 'block';
+                        document.body.style.pointerEvents = 'auto';
+                        document.body.style.userSelect = 'auto';
                     }
                 }
-            }, 500);
+            }
+            
+            // 降低检测频率，减少性能影响
+            setInterval(checkDevToolsInPractice, 3000);
             
             // 防止选择文本（答题时防止复制题目）
             document.addEventListener('selectstart', function(e) {

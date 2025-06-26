@@ -343,24 +343,58 @@
                 }
             });
             
-            // 检测开发者工具
+            // 检测开发者工具（优化版本）
             let devtools = {open: false, orientation: null};
-            const threshold = 160;
+            const widthThreshold = 200;  // 增加阈值，减少误判
+            const heightThreshold = 200;
             
-            setInterval(function() {
-                if (window.outerHeight - window.innerHeight > threshold || 
-                    window.outerWidth - window.innerWidth > threshold) {
+            function checkDevTools() {
+                // 更精确的检测逻辑
+                const heightDiff = window.outerHeight - window.innerHeight;
+                const widthDiff = window.outerWidth - window.innerWidth;
+                
+                // 只有当差异明显超过正常浏览器边框时才认为是开发者工具
+                if (heightDiff > heightThreshold || widthDiff > widthThreshold) {
                     if (!devtools.open) {
                         devtools.open = true;
-                        // 检测到开发者工具打开时的处理
-                        document.body.style.display = 'none';
-                        alert('请关闭开发者工具后刷新页面');
+                        // 使用更友好的提示方式
+                        const warning = document.createElement('div');
+                        warning.id = 'dev-warning';
+                        warning.style.cssText = `
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            background: #ef4444;
+                            color: white;
+                            padding: 15px 20px;
+                            border-radius: 8px;
+                            z-index: 10000;
+                            font-size: 14px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                            max-width: 300px;
+                        `;
+                        warning.innerHTML = '⚠️ 检测到开发者工具，请关闭后继续使用';
+                        document.body.appendChild(warning);
+                        
+                        // 3秒后自动移除警告
+                        setTimeout(() => {
+                            if (warning.parentNode) {
+                                warning.remove();
+                            }
+                        }, 3000);
                     }
                 } else {
                     devtools.open = false;
-                    document.body.style.display = 'block';
+                    // 移除警告
+                    const warning = document.getElementById('dev-warning');
+                    if (warning) {
+                        warning.remove();
+                    }
                 }
-            }, 500);
+            }
+            
+            // 降低检测频率，减少性能影响
+            setInterval(checkDevTools, 2000);
             
             // 防止选择文本
             document.addEventListener('selectstart', function(e) {
