@@ -8,14 +8,16 @@ class QuestionLoader {
     }
 
     /**
-     * 加载题目数据
+     * 加载题目数据（需要密码验证）
      * @param {string} subject - 科目名称（如：'engineering-budget'）
+     * @param {string} password - 题库密码
      * @returns {Promise<Object>} 题目数据对象
      */
-    async loadQuestions(subject) {
-        // 检查缓存
-        if (this.cache.has(subject)) {
-            return this.cache.get(subject);
+    async loadQuestions(subject, password = null) {
+        // 检查缓存（包含密码验证状态）
+        const cacheKey = `${subject}_verified`;
+        if (this.cache.has(cacheKey)) {
+            return this.cache.get(cacheKey);
         }
 
         try {
@@ -31,12 +33,52 @@ class QuestionLoader {
                 throw new Error('Invalid question data format');
             }
             
-            // 缓存数据
-            this.cache.set(subject, data);
+            // 密码验证
+            if (data.password) {
+                if (!password) {
+                    throw new Error('PASSWORD_REQUIRED');
+                }
+                if (password !== data.password) {
+                    throw new Error('INVALID_PASSWORD');
+                }
+            }
+            
+            // 缓存验证通过的数据
+            this.cache.set(cacheKey, data);
             
             return data;
         } catch (error) {
             console.error(`Failed to load questions for subject: ${subject}`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * 获取题库基本信息（不需要密码）
+     * @param {string} subject - 科目名称
+     * @returns {Promise<Object>} 题库基本信息
+     */
+    async getQuestionBankInfo(subject) {
+        try {
+            const response = await fetch(`./data/${subject}-questions.json`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // 返回基本信息，不包含题目内容
+            return {
+                subject: data.subject,
+                description: data.description,
+                version: data.version,
+                lastUpdated: data.lastUpdated,
+                hasPassword: !!data.password,
+                passwordHint: data.passwordHint || '请输入题库密码',
+                questionCount: data.questions ? data.questions.length : 0
+            };
+        } catch (error) {
+            console.error(`Failed to get info for subject: ${subject}`, error);
             throw error;
         }
     }
@@ -52,14 +94,14 @@ class QuestionLoader {
                 name: '工程概预算',
                 description: '工程概预算练习题库',
                 file: 'engineering-budget-questions.json'
+            },
+            {
+                id: 'sample',
+                name: '示例题库',
+                description: '示例题库，用于测试',
+                file: 'sample-questions.json'
             }
             // 可以在这里添加更多科目
-            // {
-            //     id: 'construction-management',
-            //     name: '建筑工程管理',
-            //     description: '建筑工程管理练习题库',
-            //     file: 'construction-management-questions.json'
-            // }
         ];
     }
 

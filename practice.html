@@ -123,6 +123,38 @@
                 </div>
             </div>
             
+            <!-- 密码验证界面 -->
+            <div id="password-section" class="mb-6 hidden">
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 max-w-md mx-auto">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-lock text-yellow-600 text-2xl mb-2"></i>
+                        <h3 class="text-lg font-semibold text-yellow-800">题库密码验证</h3>
+                        <p id="password-hint" class="text-yellow-700 text-sm mt-1">请输入题库密码</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <input type="password" id="bank-password" 
+                                   class="w-full px-4 py-3 border border-yellow-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                                   placeholder="请输入密码" maxlength="50">
+                        </div>
+                        <div class="flex space-x-3">
+                            <button id="verify-password-btn" 
+                                    class="flex-1 bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                                <i class="fas fa-key mr-2"></i>验证密码
+                            </button>
+                            <button id="cancel-password-btn" 
+                                    class="flex-1 bg-gray-500 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-times mr-2"></i>取消
+                            </button>
+                        </div>
+                    </div>
+                    <div id="password-error" class="hidden mt-3 text-red-600 text-sm text-center">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                        <span id="password-error-text">密码错误，请重试</span>
+                    </div>
+                </div>
+            </div>
+            
             <!-- 题型选择 -->
             <div class="mb-6">
                 <p class="text-gray-600 mb-4">请选择题型：</p>
@@ -543,20 +575,115 @@
         // 从URL参数获取题库信息
         const urlParams = new URLSearchParams(window.location.search);
         let selectedQuestionBank = urlParams.get('bank') || 'engineering-budget';
+        let currentBankPassword = null;
+        let bankInfo = null;
+        
+        // 密码验证相关元素
+        const passwordSection = document.getElementById('password-section');
+        const passwordHint = document.getElementById('password-hint');
+        const bankPasswordInput = document.getElementById('bank-password');
+        const verifyPasswordBtn = document.getElementById('verify-password-btn');
+        const cancelPasswordBtn = document.getElementById('cancel-password-btn');
+        const passwordError = document.getElementById('password-error');
+        const passwordErrorText = document.getElementById('password-error-text');
         
         // 更新题库显示
         const bankNameElement = document.getElementById('bank-name');
         const currentBankDisplay = document.getElementById('current-bank-display');
         
-        if (selectedQuestionBank === 'engineering-budget') {
-            bankNameElement.textContent = '工程概预算';
-            currentBankDisplay.className = 'inline-flex items-center bg-indigo-100 text-indigo-700 font-semibold py-3 px-6 rounded-full';
-            currentBankDisplay.querySelector('i').className = 'fas fa-calculator mr-2';
-        } else if (selectedQuestionBank === 'sample') {
-            bankNameElement.textContent = '示例题库';
-            currentBankDisplay.className = 'inline-flex items-center bg-orange-100 text-orange-700 font-semibold py-3 px-6 rounded-full';
-            currentBankDisplay.querySelector('i').className = 'fas fa-code mr-2';
+        // 初始化题库信息
+        async function initializeBankInfo() {
+            try {
+                bankInfo = await questionLoader.getQuestionBankInfo(selectedQuestionBank);
+                
+                // 更新题库显示
+                bankNameElement.textContent = bankInfo.subject;
+                
+                if (selectedQuestionBank === 'engineering-budget') {
+                    currentBankDisplay.className = 'inline-flex items-center bg-indigo-100 text-indigo-700 font-semibold py-3 px-6 rounded-full';
+                    currentBankDisplay.querySelector('i').className = 'fas fa-calculator mr-2';
+                } else if (selectedQuestionBank === 'sample') {
+                    currentBankDisplay.className = 'inline-flex items-center bg-orange-100 text-orange-700 font-semibold py-3 px-6 rounded-full';
+                    currentBankDisplay.querySelector('i').className = 'fas fa-code mr-2';
+                }
+                
+                // 如果题库需要密码，显示密码输入界面
+                if (bankInfo.hasPassword) {
+                    passwordHint.textContent = bankInfo.passwordHint;
+                    showPasswordSection();
+                }
+                
+            } catch (error) {
+                console.error('Failed to initialize bank info:', error);
+                alert('加载题库信息失败，请刷新页面重试');
+            }
         }
+        
+        // 显示密码输入界面
+        function showPasswordSection() {
+            passwordSection.classList.remove('hidden');
+            bankPasswordInput.focus();
+        }
+        
+        // 隐藏密码输入界面
+        function hidePasswordSection() {
+            passwordSection.classList.add('hidden');
+            bankPasswordInput.value = '';
+            passwordError.classList.add('hidden');
+        }
+        
+        // 显示密码错误
+        function showPasswordError(message) {
+            passwordErrorText.textContent = message;
+            passwordError.classList.remove('hidden');
+        }
+        
+        // 验证密码
+        async function verifyPassword() {
+            const password = bankPasswordInput.value.trim();
+            if (!password) {
+                showPasswordError('请输入密码');
+                return;
+            }
+            
+            try {
+                verifyPasswordBtn.disabled = true;
+                verifyPasswordBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>验证中...';
+                
+                // 尝试加载题库数据
+                await questionLoader.loadQuestions(selectedQuestionBank, password);
+                
+                // 验证成功
+                currentBankPassword = password;
+                hidePasswordSection();
+                
+            } catch (error) {
+                if (error.message === 'INVALID_PASSWORD') {
+                    showPasswordError('密码错误，请重试');
+                } else {
+                    showPasswordError('验证失败，请重试');
+                }
+            } finally {
+                verifyPasswordBtn.disabled = false;
+                verifyPasswordBtn.innerHTML = '<i class="fas fa-key mr-2"></i>验证密码';
+            }
+        }
+        
+        // 密码验证事件监听
+        verifyPasswordBtn.addEventListener('click', verifyPassword);
+        
+        cancelPasswordBtn.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+        
+        bankPasswordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                verifyPassword();
+            }
+        });
+        
+        // 页面加载时初始化
+        initializeBankInfo();
         
         questionCountSelector.addEventListener('click', (e) => {
             if (e.target.classList.contains('count-btn')) {
@@ -584,8 +711,17 @@
 
         startBtn.addEventListener('click', async () => {
             try {
+                // 检查是否需要密码验证
+                if (bankInfo && bankInfo.hasPassword && !currentBankPassword) {
+                    showPasswordSection();
+                    return;
+                }
+                
+                startBtn.disabled = true;
+                startBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>加载中...';
+                
                 // 根据选择的题库动态加载题目数据
-                const data = await questionLoader.loadQuestions(selectedQuestionBank);
+                const data = await questionLoader.loadQuestions(selectedQuestionBank, currentBankPassword);
                 questionsData = data.questions;
                  
                  if (questionsData.length === 0) {
@@ -617,7 +753,17 @@
                 initQuiz(questionSet, false);
             } catch (error) {
                 console.error('加载题目失败:', error);
-                alert('加载题目失败，请检查网络连接或联系管理员！');
+                if (error.message === 'PASSWORD_REQUIRED') {
+                    showPasswordSection();
+                } else if (error.message === 'INVALID_PASSWORD') {
+                    showPasswordError('密码错误，请重新验证');
+                    showPasswordSection();
+                } else {
+                    alert('加载题目失败，请检查网络连接或联系管理员！');
+                }
+            } finally {
+                startBtn.disabled = false;
+                startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>开始答题';
             }
         });
         
