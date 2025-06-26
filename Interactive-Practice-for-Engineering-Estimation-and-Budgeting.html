@@ -42,14 +42,7 @@
             color: white !important;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
-        .bank-btn {
-            transition: all 0.3s ease;
-        }
-        .active-bank-btn {
-            background-color: #6366f1 !important; /* indigo-500 */
-            color: white !important;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
+
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
@@ -58,16 +51,17 @@
         <div id="start-screen" class="text-center bg-white p-8 rounded-2xl shadow-lg">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">在线答题系统</h1>
             
-            <!-- 题库选择 -->
+            <!-- 当前题库显示 -->
             <div class="mb-6">
-                <p class="text-gray-600 mb-4">请选择题库：</p>
-                <div id="question-bank-selector" class="flex justify-center flex-wrap gap-2 sm:gap-4 mb-6">
-                    <button data-bank="engineering-budget" class="bank-btn active-bank-btn bg-indigo-100 text-indigo-700 font-semibold py-2 px-4 rounded-full hover:bg-indigo-200 transition-all">
-                        <i class="fas fa-calculator mr-1"></i>工程概预算
-                    </button>
-                    <button data-bank="sample" class="bank-btn bg-orange-100 text-orange-700 font-semibold py-2 px-4 rounded-full hover:bg-orange-200 transition-all">
-                        <i class="fas fa-code mr-1"></i>示例题库
-                    </button>
+                <div class="text-center">
+                    <div id="current-bank-display" class="inline-flex items-center bg-indigo-100 text-indigo-700 font-semibold py-3 px-6 rounded-full">
+                         <i class="fas fa-calculator mr-2"></i>
+                         <span id="bank-name">工程概预算</span>
+                     </div>
+                     <p class="text-gray-500 text-sm mt-2">当前练习题库</p>
+                     <a href="index.html" class="inline-flex items-center text-gray-500 hover:text-gray-700 text-sm mt-2 transition-colors">
+                         <i class="fas fa-arrow-left mr-1"></i>返回首页选择其他题库
+                     </a>
                 </div>
             </div>
             
@@ -444,12 +438,41 @@
             if (wrongAnswers.length > 0) {
                  wrongAnswers.forEach((q, index) => {
                     const item = document.createElement('div');
-                    item.className = 'p-4 mb-2 border rounded-lg bg-red-50';
+                    item.className = 'p-4 mb-4 border rounded-lg bg-red-50';
                     let correctAnswerText = Array.isArray(q.answer) ? q.answer.join(', ') : q.answer;
+                    
+                    // 构建选项显示
+                    const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
+                    let optionsHtml = '';
+                    if (q.options && q.options.length > 0) {
+                        optionsHtml = '<div class="mt-3 space-y-2">';
+                        q.options.forEach((option, optIndex) => {
+                            let optionText = option;
+                            // 对于单选题和多选题，移除选项前缀
+                            if (q.type !== '判断题') {
+                                optionText = option.substring(3);
+                            }
+                            
+                            const optionLetter = q.type === '判断题' ? '' : optionLetters[optIndex];
+                            const isCorrect = Array.isArray(q.answer) ? 
+                                q.answer.includes(optionLetter || option) : 
+                                (q.answer === optionLetter || q.answer === option);
+                            
+                            optionsHtml += `
+                                <div class="flex items-start space-x-2 ${isCorrect ? 'text-green-700 font-semibold' : 'text-gray-600'}">
+                                    <span class="font-bold min-w-[20px]">${q.type === '判断题' ? '' : optionLetter + '.'}</span>
+                                    <span class="flex-1">${optionText} ${isCorrect ? '✓' : ''}</span>
+                                </div>
+                            `;
+                        });
+                        optionsHtml += '</div>';
+                    }
 
                     item.innerHTML = `
-                        <p class="font-semibold">${index + 1}. ${q.question.replace(/\uff08\s*\uff09/g, '(____)')}</p>
-                        <p class="text-green-700 mt-2"><strong>正确答案:</strong> ${correctAnswerText}</p>
+                        <p class="font-semibold text-lg">${index + 1}. ${q.question.replace(/\uff08\s*\uff09/g, '(____)')}</p>
+                        <p class="text-sm text-gray-600 mt-1">【${q.type}】</p>
+                        ${optionsHtml}
+                        <p class="text-green-700 mt-3 p-2 bg-green-100 rounded"><strong>正确答案:</strong> ${correctAnswerText}</p>
                     `;
                     wrongQuestionsListEl.appendChild(item);
                 });
@@ -460,19 +483,23 @@
         }
         
         // --- Event Listeners ---
-        // 题库选择事件监听
-        const questionBankSelector = document.getElementById('question-bank-selector');
-        let selectedQuestionBank = 'engineering-budget';
+        // 从URL参数获取题库信息
+        const urlParams = new URLSearchParams(window.location.search);
+        let selectedQuestionBank = urlParams.get('bank') || 'engineering-budget';
         
-        questionBankSelector.addEventListener('click', (e) => {
-            if (e.target.classList.contains('bank-btn')) {
-                questionBankSelector.querySelectorAll('.bank-btn').forEach(btn => {
-                    btn.classList.remove('active-bank-btn');
-                });
-                e.target.classList.add('active-bank-btn');
-                selectedQuestionBank = e.target.dataset.bank;
-            }
-        });
+        // 更新题库显示
+        const bankNameElement = document.getElementById('bank-name');
+        const currentBankDisplay = document.getElementById('current-bank-display');
+        
+        if (selectedQuestionBank === 'engineering-budget') {
+            bankNameElement.textContent = '工程概预算';
+            currentBankDisplay.className = 'inline-flex items-center bg-indigo-100 text-indigo-700 font-semibold py-3 px-6 rounded-full';
+            currentBankDisplay.querySelector('i').className = 'fas fa-calculator mr-2';
+        } else if (selectedQuestionBank === 'sample') {
+            bankNameElement.textContent = '示例题库';
+            currentBankDisplay.className = 'inline-flex items-center bg-orange-100 text-orange-700 font-semibold py-3 px-6 rounded-full';
+            currentBankDisplay.querySelector('i').className = 'fas fa-code mr-2';
+        }
         
         questionCountSelector.addEventListener('click', (e) => {
             if (e.target.classList.contains('count-btn')) {
