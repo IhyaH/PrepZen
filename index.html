@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrepZen - 专注高效的在线刷题平台</title>
+    
+    <!-- 安全相关元标签 -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    
+    <!-- 版权和所有权信息 -->
+    <meta name="copyright" content="© 2024 PrepZen. All rights reserved.">
+    <meta name="author" content="IhyaH">
+    <meta name="generator" content="PrepZen Protection System v1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- 源代码保护脚本 -->
+    <script src="protect.js"></script>
     <style>
         body {
             font-family: 'Noto Sans SC', sans-serif;
@@ -26,6 +40,32 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+        }
+        
+        /* 源代码保护样式 */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* 防止图片拖拽 */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        
+        /* 隐藏滚动条但保持功能 */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
         }
     </style>
 </head>
@@ -282,6 +322,65 @@
     </footer>
 
     <script>
+        // 源代码保护措施
+        (function() {
+            'use strict';
+            
+            // 禁用右键菜单
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // 禁用常用开发者工具快捷键
+            document.addEventListener('keydown', function(e) {
+                // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // 检测开发者工具
+            let devtools = {open: false, orientation: null};
+            const threshold = 160;
+            
+            setInterval(function() {
+                if (window.outerHeight - window.innerHeight > threshold || 
+                    window.outerWidth - window.innerWidth > threshold) {
+                    if (!devtools.open) {
+                        devtools.open = true;
+                        // 检测到开发者工具打开时的处理
+                        document.body.style.display = 'none';
+                        alert('请关闭开发者工具后刷新页面');
+                    }
+                } else {
+                    devtools.open = false;
+                    document.body.style.display = 'block';
+                }
+            }, 500);
+            
+            // 防止选择文本
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // 防止拖拽
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // 控制台警告信息
+            console.clear();
+            console.log('%c⚠️ 警告', 'color: red; font-size: 30px; font-weight: bold;');
+            console.log('%c此功能专为开发者设计。如果有人告诉您在此处复制粘贴内容以启用某项功能或"破解"某个人的账户，这是一种诈骗行为，会导致您的账户被盗。', 'color: red; font-size: 16px;');
+            
+        })();
+        
         // 设置当前年份
         document.getElementById('current-year').textContent = new Date().getFullYear();
         

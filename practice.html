@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>工程概预算 - 在线答题</title>
+    
+    <!-- 安全相关元标签 -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    
+    <!-- 版权和所有权信息 -->
+    <meta name="copyright" content="© 2024 PrepZen. All rights reserved.">
+    <meta name="author" content="IhyaH">
+    <meta name="generator" content="PrepZen Protection System v1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 源代码保护脚本 -->
+    <script src="protect.js"></script>
     <style>
         body {
             font-family: 'Noto Sans SC', sans-serif;
@@ -41,6 +55,50 @@
             background-color: #10b981 !important; /* green-500 */
             color: white !important;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        
+        /* 源代码保护样式 */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* 允许按钮和输入框的交互 */
+        button, input, textarea, select {
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+            pointer-events: auto;
+        }
+        
+        /* 防止图片拖拽 */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        
+        /* 隐藏滚动条但保持功能 */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        
+        /* 防止文本高亮显示 */
+        ::selection {
+            background: transparent;
+        }
+        
+        ::-moz-selection {
+            background: transparent;
         }
 
     </style>
@@ -583,6 +641,99 @@
         reviewWrongBtn.addEventListener('click', () => {
             initQuiz([...wrongAnswers], true);
         });
+        
+        // 源代码保护措施
+        (function() {
+            'use strict';
+            
+            // 禁用右键菜单
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // 禁用常用开发者工具快捷键
+            document.addEventListener('keydown', function(e) {
+                // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // 检测开发者工具（答题页面更严格）
+            let devtools = {open: false, orientation: null};
+            const threshold = 160;
+            let warningCount = 0;
+            
+            setInterval(function() {
+                if (window.outerHeight - window.innerHeight > threshold || 
+                    window.outerWidth - window.innerWidth > threshold) {
+                    if (!devtools.open) {
+                        devtools.open = true;
+                        warningCount++;
+                        
+                        if (warningCount >= 3) {
+                            // 多次尝试打开开发者工具，清空页面
+                            document.body.innerHTML = '<div style="text-align:center;padding:50px;font-size:24px;color:red;">检测到异常操作，页面已被保护</div>';
+                        } else {
+                            document.body.style.display = 'none';
+                            alert(`警告 ${warningCount}/3: 请关闭开发者工具后刷新页面`);
+                        }
+                    }
+                } else {
+                    devtools.open = false;
+                    if (warningCount < 3) {
+                        document.body.style.display = 'block';
+                    }
+                }
+            }, 500);
+            
+            // 防止选择文本（答题时防止复制题目）
+            document.addEventListener('selectstart', function(e) {
+                // 允许在输入框中选择文本
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return true;
+                }
+                e.preventDefault();
+                return false;
+            });
+            
+            // 防止拖拽
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // 防止打印页面
+            window.addEventListener('beforeprint', function(e) {
+                e.preventDefault();
+                alert('不允许打印此页面');
+                return false;
+            });
+            
+            // 检测页面失焦（可能切换到其他应用查答案）
+            let focusWarnings = 0;
+            window.addEventListener('blur', function() {
+                focusWarnings++;
+                if (focusWarnings > 5) {
+                    console.log('检测到频繁切换窗口，请专注答题');
+                }
+            });
+            
+            // 控制台警告信息
+            console.clear();
+            console.log('%c🚫 答题页面保护', 'color: red; font-size: 30px; font-weight: bold;');
+            console.log('%c为保证考试公平性，此页面已启用防作弊保护。任何尝试查看源代码或使用开发者工具的行为都将被记录。', 'color: red; font-size: 16px;');
+            
+            // 简单的反调试
+            setInterval(function() {
+                debugger;
+            }, 1000);
+            
+        })();
         
         // Set current year in footer
         document.getElementById('current-year').textContent = new Date().getFullYear();
