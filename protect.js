@@ -65,9 +65,27 @@
             
             setInterval(detectDebugger, 2000);
             
-            // 改进的开发者工具检测（减少误报）
+            // 智能开发者工具检测（防止滚动误报）
             let devToolsDetected = false;
             let initialSizeDiff = null;
+            let isScrolling = false;
+            let scrollTimeout = null;
+            let detectionHistory = [];
+            let lastCheckTime = 0;
+            
+            // 监听滚动事件
+            let scrollListener = function() {
+                isScrolling = true;
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(function() {
+                    isScrolling = false;
+                }, 1000); // 滚动停止1秒后才恢复检测
+            };
+            
+            if (typeof window !== 'undefined' && window.addEventListener) {
+                window.addEventListener('scroll', scrollListener, { passive: true });
+                window.addEventListener('resize', scrollListener, { passive: true });
+            }
             
             function checkDevTools() {
                 try {
@@ -84,6 +102,12 @@
                         return;
                     }
                     
+                    // 如果正在滚动，跳过检测
+                    if (isScrolling) {
+                        return;
+                    }
+                    
+                    const currentTime = Date.now();
                     const heightDiff = window.outerHeight - window.innerHeight;
                     const widthDiff = window.outerWidth - window.innerWidth;
                     
@@ -100,10 +124,33 @@
                     const heightChange = Math.abs(heightDiff - initialSizeDiff.height);
                     const widthChange = Math.abs(widthDiff - initialSizeDiff.width);
                     
-                    // 更严格的阈值：只有当尺寸变化超过300px时才认为是开发者工具
-                    const threshold = 300;
+                    // 记录检测历史（用于趋势分析）
+                    detectionHistory.push({
+                        time: currentTime,
+                        heightChange: heightChange,
+                        widthChange: widthChange
+                    });
                     
-                    if (heightChange > threshold || widthChange > threshold) {
+                    // 只保留最近10次检测记录
+                    if (detectionHistory.length > 10) {
+                        detectionHistory.shift();
+                    }
+                    
+                    // 更严格的阈值：只有当尺寸变化超过400px时才认为是开发者工具
+                    const threshold = 400;
+                    
+                    // 需要连续3次检测都超过阈值才触发警告（防止偶发性变化）
+                    let consecutiveDetections = 0;
+                    if (detectionHistory.length >= 3) {
+                        for (let i = detectionHistory.length - 3; i < detectionHistory.length; i++) {
+                            const record = detectionHistory[i];
+                            if (record.heightChange > threshold || record.widthChange > threshold) {
+                                consecutiveDetections++;
+                            }
+                        }
+                    }
+                    
+                    if (consecutiveDetections >= 3) {
                         if (!devToolsDetected) {
                             devToolsDetected = true;
                             // 显示警告而不是直接清空页面
