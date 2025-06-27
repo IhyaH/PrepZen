@@ -28,7 +28,7 @@
             background-color: #0f172a; /* 深蓝灰色背景 */
             color: #cbd5e1; /* 默认浅灰色文字 */
             background-image: radial-gradient(#334155 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-size: 40px 40px;
         }
         .card {
             background-color: #1e293b; /* 卡片背景色 */
@@ -71,9 +71,12 @@
             transform: translate(-50%, -50%);
             pointer-events: none;
         }
+        .tech-card {
+             background: linear-gradient(145deg, #1e293b, #2c3e50);
+        }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
     <!-- Header -->
     <header class="sticky-header text-slate-200">
@@ -84,9 +87,9 @@
                     <h1 class="text-2xl font-bold">PrepZen</h1>
                 </div>
                 <div class="hidden md:flex items-center space-x-8 font-medium">
-                    <a href="#subjects" class="hover:text-cyan-400 transition-colors">题库中心</a>
-                    <a href="#features" class="hover:text-cyan-400 transition-colors">核心优势</a>
-                    <a href="#about" class="hover:text-cyan-400 transition-colors">关于我们</a>
+                    <a href="#project-overview" class="hover:text-cyan-400 transition-colors">项目概览</a>
+                    <a href="#subjects" class="hover:text-cyan-400 transition-colors">功能演示</a>
+                    <a href="#tech-stack" class="hover:text-cyan-400 transition-colors">技术栈</a>
                 </div>
             </div>
         </nav>
@@ -100,64 +103,78 @@
                 PrepZen
             </h2>
             <p class="text-xl md:text-2xl mb-6 opacity-90 font-light">
-                用<span class="text-cyan-300 font-semibold">禅</span>的专注，为备考<span class="text-cyan-300 font-semibold">赋能</span>
+                一个<span class="text-cyan-300 font-semibold">纯前端、轻量级</span>的在线刷题平台
             </p>
             <p class="text-lg md:text-xl mb-10 text-slate-300 max-w-3xl mx-auto leading-relaxed">
-                告别题海战术，我们用智能化的练习与分析工具，助你精准定位薄弱点，高效备考，轻松拿分。
+                本项目旨在演示一个完整的、无需后端服务的 Web 应用。它通过精巧的前端设计，实现了动态题库加载、多样化练习模式与即时反馈，展现了现代前端技术在构建交互式应用中的强大能力。
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="#subjects" 
                    class="btn-primary bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg inline-flex items-center justify-center">
                    <span class="iconify mr-2 text-xl" data-icon="mdi:compass-outline"></span>
-                    探索题库
+                    功能体验
+                </a>
+                 <a href="https://github.com/IhyaH/PrepZen" target="_blank" 
+                   class="btn-primary bg-slate-700/50 hover:bg-slate-700 text-slate-100 px-8 py-4 rounded-full font-bold text-lg inline-flex items-center justify-center">
+                   <span class="iconify mr-2 text-xl" data-icon="mdi:github"></span>
+                    查看源码
                 </a>
             </div>
         </div>
     </section>
 
-     <!-- Why Choose Us Section -->
-    <section id="features" class="py-24 bg-slate-900">
+     <!-- Project Overview Section -->
+    <section id="project-overview" class="py-24 bg-slate-900">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white mb-4">为高效学习而设计</h3>
+                <h3 class="text-4xl font-bold text-white mb-4">项目概览</h3>
                 <p class="text-xl text-slate-400 max-w-2xl mx-auto">
-                    我们相信，好的工具能让学习事半功倍。
+                    解决特定问题，展示核心能力。
                 </p>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="text-center p-8">
-                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
-                        <span class="iconify text-4xl text-cyan-400" data-icon="mdi:brain"></span>
-                    </div>
-                    <h4 class="text-2xl font-semibold mb-3 text-white">智能练习</h4>
-                    <p class="text-slate-400 leading-relaxed">自定义题型、数量和模式，更有错题重练机制，让你专注于真正需要提升的部分。</p>
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto items-center">
+                <div class="prose prose-invert prose-lg text-slate-300">
+                    <h4>项目目标</h4>
+                    <p>核心目标是构建一个<strong class="text-cyan-400">零依赖、高性能</strong>的客户端刷题应用。它旨在解决传统刷题平台依赖服务器、加载缓慢、体验割裂的问题，证明仅通过浏览器端技术，也能实现丰富、流畅、个性化的学习体验。</p>
+                    <h4>核心挑战</h4>
+                    <ul>
+                        <li><strong>数据管理：</strong>在无后端的情况下，如何高效、安全地加载和管理不同学科的题库数据？</li>
+                        <li><strong>状态同步：</strong>如何构建一个健壮的状态管理系统，在复杂的练习流程中（如题型切换、错题重练、答题卡）保持数据的一致性？</li>
+                        <li><strong>UI/UX 设计：</strong>如何设计一个既美观又符合直觉的用户界面，让用户能够专注于学习本身？</li>
+                    </ul>
                 </div>
-                <div class="text-center p-8">
-                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
-                       <span class="iconify text-4xl text-cyan-400" data-icon="mdi:chart-line"></span>
-                    </div>
-                    <h4 class="text-2xl font-semibold mb-3 text-white">即时反馈</h4>
-                    <p class="text-slate-400 leading-relaxed">答题后立即获得包含解析的详细反馈，实时统计正确率与进度，全面掌握学习状态。</p>
-                </div>
-                 <div class="text-center p-8">
-                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
-                        <span class="iconify text-4xl text-cyan-400" data-icon="mdi:compass-off-outline"></span>
-                    </div>
-                    <h4 class="text-2xl font-semibold mb-3 text-white">极简专注</h4>
-                    <p class="text-slate-400 leading-relaxed">无广告、无干扰的纯净学习环境。极速加载，无需等待，让你随时随地进入心流状态。</p>
+                <div class="card p-8 rounded-2xl">
+                     <h4 class="text-2xl font-semibold mb-4 text-white">最终实现</h4>
+                     <p class="text-slate-400 mb-6">PrepZen 成功地应对了这些挑战，交付了一个完整的、可交互的 Web 应用。它不仅是一个实用的工具，更是我作为一名前端开发者，在架构设计、代码实现和产品思维上的一次综合展示。</p>
+                     <div class="border-t border-slate-700 pt-6 space-y-4">
+                         <div class="flex items-start">
+                            <span class="iconify text-green-400 mt-1 mr-3" data-icon="mdi:check-circle"></span>
+                            <div>
+                                <h5 class="font-semibold text-white">纯前端架构</h5>
+                                <p class="text-slate-400 text-sm">无需数据库，无服务器成本，部署简单，加载极速。</p>
+                            </div>
+                         </div>
+                         <div class="flex items-start">
+                            <span class="iconify text-green-400 mt-1 mr-3" data-icon="mdi:check-circle"></span>
+                            <div>
+                                <h5 class="font-semibold text-white">模块化设计</h5>
+                                <p class="text-slate-400 text-sm">逻辑清晰，代码解耦，易于维护和扩展新功能。</p>
+                            </div>
+                         </div>
+                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Subjects Section -->
+    <!-- Subjects Section (Live Demo) -->
     <section id="subjects" class="py-24 bg-slate-900/50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white mb-4">题库中心</h3>
+                <h3 class="text-4xl font-bold text-white mb-4">功能演示</h3>
                 <p class="text-xl text-slate-400 max-w-2xl mx-auto">
-                    覆盖多个核心学科领域，由专业人士精心整理和校对，持续更新中。
+                    选择一个题库，亲自体验平台的各项功能。
                 </p>
             </div>
             
@@ -167,15 +184,35 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-24">
+    <!-- Tech Stack Section -->
+    <section id="tech-stack" class="py-24">
         <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto text-center">
-                <span class="iconify text-cyan-400 text-5xl mb-4" data-icon="streamline-pixel:school-science-graduation-cap-solid"></span>
-                <h3 class="text-4xl font-bold text-white mb-6">关于 PrepZen</h3>
-                <div class="text-lg text-slate-300 space-y-6 leading-relaxed">
-                    <p>PrepZen 的诞生源于一个简单的想法：为大学生创造一个纯粹、高效、无干扰的在线刷题平台。我们深知备考路上的艰辛与不易，因此致力于用技术和设计，为你扫清学习障碍。</p>
-                    <p>我们坚持用户体验至上，永久免费，无广告。你的每一次进步，都是我们前行的最大动力。欢迎加入我们，一起用更“禅”的方式，迎接每一次挑战。</p>
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">技术栈与实现</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    现代、高效、可靠的技术选型。
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <div class="tech-card p-6 rounded-lg border border-slate-700">
+                    <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="logos:html-5"></span>
+                    <h4 class="text-xl font-bold text-white mb-2">HTML5</h4>
+                    <p class="text-slate-400">采用语义化标签构建清晰、无障碍的页面结构。</p>
+                </div>
+                <div class="tech-card p-6 rounded-lg border border-slate-700">
+                    <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="logos:tailwindcss-icon"></span>
+                    <h4 class="text-xl font-bold text-white mb-2">Tailwind CSS</h4>
+                    <p class="text-slate-400">以原子化 CSS 的方式，快速构建响应式、可定制化的用户界面。</p>
+                </div>
+                <div class="tech-card p-6 rounded-lg border border-slate-700">
+                    <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="logos:javascript"></span>
+                    <h4 class="text-xl font-bold text-white mb-2">原生 JavaScript (ES6+)</h4>
+                    <p class="text-slate-400">无框架依赖，通过模块化和现代 JS 特性，实现所有核心逻辑。</p>
+                </div>
+                <div class="tech-card p-6 rounded-lg border border-slate-700">
+                    <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="simple-icons:iconify"></span>
+                    <h4 class="text-xl font-bold text-white mb-2">Iconify</h4>
+                    <p class="text-slate-400">按需加载海量图标，优化性能，保持视觉一致性。</p>
                 </div>
             </div>
         </div>
