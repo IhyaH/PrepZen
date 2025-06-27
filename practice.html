@@ -165,6 +165,10 @@
                     </div>
                     <div class="space-y-4">
                         <input type="password" id="bank-password" class="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="请输入密码">
+                        <div class="flex items-center justify-start mt-4">
+                            <input id="remember-password-checkbox" type="checkbox" class="h-4 w-4 rounded border-slate-500 bg-slate-700 text-cyan-600 focus:ring-cyan-500">
+                            <label for="remember-password-checkbox" class="ml-2 block text-sm text-slate-300">记住密码</label>
+                        </div>
                         <button id="verify-password-btn" class="w-full bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-yellow-700 transition-colors inline-flex items-center justify-center">
                             <span class="iconify mr-2" data-icon="mdi:key-variant"></span>验证密码
                         </button>
@@ -245,9 +249,10 @@
                 </div>
                 <h2 id="question-text" class="text-xl md:text-2xl font-bold text-white mb-6 min-h-[6rem]"></h2>
                 <div id="options-container" class="space-y-4"></div>
-                <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                     <button id="skip-btn" class="w-full sm:w-auto bg-slate-600 text-slate-200 font-bold py-4 px-6 rounded-lg hover:bg-slate-500 transition-colors text-lg inline-flex items-center justify-center">
-                        <span class="iconify mr-2" data-icon="mdi:skip-next"></span>跳过
+                <div class="mt-8 flex flex-row gap-4">
+                    <button id="skip-btn" class="flex-shrink-0 bg-slate-600 text-slate-200 font-bold py-4 px-4 rounded-lg hover:bg-slate-500 transition-colors text-lg inline-flex items-center justify-center">
+                        <span class="iconify text-2xl" data-icon="mdi:skip-next"></span>
+                        <span class="sr-only">跳过</span>
                     </button>
                     <button id="confirm-btn" class="w-full bg-cyan-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-cyan-500 transition-colors disabled:bg-slate-600 disabled:cursor-not-allowed text-lg inline-flex items-center justify-center">
                         确认答案 <span class="iconify ml-2" data-icon="mdi:check"></span>
@@ -701,6 +706,12 @@
                     if (bankInfo.passwordHint) {
                         passwordHintElement.textContent = bankInfo.passwordHint;
                     }
+                    const savedPassword = localStorage.getItem(`prepzen-password-${selectedQuestionBank}`);
+                    if (savedPassword) {
+                        document.getElementById('bank-password').value = savedPassword;
+                        document.getElementById('remember-password-checkbox').checked = true;
+                        await verifyPassword(true);
+                    }
                 } else {
                     settingsContainer.classList.remove('hidden');
                 }
@@ -748,27 +759,46 @@
             container.querySelectorAll('.count-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     container.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active-count-btn'));
-                    this.classList.add('active-count-btn');
+                    this.classList.add('active-type-btn');
                     selectedQuestionCount = this.dataset.count;
                 });
             });
         }
         
-        async function verifyPassword() {
+        async function verifyPassword(isAuto = false) {
             const password = document.getElementById('bank-password').value.trim();
             if (!password) return;
             const btn = document.getElementById('verify-password-btn');
-            btn.disabled = true; btn.innerHTML = '<span class="iconify spin mr-2" data-icon="mdi:loading"></span>';
+            const rememberCheckbox = document.getElementById('remember-password-checkbox');
+            const passwordErrorEl = document.getElementById('password-error');
+            
+            if (!isAuto) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="iconify spin mr-2" data-icon="mdi:loading"></span>';
+            }
+            passwordErrorEl.classList.add('hidden');
+
             try {
                 await questionLoader.loadQuestions(selectedQuestionBank, password);
                 currentBankPassword = password;
                 document.getElementById('password-section').classList.add('hidden');
                 settingsContainer.classList.remove('hidden');
+
+                if (rememberCheckbox.checked) {
+                    localStorage.setItem(`prepzen-password-${selectedQuestionBank}`, password);
+                } else {
+                    localStorage.removeItem(`prepzen-password-${selectedQuestionBank}`);
+                }
             } catch (error) { 
-                document.getElementById('password-error').classList.remove('hidden'); 
+                if(!isAuto) {
+                    passwordErrorEl.classList.remove('hidden'); 
+                }
+                localStorage.removeItem(`prepzen-password-${selectedQuestionBank}`);
             } finally { 
-                btn.disabled = false; 
-                btn.innerHTML = '<span class="iconify mr-2" data-icon="mdi:key-variant"></span>验证密码'; 
+                if(!isAuto){
+                    btn.disabled = false; 
+                    btn.innerHTML = '<span class="iconify mr-2" data-icon="mdi:key-variant"></span>验证密码';
+                } 
             }
         }
         
@@ -809,8 +839,8 @@
 
             initializeBankInfo();
             document.getElementById('current-year').textContent = new Date().getFullYear();
-            document.getElementById('verify-password-btn').addEventListener('click', verifyPassword);
-            document.getElementById('bank-password').addEventListener('keypress', (e) => e.key === 'Enter' && verifyPassword());
+            document.getElementById('verify-password-btn').addEventListener('click', () => verifyPassword(false));
+            document.getElementById('bank-password').addEventListener('keypress', (e) => e.key === 'Enter' && verifyPassword(false));
             startBtn.addEventListener('click', () => loadAndStart('quiz'));
             browseBtn.addEventListener('click', () => loadAndStart('browse'));
             confirmBtn.addEventListener('click', () => isAnswered ? (currentQuestionIndex++, displayQuestion()) : handleAnswer());
