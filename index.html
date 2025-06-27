@@ -124,66 +124,8 @@
                 </p>
             </div>
             
-            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <!-- Subject 1 -->
-                <div class="card-hover bg-white p-8 rounded-2xl border border-gray-200">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-blue-100 p-3 rounded-full mr-4">
-                            <i class="fas fa-calculator text-blue-600 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-gray-800">工程概预算</h4>
-                            <p class="text-gray-600">644道专业题目</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 mb-6">
-                        涵盖工程造价、定额管理、清单计价等核心知识点，助力工程类专业学习
-                    </p>
-                    <a href="practice.html?bank=engineering-budget" 
-                       class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold">
-                        开始练习 <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                </div>
-
-                <!-- Subject 2 -->
-                <div class="card-hover bg-white p-8 rounded-2xl border border-gray-200">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-orange-100 p-3 rounded-full mr-4">
-                            <i class="fas fa-code text-orange-600 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-gray-800">示例题库</h4>
-                            <p class="text-gray-600">演示题目</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 mb-6">
-                        包含项目管理、软件开发等多个领域的示例题目，展示系统功能
-                    </p>
-                    <a href="practice.html?bank=sample" 
-                       class="inline-flex items-center text-orange-600 hover:text-orange-800 font-semibold">
-                        体验功能 <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                </div>
-
-                <!-- Subject 3 -->
-                <div class="card-hover bg-white p-8 rounded-2xl border border-gray-200">
-                    <div class="flex items-center mb-4">
-                        <div class="bg-green-100 p-3 rounded-full mr-4">
-                            <i class="fas fa-bolt text-green-600 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-gray-800">继电保护</h4>
-                            <p class="text-gray-600">33道专业题目</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 mb-6">
-                        涵盖电力系统继电保护原理、装置及整定计算等核心知识点
-                    </p>
-                    <a href="practice.html?bank=jdbh" 
-                       class="inline-flex items-center text-green-600 hover:text-green-800 font-semibold">
-                        开始练习 <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                </div>
+            <div id="subject-cards-container" class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- 题库卡片将由 JavaScript 动态生成 -->
             </div>
         </div>
     </section>
@@ -206,7 +148,7 @@
                     </div>
                     <h4 class="text-xl font-semibold mb-3 text-gray-800">智能题库</h4>
                     <p class="text-gray-600">
-                        多种题型支持，包括单选题、多选题、判断题，满足不同学习需求
+                        多种题型支持，包括单选题、多选题、判断题、填空题、简答题，满足不同学习需求
                     </p>
                 </div>
 
@@ -340,6 +282,9 @@
         </div>
     </footer>
 
+    <!-- 引入题目加载器 -->
+    <script src="./data/question-loader.js"></script>
+    
     <script>
         // 源代码保护措施
         (function() {
@@ -449,6 +394,63 @@
                     });
                 }
             });
+        });
+
+        // 动态加载题库卡片
+        document.addEventListener('DOMContentLoaded', async () => {
+            const subjectCardsContainer = document.getElementById('subject-cards-container');
+            const availableSubjects = window.questionLoader.getAvailableSubjects();
+
+            for (const subjectInfo of availableSubjects) {
+                try {
+                    const data = await window.questionLoader.loadQuestions(subjectInfo.id);
+                    const totalQuestions = data.questionStats ? data.questionStats.totalQuestions : (data.questions ? data.questions.length : 0);
+                    
+                    let iconClass = 'fas fa-question text-gray-600'; // Default icon
+                    let bgColorClass = 'bg-gray-100';
+                    let textColorClass = 'text-gray-600';
+
+                    if (subjectInfo.id === 'engineering-budget') {
+                        iconClass = 'fas fa-calculator text-blue-600';
+                        bgColorClass = 'bg-blue-100';
+                        textColorClass = 'text-blue-600';
+                    } else if (subjectInfo.id === 'sample') {
+                        iconClass = 'fas fa-code text-orange-600';
+                        bgColorClass = 'bg-orange-100';
+                        textColorClass = 'text-orange-600';
+                    } else if (subjectInfo.id === 'jdbh') {
+                        iconClass = 'fas fa-bolt text-green-600';
+                        bgColorClass = 'bg-green-100';
+                        textColorClass = 'text-green-600';
+                    }
+                    // 可以根据需要为其他题库添加更多图标和颜色
+
+                    const cardHtml = `
+                        <div class="card-hover bg-white p-8 rounded-2xl border border-gray-200">
+                            <div class="flex items-center mb-4">
+                                <div class="${bgColorClass} p-3 rounded-full mr-4">
+                                    <i class="${iconClass} text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-gray-800">${subjectInfo.name}</h4>
+                                    <p class="text-gray-600">${totalQuestions}道专业题目</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-6">
+                                ${subjectInfo.description}
+                            </p>
+                            <a href="practice.html?bank=${subjectInfo.id}" 
+                               class="inline-flex items-center ${textColorClass} hover:${textColorClass.replace('-600', '-800')} font-semibold">
+                                开始练习 <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    `;
+                    subjectCardsContainer.insertAdjacentHTML('beforeend', cardHtml);
+                } catch (error) {
+                    console.error(`加载题库 ${subjectInfo.id} 信息失败:`, error);
+                    // 可以选择显示一个错误卡片或跳过此题库
+                }
+            }
         });
     </script>
 </body>
