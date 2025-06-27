@@ -12,7 +12,7 @@
   "version": "1.0",
   "lastUpdated": "2024-06-25",
   "password": "budget2025",
-  "passwordHint": "题库密码：budget2025",
+  "passwordHint": "budget2025",
   "questions": [
     {
       "type": "单选题",
