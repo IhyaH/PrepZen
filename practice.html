@@ -109,15 +109,13 @@
         /* Collapsible Stats Section */
         #stats-details-wrapper {
             transition: grid-template-rows 0.4s ease-in-out, opacity 0.3s ease-in-out;
+            grid-template-rows: 1fr;
         }
         #stats-details-wrapper.collapsed {
             grid-template-rows: 0fr;
             opacity: 0;
         }
-        #toggle-stats-icon.collapsed {
-            transform: rotate(180deg);
-        }
-
+        
         /* 源代码保护 */
         * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         button, input, textarea, select, a { pointer-events: auto; }
@@ -134,9 +132,14 @@
                 <span class="iconify text-cyan-400 text-3xl" data-icon="streamline-pixel:school-science-graduation-cap"></span>
                 <h1 class="text-2xl font-bold">PrepZen</h1>
             </div>
-            <a href="index.html" class="font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
-                <span class="iconify mr-2" data-icon="mdi:home"></span>返回首页
-            </a>
+            <div class="flex items-center space-x-4">
+                <button id="answer-sheet-btn" class="hidden font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
+                    <span class="iconify mr-2" data-icon="mdi:grid"></span>答题卡
+                </button>
+                <a href="index.html" class="font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
+                    <span class="iconify mr-2" data-icon="mdi:home"></span>返回首页
+                </a>
+            </div>
         </nav>
     </header>
 
@@ -200,28 +203,25 @@
             </div>
         </div>
 
-        <!-- Browse Mode -->
-        <div id="browse-container" class="hidden">
+        <!-- List View Container (for Browse and Answer Sheet) -->
+        <div id="list-view-container" class="hidden">
             <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold text-white">题目浏览</h2>
-                <p class="text-slate-400 mt-2">列表模式浏览所有题目</p>
+                <h2 id="list-view-title" class="text-3xl font-bold text-white">题目列表</h2>
+                <p id="list-view-subtitle" class="text-slate-400 mt-2"></p>
             </div>
-            <div id="browse-type-selector" class="flex justify-center flex-wrap gap-3 sm:gap-4 mb-6"></div>
-            <div id="browse-questions-list" class="card p-6 rounded-2xl space-y-6"></div>
+            <div id="list-view-filters" class="flex justify-center flex-wrap gap-3 sm:gap-4 mb-6"></div>
+            <div id="list-view-questions" class="card p-6 rounded-2xl space-y-6"></div>
             <div class="text-center mt-8">
-                <button id="back-to-start-btn" class="btn-hover bg-slate-700 text-white font-bold py-3 px-8 rounded-full inline-flex items-center justify-center">
-                    <span class="iconify mr-2" data-icon="mdi:home"></span>返回设置
+                <button id="back-from-list-btn" class="btn-hover bg-slate-700 text-white font-bold py-3 px-8 rounded-full inline-flex items-center justify-center">
+                    <span class="iconify mr-2" data-icon="mdi:arrow-left"></span>返回
                 </button>
             </div>
         </div>
         
         <!-- Quiz Mode -->
         <div id="quiz-container" class="hidden">
-            <div class="sticky-header mb-6 rounded-b-xl -mx-4 -mt-4 sm:-mx-6 sm:-mt-6 sm:px-6">
+            <div id="quiz-header" class="sticky top-[73px] z-40 mb-6 rounded-b-xl -mx-4 -mt-4 sm:-mx-6 sm:-mt-6 sm:px-6 bg-slate-900/70 backdrop-blur-sm border-b border-slate-700">
                 <div class="p-4 relative">
-                    <button id="toggle-stats-btn" class="absolute top-2 right-2 text-slate-400 hover:text-white p-2 z-10">
-                        <span id="toggle-stats-icon" class="iconify text-xl transition-transform duration-300" data-icon="mdi:chevron-up"></span>
-                    </button>
                     <div id="stats-details-wrapper" class="grid grid-rows-[1fr]">
                         <div class="overflow-hidden">
                             <div class="flex flex-wrap justify-between items-center text-center">
@@ -232,7 +232,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div id="progress-bar" class="bg-cyan-500 h-2.5 rounded-full transition-all duration-300"></div></div>
+                    <div id="progress-bar-container" class="w-full bg-slate-700 rounded-full h-2.5 mt-3 cursor-pointer">
+                        <div id="progress-bar" class="bg-cyan-500 h-2.5 rounded-full transition-all duration-300"></div>
+                    </div>
                 </div>
             </div>
 
@@ -243,7 +245,10 @@
                 </div>
                 <h2 id="question-text" class="text-xl md:text-2xl font-bold text-white mb-6 min-h-[6rem]"></h2>
                 <div id="options-container" class="space-y-4"></div>
-                <div class="mt-8">
+                <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                     <button id="skip-btn" class="w-full sm:w-auto bg-slate-600 text-slate-200 font-bold py-4 px-6 rounded-lg hover:bg-slate-500 transition-colors text-lg inline-flex items-center justify-center">
+                        <span class="iconify mr-2" data-icon="mdi:skip-next"></span>跳过
+                    </button>
                     <button id="confirm-btn" class="w-full bg-cyan-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-cyan-500 transition-colors disabled:bg-slate-600 disabled:cursor-not-allowed text-lg inline-flex items-center justify-center">
                         确认答案 <span class="iconify ml-2" data-icon="mdi:check"></span>
                     </button>
@@ -284,16 +289,16 @@
     <script>
         // --- DATA ---
         let questionsData = [];
-        let browseQuestions = [];
 
         // --- DOM ELEMENTS ---
         const startScreen = document.getElementById('start-screen');
         const quizContainer = document.getElementById('quiz-container');
-        const browseContainer = document.getElementById('browse-container');
+        const listViewContainer = document.getElementById('list-view-container');
         const settingsContainer = document.getElementById('settings-container');
         const startBtn = document.getElementById('start-btn');
         const browseBtn = document.getElementById('browse-btn');
         const confirmBtn = document.getElementById('confirm-btn');
+        const skipBtn = document.getElementById('skip-btn');
         const restartBtn = document.getElementById('restart-btn');
         const reviewWrongBtn = document.getElementById('review-wrong-btn');
         const questionCard = document.getElementById('question-card');
@@ -310,13 +315,18 @@
         const finalScoreEl = document.getElementById('final-score');
         const wrongTotalEl = document.getElementById('wrong-total');
         const wrongQuestionsListEl = document.getElementById('wrong-questions-list');
-        const backToStartBtn = document.getElementById('back-to-start-btn');
-        const toggleStatsBtn = document.getElementById('toggle-stats-btn');
+        const backFromListBtn = document.getElementById('back-from-list-btn');
         const statsDetailsWrapper = document.getElementById('stats-details-wrapper');
-        const toggleStatsIcon = document.getElementById('toggle-stats-icon');
+        const answerSheetBtn = document.getElementById('answer-sheet-btn');
+        const listViewTitle = document.getElementById('list-view-title');
+        const listViewSubtitle = document.getElementById('list-view-subtitle');
+        const listViewFilters = document.getElementById('list-view-filters');
+        const listViewQuestions = document.getElementById('list-view-questions');
+        const progressBarContainer = document.getElementById('progress-bar-container');
 
         // --- State ---
         let questions = [];
+        let questionStates = [];
         let currentQuestionIndex = 0;
         let correctCount = 0;
         let wrongCount = 0;
@@ -326,7 +336,7 @@
         let isAnswered = false;
         let selectedQuestionCount = 'all';
         let selectedQuestionType = 'all';
-        let currentBrowseQuestions = [];
+        let isAnswerCardMode = false;
         
         // --- Functions ---
         function shuffleArray(array) {
@@ -349,59 +359,124 @@
             return typeConfig[type] || { icon: "mdi:help-circle" };
         }
 
-        function initBrowseMode(questionSet) {
+        function showListView(mode) {
+            isAnswerCardMode = mode === 'answer-sheet';
             startScreen.classList.add('hidden');
             quizContainer.classList.add('hidden');
-            browseContainer.classList.remove('hidden');
-            browseQuestions = questionSet;
-            currentBrowseQuestions = [...browseQuestions];
-            generateBrowseTypeButtons();
-            renderBrowseQuestionsList(currentBrowseQuestions);
+            listViewContainer.classList.remove('hidden');
+
+            if (isAnswerCardMode) {
+                listViewTitle.textContent = '答题卡';
+                listViewSubtitle.textContent = '查看答题情况或跳转到指定题目。';
+                backFromListBtn.textContent = '返回答题';
+                generateAnswerCardFilterButtons();
+                renderQuestionList(questions);
+            } else {
+                listViewTitle.textContent = '题目浏览';
+                listViewSubtitle.textContent = '列表模式浏览所有题目。';
+                backFromListBtn.textContent = '返回设置';
+                generateBrowseTypeButtons();
+                renderQuestionList(questionsData);
+            }
+        }
+        
+        function generateAnswerCardFilterButtons() {
+            listViewFilters.innerHTML = '';
+            const statuses = {
+                'all': { label: '全部', icon: 'mdi:format-list-bulleted', count: questionStates.length },
+                'correct': { label: '正确', icon: 'mdi:check', count: questionStates.filter(s => s === 'correct').length },
+                'wrong': { label: '错误', icon: 'mdi:close', count: questionStates.filter(s => s === 'wrong').length },
+                'skipped': { label: '跳过', icon: 'mdi:skip-next', count: questionStates.filter(s => s === 'skipped').length },
+                'unanswered': { label: '未答', icon: 'mdi:help-circle-outline', count: questionStates.filter(s => s === 'unanswered').length },
+            };
+            
+            Object.entries(statuses).forEach(([status, { label, icon, count }]) => {
+                const btn = document.createElement('button');
+                btn.dataset.status = status;
+                btn.className = `type-btn ${status === 'all' ? 'active-type-btn' : 'bg-slate-800'} text-slate-300 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
+                btn.innerHTML = `<span class="iconify mr-2" data-icon="${icon}"></span>${label} (${count})`;
+                btn.addEventListener('click', () => {
+                    listViewFilters.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-type-btn'));
+                    btn.classList.add('active-type-btn');
+                    const filteredQuestions = status === 'all' ? questions : questions.filter((q, i) => questionStates[i] === status);
+                    renderQuestionList(filteredQuestions);
+                });
+                listViewFilters.appendChild(btn);
+            });
         }
 
         function generateBrowseTypeButtons() {
-            const container = document.getElementById('browse-type-selector');
-            container.innerHTML = '';
-            const typeCounts = browseQuestions.reduce((acc, q) => {
+            listViewFilters.innerHTML = '';
+            const typeCounts = questionsData.reduce((acc, q) => {
                 acc[q.type] = (acc[q.type] || 0) + 1;
                 return acc;
             }, {});
             
-            const createBtn = (type, count, icon) => `<button data-type="${type}" class="type-btn ${type === 'all' ? 'active-type-btn' : 'bg-slate-800'} text-slate-300 font-semibold py-2 px-4 rounded-full inline-flex items-center"><span class="iconify mr-2" data-icon="${icon}"></span>${type === 'all' ? '全部' : type} (${count})</button>`;
-            
-            container.innerHTML += createBtn('all', browseQuestions.length, 'mdi:format-list-bulleted');
-            
-            Object.entries(typeCounts).forEach(([type, count]) => {
-                const config = getTypeConfig(type);
-                container.innerHTML += createBtn(type, count, config.icon);
-            });
-            
-            container.querySelectorAll('.type-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    container.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-type-btn'));
-                    this.classList.add('active-type-btn');
-                    currentBrowseQuestions = this.dataset.type === 'all' ? [...browseQuestions] : browseQuestions.filter(q => q.type === this.dataset.type);
-                    renderBrowseQuestionsList(currentBrowseQuestions);
+            const createBtn = (type, count, icon) => {
+                const btn = document.createElement('button');
+                btn.dataset.type = type;
+                btn.className = `type-btn ${type === 'all' ? 'active-type-btn' : 'bg-slate-800'} text-slate-300 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
+                btn.innerHTML = `<span class="iconify mr-2" data-icon="${icon}"></span>${type === 'all' ? '全部题型' : type} (${count})`;
+                btn.addEventListener('click', () => {
+                    listViewFilters.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-type-btn'));
+                    btn.classList.add('active-type-btn');
+                    const filtered = type === 'all' ? questionsData : questionsData.filter(q => q.type === type);
+                    renderQuestionList(filtered);
                 });
+                listViewFilters.appendChild(btn);
+            };
+            
+            createBtn('all', questionsData.length, 'mdi:format-list-bulleted');
+            Object.entries(typeCounts).forEach(([type, count]) => {
+                createBtn(type, count, getTypeConfig(type).icon);
             });
         }
 
-        function renderBrowseQuestionsList(questions) {
-            const container = document.getElementById('browse-questions-list');
-            container.innerHTML = questions.length === 0 ? '<p class="text-center text-slate-400 py-4">该类型下没有题目</p>' : '';
-            questions.forEach((q, index) => {
+        function renderQuestionList(questionSet) {
+            listViewQuestions.innerHTML = questionSet.length === 0 ? '<p class="text-center text-slate-400 py-4">该分类下没有题目。</p>' : '';
+            questionSet.forEach((q) => {
                 const item = document.createElement('div');
                 item.className = 'browse-question-item border-b border-slate-700 pb-6 last:border-0 last:pb-0';
-                const optionsHtml = q.options ? q.options.map((opt, i) => `<div class="option-btn block w-full text-left p-3 border border-slate-600 rounded-lg bg-slate-800"><span class="font-bold mr-3">${q.type === '判断题' ? '' : ['A', 'B', 'C', 'D', 'E', 'F'][i] + '.'}</span>${(q.type !== '判断题' && opt.includes('、')) ? opt.substring(opt.indexOf('、') + 1) : opt}</div>`).join('') : '';
-                item.innerHTML = `
-                    <div class="flex justify-between items-start mb-2"><span class="bg-slate-700 text-cyan-300 text-sm font-semibold mr-3 px-3 py-1 rounded-full">【${q.type}】</span><span class="text-slate-400 font-medium">#${index + 1}</span></div>
-                    <div class="text-lg font-medium text-white mb-4">${q.question.replace(/\uff08\s*\uff09/g, '(____)')}</div>
-                    ${q.options ? `<div class="options-container space-y-2 mb-4">${optionsHtml}</div>` : ''}
+                if (isAnswerCardMode) item.classList.add('cursor-pointer', 'hover:bg-slate-700/50', 'p-4', 'rounded-lg');
+                
+                const optionsHtml = q.options ? q.options.map((opt, i) => `<div class="option-btn block w-full text-left p-3 border border-slate-600 rounded-lg bg-slate-800 mt-2">${opt}</div>`).join('') : '';
+
+                let answerHtmlBlock = '';
+                // In browse mode, always show the answer.
+                if (!isAnswerCardMode) {
+                    answerHtmlBlock = `
                     <div class="answer-explanation mt-4 p-4 bg-green-900/30 border border-green-500/30 rounded-lg">
                         <p class="text-green-300 font-semibold">正确答案：<span class="correct-answer-text">${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</span></p>
                         ${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> <span class="explanation-text">${q.explanation.replace(/\n/g, '<br>')}</span></p>` : ''}
                     </div>`;
-                container.appendChild(item);
+                } else { // In answer sheet mode, only show for answered questions.
+                    const stateIndex = questions.findIndex(ques => ques === q);
+                    const state = questionStates[stateIndex];
+                    if (state === 'correct' || state === 'wrong') {
+                         answerHtmlBlock = `
+                        <div class="answer-explanation mt-4 p-4 bg-green-900/30 border border-green-500/30 rounded-lg">
+                            <p class="text-green-300 font-semibold">正确答案：<span class="correct-answer-text">${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</span></p>
+                            ${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> <span class="explanation-text">${q.explanation.replace(/\n/g, '<br>')}</span></p>` : ''}
+                        </div>`;
+                    }
+                }
+
+                item.innerHTML = `
+                    <div class="flex justify-between items-start mb-2"><span class="bg-slate-700 text-cyan-300 text-sm font-semibold mr-3 px-3 py-1 rounded-full">【${q.type}】</span><span class="text-slate-400 font-medium">#${questionsData.indexOf(q) + 1}</span></div>
+                    <div class="text-lg font-medium text-white mb-4">${q.question.replace(/\uff08\s*\uff09/g, '(____)')}</div>
+                    ${q.options ? `<div class="options-container space-y-2 mb-4">${optionsHtml}</div>` : ''}
+                    ${answerHtmlBlock}`;
+                
+                if(isAnswerCardMode) {
+                    item.addEventListener('click', () => {
+                        const originalIndex = questions.findIndex(ques => ques === q);
+                        currentQuestionIndex = originalIndex;
+                        displayQuestion();
+                        listViewContainer.classList.add('hidden');
+                        quizContainer.classList.remove('hidden');
+                    });
+                }
+                listViewQuestions.appendChild(item);
             });
         }
 
@@ -411,11 +486,13 @@
             wrongCount = 0;
             sessionWrongAnswers = []; // Reset session-specific wrong answers
             questions = questionSet;
+            questionStates = new Array(questions.length).fill('unanswered');
             startScreen.classList.add('hidden');
-            browseContainer.classList.add('hidden');
+            listViewContainer.classList.add('hidden');
             resultScreen.classList.add('hidden');
             quizContainer.classList.remove('hidden');
             questionCard.classList.remove('hidden');
+            answerSheetBtn.classList.remove('hidden');
             updateStats();
             displayQuestion();
         }
@@ -427,6 +504,7 @@
             }
             isAnswered = false;
             selectedAnswers = [];
+            skipBtn.disabled = false;
             confirmBtn.disabled = true;
             confirmBtn.innerHTML = '确认答案 <span class="iconify ml-2" data-icon="mdi:check"></span>';
             const q = questions[currentQuestionIndex];
@@ -457,13 +535,10 @@
                     const isMulti = q.type === '多选题';
                     const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
                     const val = q.type === '判断题' ? opt : letters[index];
-                    const optText = (q.type !== '判断题' && opt.includes('、')) ? opt.substring(opt.indexOf('、') + 1) : opt;
                     optionsContainerEl.innerHTML += `
                         <div>
                             <input type="${isMulti ? 'checkbox' : 'radio'}" id="opt-${index}" name="option" value="${val}" class="hidden peer">
-                            <label for="opt-${index}" class="option-label block w-full text-left p-4 rounded-lg cursor-pointer">
-                                <span class="font-bold mr-3">${q.type === '判断题' ? '' : letters[index] + '.'}</span>${optText}
-                            </label>
+                            <label for="opt-${index}" class="option-label block w-full text-left p-4 rounded-lg cursor-pointer">${opt}</label>
                         </div>`;
                 });
                 optionsContainerEl.querySelectorAll('input').forEach(el => el.addEventListener('change', handleOptionSelect));
@@ -477,23 +552,32 @@
             confirmBtn.disabled = selectedAnswers.length === 0;
         }
 
-        function checkAnswer() {
-            const q = questions[currentQuestionIndex];
+        function handleAnswer(isSkipped = false) {
+             const q = questions[currentQuestionIndex];
+            if(isAnswered) return; // Prevent re-answering
+            isAnswered = true;
+            skipBtn.disabled = true;
+
             const correct = Array.isArray(q.answer) ? q.answer : [q.answer];
             let isCorrect = selectedAnswers.sort().join(',') === correct.sort().join(',');
 
+            if(isSkipped){
+                isCorrect = false;
+                questionStates[currentQuestionIndex] = 'skipped';
+            } else {
+                questionStates[currentQuestionIndex] = isCorrect ? 'correct' : 'wrong';
+            }
+
+
             if (q.options) {
-                // Logic for Multiple Choice questions when the answer is not entirely correct
                 if (q.type === '多选题' && !isCorrect) {
                      optionsContainerEl.querySelectorAll('input').forEach(input => {
                         const label = input.nextElementSibling;
                         input.disabled = true;
                         const isUserChoice = input.checked;
                         const isCorrectAnswer = correct.includes(input.value);
-
                         const iconSpan = document.createElement('span');
                         iconSpan.className = 'feedback-icon';
-
                         if (isCorrectAnswer) {
                             if (isUserChoice) {
                                 label.classList.add('correct-answer');
@@ -501,24 +585,23 @@
                                 iconSpan.innerHTML = '<span class="iconify" data-icon="mdi:check-circle-outline"></span>';
                                 label.appendChild(iconSpan);
                             } else {
-                                // This is a missed correct answer
                                 label.classList.add('missed-answer');
                                 iconSpan.classList.add('missed');
                                 iconSpan.innerHTML = '<span class="iconify" data-icon="mdi:alert-circle-outline"></span>';
                                 label.appendChild(iconSpan);
                             }
                         } else if (isUserChoice) {
-                            // This is an incorrect answer that the user picked
                             label.classList.add('wrong-answer', 'shake-animation');
                             iconSpan.classList.add('wrong');
                             iconSpan.innerHTML = '<span class="iconify" data-icon="mdi:close-circle-outline"></span>';
                             label.appendChild(iconSpan);
                         }
                     });
-                } else { // Logic for Single Choice, True/False, or perfectly correct Multiple Choice
+                } else {
                     optionsContainerEl.querySelectorAll('input').forEach(input => {
                         const label = input.nextElementSibling;
                         input.disabled = true;
+                        if(isSkipped) return;
                         const isUserChoice = input.checked;
                         const isCorrectAnswer = correct.includes(input.value);
 
@@ -542,6 +625,7 @@
                 const inputs = document.querySelectorAll('.fill-blank-input, #short-answer-input');
                 inputs.forEach((input, index) => {
                     input.disabled = true;
+                    if(isSkipped) return;
                     const isBlankCorrect = (input.value.trim().toLowerCase() === (correct[index] || '').trim().toLowerCase());
                     input.classList.add(isBlankCorrect ? 'correct-answer' : 'wrong-answer');
                 });
@@ -554,13 +638,21 @@
                 sessionWrongAnswers.push(q);
             }
             
-            const explanationHtml = `<div class="mt-4 p-4 bg-slate-800 border border-slate-700 rounded-lg"><p class="text-green-300 font-semibold">正确答案：${correct.join(', ')}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> ${q.explanation.replace(/\n/g, '<br>')}</p>` : ''}</div>`;
-            optionsContainerEl.insertAdjacentHTML('beforeend', explanationHtml);
+            if(!isSkipped){
+                const explanationHtml = `<div class="mt-4 p-4 bg-slate-800 border border-slate-700 rounded-lg"><p class="text-green-300 font-semibold">正确答案：${correct.join(', ')}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> ${q.explanation.replace(/\n/g, '<br>')}</p>` : ''}</div>`;
+                optionsContainerEl.insertAdjacentHTML('beforeend', explanationHtml);
+            }
             
             updateStats();
-            isAnswered = true;
             confirmBtn.innerHTML = '下一题 <span class="iconify ml-2" data-icon="mdi:arrow-right"></span>';
             confirmBtn.disabled = false;
+
+            if(isSkipped){
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    displayQuestion();
+                }, 300); // A small delay to show the user the question is skipped
+            }
         }
 
         function updateStats() {
@@ -575,6 +667,7 @@
         function showResults() {
             questionCard.classList.add('hidden');
             resultScreen.classList.remove('hidden');
+            answerSheetBtn.classList.add('hidden');
 
             wrongAnswers = sessionWrongAnswers; // Update the persistent wrong answers list
 
@@ -694,7 +787,7 @@
                     let shuffled = shuffleArray(filtered);
                     let set = selectedQuestionCount === 'all' ? shuffled : shuffled.slice(0, parseInt(selectedQuestionCount));
                     if (set.length === 0) alert('没有找到符合条件的题目！'); else initQuiz(set);
-                } else { initBrowseMode(questionsData); }
+                } else { showListView('browse'); }
             } catch (error) { alert('加载题目失败！'); }
             finally { btn.disabled = false; btn.innerHTML = originalHtml; }
         }
@@ -720,22 +813,31 @@
             document.getElementById('bank-password').addEventListener('keypress', (e) => e.key === 'Enter' && verifyPassword());
             startBtn.addEventListener('click', () => loadAndStart('quiz'));
             browseBtn.addEventListener('click', () => loadAndStart('browse'));
-            confirmBtn.addEventListener('click', () => isAnswered ? (currentQuestionIndex++, displayQuestion()) : checkAnswer());
+            confirmBtn.addEventListener('click', () => isAnswered ? (currentQuestionIndex++, displayQuestion()) : handleAnswer());
+            skipBtn.addEventListener('click', () => handleAnswer(true));
             restartBtn.addEventListener('click', () => { 
                 quizContainer.classList.add('hidden'); 
-                startScreen.classList.remove('hidden'); 
-                // Reset to initial state for a new session from scratch
+                startScreen.classList.remove('hidden');
+                answerSheetBtn.classList.add('hidden'); 
                 if(bankInfo && !bankInfo.hasPassword) {
                      settingsContainer.classList.remove('hidden');
                 }
             });
             reviewWrongBtn.addEventListener('click', () => initQuiz(shuffleArray(wrongAnswers)));
-            backToStartBtn.addEventListener('click', () => { browseContainer.classList.add('hidden'); startScreen.classList.remove('hidden'); });
-            
-            toggleStatsBtn.addEventListener('click', () => {
-                statsDetailsWrapper.classList.toggle('collapsed');
-                toggleStatsIcon.classList.toggle('collapsed');
+            backFromListBtn.addEventListener('click', () => {
+                listViewContainer.classList.add('hidden');
+                if(isAnswerCardMode){
+                    quizContainer.classList.remove('hidden');
+                } else {
+                    startScreen.classList.remove('hidden');
+                }
             });
+            
+            progressBarContainer.addEventListener('click', () => {
+                statsDetailsWrapper.classList.toggle('collapsed');
+            });
+
+            answerSheetBtn.addEventListener('click', () => showListView('answer-sheet'));
         });
     </script>
 </body>
