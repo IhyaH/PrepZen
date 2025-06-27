@@ -19,6 +19,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -26,6 +27,12 @@
             background-color: #0f172a;
             color: #cbd5e1;
             -webkit-tap-highlight-color: transparent;
+        }
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+            text-shadow: 6px 6px 0px #0c1222; /* 增加像素感的阴影 */
+            -webkit-font-smoothing: none; /* 关闭抗锯齿以保持像素感 */
+            -moz-osx-font-smoothing: grayscale;
         }
         /* 交互动效 */
         .btn-hover { transition: all 0.3s ease; }
