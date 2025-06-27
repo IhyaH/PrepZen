@@ -18,7 +18,6 @@
     <!-- 依赖库 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
@@ -29,9 +28,7 @@
             -webkit-tap-highlight-color: transparent;
         }
         /* 交互动效 */
-        .btn-hover {
-            transition: all 0.3s ease;
-        }
+        .btn-hover { transition: all 0.3s ease; }
         .btn-hover:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
@@ -52,13 +49,12 @@
         }
         /* 答题选项样式 */
         .option-label {
+            position: relative; /* For icon positioning */
             transition: all 0.2s ease-in-out;
             border: 2px solid #334155;
             background-color: #1e293b;
         }
-        .option-label:hover {
-            border-color: #38bdf8;
-        }
+        .option-label:hover { border-color: #38bdf8; }
         .peer:checked + .option-label {
             border-color: #38bdf8;
             background-color: #334155;
@@ -67,18 +63,48 @@
             border-color: #22c55e !important;
             background-color: #16653433 !important;
             color: #dcfce7;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
         }
         .wrong-answer {
             border-color: #ef4444 !important;
             background-color: #991b1b33 !important;
             color: #fee2e2;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
         }
+        .missed-answer {
+            border-color: #f59e0b !important; /* New style for missed answers */
+            background-color: #b4530933 !important;
+            color: #fef3c7;
+        }
+
+        .feedback-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+        .feedback-icon.correct { color: #22c55e; }
+        .feedback-icon.wrong { color: #ef4444; }
+        .feedback-icon.missed { color: #f59e0b; } /* New icon color */
+        
+        @keyframes shake {
+          10%, 90% { transform: translate3d(-1px, -50%, 0); }
+          20%, 80% { transform: translate3d(2px, -50%, 0); }
+          30%, 50%, 70% { transform: translate3d(-4px, -50%, 0); }
+          40%, 60% { transform: translate3d(4px, -50%, 0); }
+        }
+        .shake-animation .feedback-icon.wrong { animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both; }
+
         /* 按钮激活状态 */
         .active-count-btn, .active-type-btn {
             background-color: #38bdf8 !important;
             color: #0f172a !important;
             font-weight: bold;
         }
+        /* Iconify 加载动画 */
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         /* 源代码保护 */
         * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         button, input, textarea, select, a { pointer-events: auto; }
@@ -96,7 +122,7 @@
                 <h1 class="text-2xl font-bold">PrepZen</h1>
             </div>
             <a href="index.html" class="font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
-                <i class="fas fa-home mr-2"></i>返回首页
+                <span class="iconify mr-2" data-icon="mdi:home"></span>返回首页
             </a>
         </nav>
     </header>
@@ -105,54 +131,59 @@
         
         <!-- Start Screen -->
         <div id="start-screen" class="text-center card p-8 rounded-2xl shadow-lg">
-            <h1 class="text-3xl md:text-4xl font-bold text-white mb-6">练习设置</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">练习设置</h1>
             
-            <div class="mb-6">
+            <div class="mb-8">
                 <div id="current-bank-display" class="inline-flex items-center bg-slate-700 text-cyan-300 font-semibold py-3 px-6 rounded-full">
-                    <i class="fas fa-calculator mr-2"></i>
+                    <span class="iconify mr-2" data-icon="mdi:calculator"></span>
                     <span id="bank-name">加载中...</span>
                 </div>
-                <p class="text-slate-400 text-sm mt-2">当前练习题库</p>
             </div>
-            
+
             <div id="password-section" class="mb-8 hidden">
                 <div class="bg-slate-800 border border-yellow-500/50 rounded-lg p-6 max-w-md mx-auto">
                     <div class="text-center mb-4">
-                        <i class="fas fa-lock text-yellow-400 text-2xl mb-2"></i>
+                        <span class="iconify text-yellow-400 text-3xl mb-2" data-icon="mdi:lock"></span>
                         <h3 class="text-lg font-semibold text-yellow-300">题库密码验证</h3>
                         <p id="password-hint" class="text-yellow-400 text-sm mt-1">请输入题库密码</p>
                     </div>
                     <div class="space-y-4">
                         <input type="password" id="bank-password" class="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="请输入密码">
-                        <button id="verify-password-btn" class="w-full bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
-                            <i class="fas fa-key mr-2"></i>验证密码
+                        <button id="verify-password-btn" class="w-full bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-yellow-700 transition-colors inline-flex items-center justify-center">
+                            <span class="iconify mr-2" data-icon="mdi:key-variant"></span>验证密码
                         </button>
                     </div>
                     <div id="password-error" class="hidden mt-3 text-red-400 text-sm text-center">
-                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                        <span class="iconify mr-1" data-icon="mdi:alert-triangle"></span>
                         <span id="password-error-text">密码错误，请重试</span>
                     </div>
                 </div>
             </div>
-            
-            <div class="mb-6">
-                <p class="text-slate-300 mb-4 font-semibold">请选择题型：</p>
-                <div id="question-type-selector" class="flex justify-center flex-wrap gap-3 sm:gap-4 mb-2"></div>
-                <p id="total-questions-display" class="text-center text-slate-400 text-sm">题库总数: <span class="font-medium">0</span> 题</p>
-            </div>
-            
-            <div class="mb-8">
-                <p class="text-slate-300 mb-4 font-semibold">请选择本次练习的题目数量：</p>
-                <div id="question-count-selector" class="flex justify-center flex-wrap gap-3 sm:gap-4"></div>
-            </div>
-            
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <button id="start-btn" class="btn-hover bg-cyan-500 text-white font-bold py-3 px-8 rounded-full shadow-lg">
-                    <i class="fas fa-play mr-2"></i>开始答题
-                </button>
-                <button id="browse-btn" class="btn-hover bg-slate-700/80 text-slate-100 font-bold py-3 px-8 rounded-full">
-                    <i class="fas fa-book-open mr-2"></i>浏览题目
-                </button>
+
+            <!-- Settings Container (hidden until password is verified if needed) -->
+            <div id="settings-container" class="hidden">
+                <p class="text-slate-400 mb-8">请配置你的练习，然后开始挑战吧！</p>
+                <div class="space-y-8 mb-10 text-center">
+                    <!-- Question Type Selection -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">题型选择</h2>
+                        <div id="question-type-selector" class="flex flex-wrap justify-center gap-3"></div>
+                    </div>
+                    <!-- Question Count Selection -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">数量选择</h2>
+                        <div id="question-count-selector" class="flex flex-wrap justify-center gap-3"></div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button id="start-btn" class="btn-hover bg-cyan-500 text-white font-bold py-3 px-8 rounded-full shadow-lg inline-flex items-center justify-center text-lg">
+                        <span class="iconify mr-2" data-icon="mdi:play"></span>开始答题
+                    </button>
+                    <button id="browse-btn" class="btn-hover bg-slate-700/80 text-slate-100 font-bold py-3 px-8 rounded-full inline-flex items-center justify-center text-lg">
+                        <span class="iconify mr-2" data-icon="mdi:book-open-variant"></span>浏览题目
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -165,8 +196,8 @@
             <div id="browse-type-selector" class="flex justify-center flex-wrap gap-3 sm:gap-4 mb-6"></div>
             <div id="browse-questions-list" class="card p-6 rounded-2xl space-y-6"></div>
             <div class="text-center mt-8">
-                <button id="back-to-start-btn" class="btn-hover bg-slate-700 text-white font-bold py-3 px-8 rounded-full">
-                    <i class="fas fa-home mr-2"></i>返回设置
+                <button id="back-to-start-btn" class="btn-hover bg-slate-700 text-white font-bold py-3 px-8 rounded-full inline-flex items-center justify-center">
+                    <span class="iconify mr-2" data-icon="mdi:home"></span>返回设置
                 </button>
             </div>
         </div>
@@ -191,8 +222,8 @@
                 <h2 id="question-text" class="text-xl md:text-2xl font-bold text-white mb-6 min-h-[6rem]"></h2>
                 <div id="options-container" class="space-y-4"></div>
                 <div class="mt-8">
-                    <button id="confirm-btn" class="w-full bg-cyan-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-cyan-500 transition-colors disabled:bg-slate-600 disabled:cursor-not-allowed text-lg">
-                        确认答案 <i class="fas fa-check ml-2"></i>
+                    <button id="confirm-btn" class="w-full bg-cyan-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-cyan-500 transition-colors disabled:bg-slate-600 disabled:cursor-not-allowed text-lg inline-flex items-center justify-center">
+                        确认答案 <span class="iconify ml-2" data-icon="mdi:check"></span>
                     </button>
                 </div>
             </div>
@@ -204,11 +235,11 @@
                     <div><p class="text-lg text-slate-300">答错题目</p><p id="wrong-total" class="text-5xl font-bold text-red-400">0</p></div>
                 </div>
                 <div class="mt-8 w-full max-w-sm mx-auto flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-                    <button id="review-wrong-btn" class="btn-hover w-full bg-red-600 text-white font-bold py-3 px-6 rounded-full disabled:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fas fa-book-open mr-2"></i>重练错题
+                    <button id="review-wrong-btn" class="btn-hover w-full bg-red-600 text-white font-bold py-3 px-6 rounded-full disabled:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center">
+                        <span class="iconify mr-2" data-icon="mdi:book-open-variant"></span>重练错题
                     </button>
-                    <button id="restart-btn" class="btn-hover w-full bg-slate-700 text-white font-bold py-3 px-6 rounded-full">
-                        <i class="fas fa-home mr-2"></i>返回设置
+                    <button id="restart-btn" class="btn-hover w-full bg-slate-700 text-white font-bold py-3 px-6 rounded-full inline-flex items-center justify-center">
+                        <span class="iconify mr-2" data-icon="mdi:home"></span>返回设置
                     </button>
                 </div>
                  <div id="wrong-questions-list" class="mt-8 text-left hidden"></div>
@@ -219,15 +250,14 @@
         <footer class="bg-transparent text-slate-400 py-12">
             <div class="container mx-auto px-6 text-center">
                 <p>&copy; <span id="current-year"></span> PrepZen. All Rights Reserved.</p>
-                <a href="https://github.com/IhyaH" target="_blank" class="hover:text-cyan-400 transition-colors inline-block mt-2">
-                    <i class="fab fa-github mr-1"></i> GitHub
+                <a href="https://github.com/IhyaH" target="_blank" class="hover:text-cyan-400 transition-colors inline-flex items-center mt-2">
+                    <span class="iconify mr-1" data-icon="mdi:github"></span> GitHub
                 </a>
             </div>
         </footer>
     </main>
 
     <script src="./data/question-loader.js"></script>
-    <script src="./ai-parser.js"></script>
     
     <script>
         // --- DATA ---
@@ -238,6 +268,7 @@
         const startScreen = document.getElementById('start-screen');
         const quizContainer = document.getElementById('quiz-container');
         const browseContainer = document.getElementById('browse-container');
+        const settingsContainer = document.getElementById('settings-container');
         const startBtn = document.getElementById('start-btn');
         const browseBtn = document.getElementById('browse-btn');
         const confirmBtn = document.getElementById('confirm-btn');
@@ -283,13 +314,13 @@
         
         function getTypeConfig(type) {
             const typeConfig = {
-                "单选题": { icon: "fa-dot-circle", color: "cyan" },
-                "多选题": { icon: "fa-check-square", color: "blue" },
-                "判断题": { icon: "fa-question-circle", color: "purple" },
-                "填空题": { icon: "fa-edit", color: "yellow" },
-                "简答题": { icon: "fa-align-left", color: "red" }
+                "单选题": { icon: "mdi:record-circle-outline" },
+                "多选题": { icon: "mdi:check-box-multiple-outline" },
+                "判断题": { icon: "mdi:help-circle-outline" },
+                "填空题": { icon: "mdi:pencil-outline" },
+                "简答题": { icon: "mdi:format-align-left" }
             };
-            return typeConfig[type] || { icon: "fa-question", color: "slate" };
+            return typeConfig[type] || { icon: "mdi:help-circle" };
         }
 
         function initBrowseMode(questionSet) {
@@ -310,12 +341,13 @@
                 return acc;
             }, {});
             
-            const allButton = `<button data-type="all" class="type-btn active-type-btn bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-full"><i class="fas fa-list mr-1"></i>全部 (${browseQuestions.length})</button>`;
-            container.innerHTML += allButton;
+            const createBtn = (type, count, icon) => `<button data-type="${type}" class="type-btn ${type === 'all' ? 'active-type-btn' : 'bg-slate-800'} text-slate-300 font-semibold py-2 px-4 rounded-full inline-flex items-center"><span class="iconify mr-2" data-icon="${icon}"></span>${type === 'all' ? '全部' : type} (${count})</button>`;
+            
+            container.innerHTML += createBtn('all', browseQuestions.length, 'mdi:format-list-bulleted');
             
             Object.entries(typeCounts).forEach(([type, count]) => {
                 const config = getTypeConfig(type);
-                container.innerHTML += `<button data-type="${type}" class="type-btn bg-slate-800 text-slate-300 font-semibold py-2 px-4 rounded-full"><i class="fas ${config.icon} mr-1"></i>${type} (${count})</button>`;
+                container.innerHTML += createBtn(type, count, config.icon);
             });
             
             container.querySelectorAll('.type-btn').forEach(btn => {
@@ -341,7 +373,7 @@
                     ${q.options ? `<div class="options-container space-y-2 mb-4">${optionsHtml}</div>` : ''}
                     <div class="answer-explanation mt-4 p-4 bg-green-900/30 border border-green-500/30 rounded-lg">
                         <p class="text-green-300 font-semibold">正确答案：<span class="correct-answer-text">${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</span></p>
-                        <p class="text-slate-300 mt-2"><strong>解析:</strong> <span class="explanation-text">${q.explanation || '暂无解析'}</span></p>
+                        ${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> <span class="explanation-text">${q.explanation.replace(/\n/g, '<br>')}</span></p>` : ''}
                     </div>`;
                 container.appendChild(item);
             });
@@ -370,7 +402,7 @@
             isAnswered = false;
             selectedAnswers = [];
             confirmBtn.disabled = true;
-            confirmBtn.innerHTML = '确认答案 <i class="fas fa-check ml-2"></i>';
+            confirmBtn.innerHTML = '确认答案 <span class="iconify ml-2" data-icon="mdi:check"></span>';
             const q = questions[currentQuestionIndex];
             questionTypeEl.textContent = `【${q.type}】`;
             questionTextEl.innerHTML = q.question.replace(/\uff08\s*\uff09/g, '<span class="text-slate-400">(____)</span>');
@@ -386,7 +418,7 @@
                     });
                 } else {
                     selectedAnswers = new Array((q.question.match(/____/g) || []).length).fill('');
-                    questionTextEl.innerHTML = q.question.replace(/____/g, (_, offset) => `<input type="text" class="fill-blank-input inline-block w-32 px-2 py-1 bg-slate-900 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500" data-fill-blank-index="${q.question.substring(0, offset).match(/____/g)?.length || 0}">`);
+                    questionTextEl.innerHTML = q.question.replace(/____/g, (_, offset) => `<input type="text" class="fill-blank-input inline-block w-32 px-2 py-1 bg-slate-900 border border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500" data-fill-blank-index="${(q.question.substring(0, offset).match(/____/g) || []).length}">`);
                     questionTextEl.querySelectorAll('.fill-blank-input').forEach(input => {
                         input.addEventListener('input', () => {
                             selectedAnswers = Array.from(questionTextEl.querySelectorAll('.fill-blank-input')).map(i => i.value.trim());
@@ -423,14 +455,63 @@
             const q = questions[currentQuestionIndex];
             const correct = Array.isArray(q.answer) ? q.answer : [q.answer];
             let isCorrect = selectedAnswers.sort().join(',') === correct.sort().join(',');
-            
-            if (q.type.includes('题')) { // Not fill-in-the-blank or short answer
-                optionsContainerEl.querySelectorAll('input').forEach(input => {
-                    const label = input.nextElementSibling;
-                    input.disabled = true;
-                    if (correct.includes(input.value)) label.classList.add('correct-answer');
-                    if (input.checked && !correct.includes(input.value)) label.classList.add('wrong-answer');
-                });
+
+            if (q.options) {
+                // Logic for Multiple Choice questions when the answer is not entirely correct
+                if (q.type === '多选题' && !isCorrect) {
+                     optionsContainerEl.querySelectorAll('input').forEach(input => {
+                        const label = input.nextElementSibling;
+                        input.disabled = true;
+                        const isUserChoice = input.checked;
+                        const isCorrectAnswer = correct.includes(input.value);
+
+                        const iconSpan = document.createElement('span');
+                        iconSpan.className = 'feedback-icon';
+
+                        if (isCorrectAnswer) {
+                            if (isUserChoice) {
+                                label.classList.add('correct-answer');
+                                iconSpan.classList.add('correct');
+                                iconSpan.innerHTML = '<span class="iconify" data-icon="mdi:check-circle-outline"></span>';
+                                label.appendChild(iconSpan);
+                            } else {
+                                // This is a missed correct answer
+                                label.classList.add('missed-answer');
+                                iconSpan.classList.add('missed');
+                                iconSpan.innerHTML = '<span class="iconify" data-icon="mdi:alert-circle-outline"></span>';
+                                label.appendChild(iconSpan);
+                            }
+                        } else if (isUserChoice) {
+                            // This is an incorrect answer that the user picked
+                            label.classList.add('wrong-answer', 'shake-animation');
+                            iconSpan.classList.add('wrong');
+                            iconSpan.innerHTML = '<span class="iconify" data-icon="mdi:close-circle-outline"></span>';
+                            label.appendChild(iconSpan);
+                        }
+                    });
+                } else { // Logic for Single Choice, True/False, or perfectly correct Multiple Choice
+                    optionsContainerEl.querySelectorAll('input').forEach(input => {
+                        const label = input.nextElementSibling;
+                        input.disabled = true;
+                        const isUserChoice = input.checked;
+                        const isCorrectAnswer = correct.includes(input.value);
+
+                        if (isCorrectAnswer) {
+                            label.classList.add('correct-answer');
+                            const iconSpan = document.createElement('span');
+                            iconSpan.className = 'feedback-icon correct';
+                            iconSpan.innerHTML = '<span class="iconify" data-icon="mdi:check-circle-outline"></span>';
+                            label.appendChild(iconSpan);
+                        }
+                        if (isUserChoice && !isCorrectAnswer) {
+                            label.classList.add('wrong-answer', 'shake-animation');
+                            const iconSpan = document.createElement('span');
+                            iconSpan.className = 'feedback-icon wrong';
+                            iconSpan.innerHTML = '<span class="iconify" data-icon="mdi:close-circle-outline"></span>';
+                            label.appendChild(iconSpan);
+                        }
+                    });
+                }
             } else { // Handle text inputs
                 const inputs = document.querySelectorAll('.fill-blank-input, #short-answer-input');
                 inputs.forEach((input, index) => {
@@ -448,7 +529,7 @@
             
             updateStats();
             isAnswered = true;
-            confirmBtn.innerHTML = '下一题 <i class="fas fa-arrow-right ml-2"></i>';
+            confirmBtn.innerHTML = '下一题 <span class="iconify ml-2" data-icon="mdi:arrow-right"></span>';
             confirmBtn.disabled = false;
         }
 
@@ -458,7 +539,7 @@
             const total = correctCount + wrongCount;
             accuracyEl.textContent = `${total > 0 ? Math.round((correctCount / total) * 100) : 0}%`;
             progressTextEl.textContent = `${Math.min(currentQuestionIndex + 1, questions.length)}/${questions.length}`;
-            progressBarEl.style.width = `${total > 0 ? (total / questions.length) * 100 : 0}%`;
+            progressBarEl.style.width = `${total > 0 ? ((correctCount + wrongCount) / questions.length) * 100 : 0}%`;
         }
         
         function showResults() {
@@ -486,9 +567,20 @@
                 bankInfo = await questionLoader.getQuestionBankInfo(selectedQuestionBank);
                 document.title = `${bankInfo.subject} - PrepZen 练习`;
                 document.getElementById('bank-name').textContent = bankInfo.subject;
-                if (bankInfo.hasPassword) document.getElementById('password-section').classList.remove('hidden');
+                
+                if (bankInfo.hasPassword) {
+                    document.getElementById('password-section').classList.remove('hidden');
+                    // 设置密码提示
+                    const passwordHintElement = document.getElementById('password-hint');
+                    if (bankInfo.passwordHint) {
+                        passwordHintElement.textContent = bankInfo.passwordHint;
+                    }
+                } else {
+                    settingsContainer.classList.remove('hidden');
+                }
+                                
                 updateQuestionTypeSelector(bankInfo);
-                generateQuestionCountButtons(bankInfo.questionStats?.totalQuestions || 0);
+                generateQuestionCountButtons(bankInfo.questionStats.totalQuestions);
             } catch (error) { console.error('Failed to initialize bank info:', error); alert('加载题库信息失败'); }
         }
         
@@ -498,9 +590,9 @@
             const stats = bankInfo.questionStats || { totalQuestions: 0, questionTypesCount: {} };
             const addButton = (type, count, icon, color) => {
                 const isActive = type === 'all';
-                container.innerHTML += `<button data-type="${type}" class="type-btn ${isActive ? 'active-type-btn' : 'bg-slate-700'} text-slate-200 font-semibold py-2 px-4 rounded-full"><i class="fas ${icon} mr-1"></i>${type === 'all' ? '全部题型' : type} <span class="bg-slate-800/50 text-xs px-1.5 py-0.5 rounded-full ml-1">${count}</span></button>`;
+                container.innerHTML += `<button data-type="${type}" class="type-btn ${isActive ? 'active-type-btn' : 'bg-slate-700'} text-slate-200 font-semibold py-2 px-4 rounded-full inline-flex items-center"><span class="iconify mr-2" data-icon="${icon}"></span>${type === 'all' ? '全部题型' : type} <span class="bg-slate-800/50 text-xs px-1.5 py-0.5 rounded-full ml-1">${count}</span></button>`;
             };
-            addButton('all', stats.totalQuestions, 'fa-list');
+            addButton('all', stats.totalQuestions, 'mdi:format-list-bulleted');
             Object.entries(stats.questionTypesCount).forEach(([type, count]) => {
                 if (count > 0) {
                     const config = getTypeConfig(type);
@@ -540,13 +632,18 @@
             const password = document.getElementById('bank-password').value.trim();
             if (!password) return;
             const btn = document.getElementById('verify-password-btn');
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>';
+            btn.disabled = true; btn.innerHTML = '<span class="iconify spin mr-2" data-icon="mdi:loading"></span>';
             try {
                 await questionLoader.loadQuestions(selectedQuestionBank, password);
                 currentBankPassword = password;
                 document.getElementById('password-section').classList.add('hidden');
-            } catch (error) { document.getElementById('password-error').classList.remove('hidden'); }
-             finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-key mr-2"></i>验证密码'; }
+                settingsContainer.classList.remove('hidden');
+            } catch (error) { 
+                document.getElementById('password-error').classList.remove('hidden'); 
+            } finally { 
+                btn.disabled = false; 
+                btn.innerHTML = '<span class="iconify mr-2" data-icon="mdi:key-variant"></span>验证密码'; 
+            }
         }
         
         async function loadAndStart(mode) {
@@ -554,7 +651,8 @@
                 document.getElementById('password-section').classList.remove('hidden'); return;
             }
             const btn = mode === 'quiz' ? startBtn : browseBtn;
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>';
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = '<span class="iconify spin mr-2" data-icon="mdi:loading"></span>';
             try {
                 const data = await questionLoader.loadQuestions(selectedQuestionBank, currentBankPassword);
                 questionsData = data.questions;
@@ -565,14 +663,24 @@
                     if (set.length === 0) alert('没有找到符合条件的题目！'); else initQuiz(set);
                 } else { initBrowseMode(questionsData); }
             } catch (error) { alert('加载题目失败！'); }
-            finally {
-                btn.disabled = false;
-                startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>开始答题';
-                browseBtn.innerHTML = '<i class="fas fa-book-open mr-2"></i>浏览题目';
-            }
+            finally { btn.disabled = false; btn.innerHTML = originalHtml; }
         }
         
         document.addEventListener('DOMContentLoaded', () => {
+            // Add DevTools and context menu protection
+            (function() {
+                'use strict';
+                document.addEventListener('contextmenu', e => e.preventDefault());
+                document.addEventListener('keydown', e => {
+                    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key === 'u')) {
+                        e.preventDefault();
+                    }
+                });
+                if (window.console) {
+                    console.log('%c PrepZen %c 学习使我快乐 ', 'background:#0e7490;color:#fff;padding:5px 10px;border-radius:3px 0 0 3px;', 'background:#0f172a;color:#fff;padding:5px 10px;border-radius:0 3px 3px 0;');
+                }
+            })();
+
             initializeBankInfo();
             document.getElementById('current-year').textContent = new Date().getFullYear();
             document.getElementById('verify-password-btn').addEventListener('click', verifyPassword);
