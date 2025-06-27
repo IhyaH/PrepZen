@@ -168,6 +168,12 @@
                     <button data-type="判断题" class="type-btn bg-purple-100 text-purple-700 font-semibold py-2 px-4 rounded-full hover:bg-purple-200 transition-all">
                         <i class="fas fa-question-circle mr-1"></i>判断题
                     </button>
+                    <button data-type="填空题" class="type-btn bg-yellow-100 text-yellow-700 font-semibold py-2 px-4 rounded-full hover:bg-yellow-200 transition-all">
+                        <i class="fas fa-edit mr-1"></i>填空题
+                    </button>
+                    <button data-type="简答题" class="type-btn bg-red-100 text-red-700 font-semibold py-2 px-4 rounded-full hover:bg-red-200 transition-all">
+                        <i class="fas fa-align-left mr-1"></i>简答题
+                    </button>
                     <button data-type="all" class="type-btn active-type-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full hover:bg-gray-300 transition-all">
                         <i class="fas fa-list mr-1"></i>全部题型
                     </button>
@@ -355,12 +361,16 @@
                 const single = questionSet.filter(q => q.type === '单选题');
                 const multiple = questionSet.filter(q => q.type === '多选题');
                 const judgement = questionSet.filter(q => q.type === '判断题');
+                const fillInBlank = questionSet.filter(q => q.type === '填空题');
+                const shortAnswer = questionSet.filter(q => q.type === '简答题');
 
                 // Shuffle each type and combine
                 questions = [
                     ...shuffleArray(single),
                     ...shuffleArray(multiple),
-                    ...shuffleArray(judgement)
+                    ...shuffleArray(judgement),
+                    ...shuffleArray(fillInBlank),
+                    ...shuffleArray(shortAnswer)
                 ];
 
                 // Show quiz, hide others
@@ -395,35 +405,70 @@
 
             const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
             
-            question.options.forEach((option, index) => {
-                const isMulti = question.type === '多选题';
-                const inputType = isMulti ? 'checkbox' : 'radio';
-                const optionID = `${inputType}-${index}`;
+            if (question.type === '填空题') {
+                // Replace placeholders with input fields
+                let questionHtml = question.question.replace(/____/g, '<input type="text" class="inline-block w-32 px-2 py-1 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" data-fill-blank-index>');
+                questionTextEl.innerHTML = questionHtml;
                 
-                let optionText = option;
-                // For single/multi choice, remove the "A、" prefix
-                if (question.type !== '判断题') {
-                     optionText = option.substring(3);
-                }
-
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = `
-                    <input type="${inputType}" id="${optionID}" name="option" value="${isMulti ? optionLetters[index] : (question.type === '判断题' ? option : optionLetters[index])}" class="hidden peer">
-                    <label for="${optionID}" class="option-btn block w-full text-left p-4 border-2 border-gray-300 rounded-lg cursor-pointer peer-checked:bg-blue-100 peer-checked:border-blue-400 hover:bg-gray-50">
-                        <span class="font-bold mr-3">${question.type === '判断题' ? '' : optionLetters[index] + '.'}</span>
-                        ${optionText}
-                    </label>
+                // Add event listener to update selectedAnswers for fill-in-the-blank
+                optionsContainerEl.innerHTML = ''; // Clear options container
+                questionTextEl.querySelectorAll('input[data-fill-blank-index]').forEach((input, index) => {
+                    input.addEventListener('input', (e) => {
+                        selectedAnswers[index] = e.target.value;
+                        confirmBtn.disabled = selectedAnswers.some(ans => ans === '' || ans === undefined);
+                    });
+                });
+                confirmBtn.disabled = true; // Initially disable confirm button for fill-in-the-blank
+            } else if (question.type === '简答题') {
+                optionsContainerEl.innerHTML = `
+                    <textarea id="short-answer-input" class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 min-h-[100px]" placeholder="请输入您的答案"></textarea>
                 `;
-                optionsContainerEl.appendChild(wrapper);
+                document.getElementById('short-answer-input').addEventListener('input', (e) => {
+                    selectedAnswers = [e.target.value];
+                    confirmBtn.disabled = selectedAnswers[0].trim() === '';
+                });
+                confirmBtn.disabled = true; // Initially disable confirm button for short answer
+            } else {
+                question.options.forEach((option, index) => {
+                    const isMulti = question.type === '多选题';
+                    const inputType = isMulti ? 'checkbox' : 'radio';
+                    const optionID = `${inputType}-${index}`;
+                    
+                    let optionText = option;
+                    // For single/multi choice, remove the "A、" prefix
+                    if (question.type !== '判断题') {
+                         optionText = option.substring(3);
+                    }
 
-                wrapper.querySelector('input').addEventListener('change', handleOptionSelect);
-            });
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = `
+                        <input type="${inputType}" id="${optionID}" name="option" value="${isMulti ? optionLetters[index] : (question.type === '判断题' ? option : optionLetters[index])}" class="hidden peer">
+                        <label for="${optionID}" class="option-btn block w-full text-left p-4 border-2 border-gray-300 rounded-lg cursor-pointer peer-checked:bg-blue-100 peer-checked:border-blue-400 hover:bg-gray-50">
+                            <span class="font-bold mr-3">${question.type === '判断题' ? '' : optionLetters[index] + '.'}</span>
+                            ${optionText}
+                        </label>
+                    `;
+                    optionsContainerEl.appendChild(wrapper);
+
+                    wrapper.querySelector('input').addEventListener('change', handleOptionSelect);
+                });
+            }
             updateStats();
         }
 
         function handleOptionSelect() {
-            if (questions[currentQuestionIndex].type === '多选题') {
+            const question = questions[currentQuestionIndex];
+            if (question.type === '多选题') {
                 selectedAnswers = Array.from(optionsContainerEl.querySelectorAll('input[type="checkbox"]:checked')).map(el => el.value);
+            } else if (question.type === '填空题') {
+                // This is handled by the input event listener on the text fields themselves
+                // We just need to ensure confirmBtn is enabled if all fields are filled
+                confirmBtn.disabled = selectedAnswers.some(ans => ans === '' || ans === undefined);
+                return; // Exit as selectedAnswers is updated by input event
+            } else if (question.type === '简答题') {
+                // This is handled by the input event listener on the textarea
+                confirmBtn.disabled = selectedAnswers[0].trim() === '';
+                return; // Exit as selectedAnswers is updated by input event
             } else {
                 selectedAnswers = [optionsContainerEl.querySelector('input[type="radio"]:checked').value];
             }
