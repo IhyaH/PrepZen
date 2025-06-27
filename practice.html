@@ -105,6 +105,19 @@
         /* Iconify 加载动画 */
         .spin { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        /* Collapsible Stats Section */
+        #stats-details-wrapper {
+            transition: grid-template-rows 0.4s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        #stats-details-wrapper.collapsed {
+            grid-template-rows: 0fr;
+            opacity: 0;
+        }
+        #toggle-stats-icon.collapsed {
+            transform: rotate(180deg);
+        }
+
         /* 源代码保护 */
         * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         button, input, textarea, select, a { pointer-events: auto; }
@@ -204,14 +217,23 @@
         
         <!-- Quiz Mode -->
         <div id="quiz-container" class="hidden">
-            <div class="sticky-header mb-6 p-4 rounded-b-xl -mx-4 -mt-4 sm:-mx-6 sm:-mt-6 sm:px-6">
-                <div class="flex flex-wrap justify-between items-center text-center">
-                    <div class="w-1/2 sm:w-1/4 p-2"><p class="text-sm text-slate-400">正确</p><p id="correct-count" class="text-2xl font-bold text-green-400">0</p></div>
-                    <div class="w-1/2 sm:w-1/4 p-2"><p class="text-sm text-slate-400">错误</p><p id="wrong-count" class="text-2xl font-bold text-red-400">0</p></div>
-                    <div class="w-1/2 sm:w-1/4 p-2"><p class="text-sm text-slate-400">正确率</p><p id="accuracy" class="text-2xl font-bold text-cyan-400">0%</p></div>
-                    <div class="w-1/2 sm:w-1/4 p-2"><p class="text-sm text-slate-400">进度</p><p id="progress-text" class="text-2xl font-bold text-slate-200">0/0</p></div>
+            <div class="sticky-header mb-6 rounded-b-xl -mx-4 -mt-4 sm:-mx-6 sm:-mt-6 sm:px-6">
+                <div class="p-4 relative">
+                    <button id="toggle-stats-btn" class="absolute top-2 right-2 text-slate-400 hover:text-white p-2 z-10">
+                        <span id="toggle-stats-icon" class="iconify text-xl transition-transform duration-300" data-icon="mdi:chevron-up"></span>
+                    </button>
+                    <div id="stats-details-wrapper" class="grid grid-rows-[1fr]">
+                        <div class="overflow-hidden">
+                            <div class="flex flex-wrap justify-between items-center text-center">
+                                <div class="w-1/2 sm:w-1/4 p-2"><p class="text-sm text-slate-400">正确</p><p id="correct-count" class="text-2xl font-bold text-green-400">0</p></div>
+                                <div class="w-1/2 sm:w-1/4 p-2"><p class="text-sm text-slate-400">错误</p><p id="wrong-count" class="text-2xl font-bold text-red-400">0</p></div>
+                                <div class="w-1/2 sm:w-1/4 p-2"><p class="text-sm text-slate-400">正确率</p><p id="accuracy" class="text-2xl font-bold text-cyan-400">0%</p></div>
+                                <div class="w-1/2 sm:w-1/4 p-2"><p class="text-sm text-slate-400">进度</p><p id="progress-text" class="text-2xl font-bold text-slate-200">0/0</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div id="progress-bar" class="bg-cyan-500 h-2.5 rounded-full transition-all duration-300"></div></div>
                 </div>
-                <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div id="progress-bar" class="bg-cyan-500 h-2.5 rounded-full transition-all duration-300"></div></div>
             </div>
 
             <div id="question-card" class="card p-6 sm:p-8 rounded-2xl shadow-lg">
@@ -289,6 +311,9 @@
         const wrongTotalEl = document.getElementById('wrong-total');
         const wrongQuestionsListEl = document.getElementById('wrong-questions-list');
         const backToStartBtn = document.getElementById('back-to-start-btn');
+        const toggleStatsBtn = document.getElementById('toggle-stats-btn');
+        const statsDetailsWrapper = document.getElementById('stats-details-wrapper');
+        const toggleStatsIcon = document.getElementById('toggle-stats-icon');
 
         // --- State ---
         let questions = [];
@@ -706,6 +731,11 @@
             });
             reviewWrongBtn.addEventListener('click', () => initQuiz(shuffleArray(wrongAnswers)));
             backToStartBtn.addEventListener('click', () => { browseContainer.classList.add('hidden'); startScreen.classList.remove('hidden'); });
+            
+            toggleStatsBtn.addEventListener('click', () => {
+                statsDetailsWrapper.classList.toggle('collapsed');
+                toggleStatsIcon.classList.toggle('collapsed');
+            });
         });
     </script>
 </body>
