@@ -4,113 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrepZen - 专注高效的在线刷题平台</title>
-    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iYmxhY2siIGQ9Ik0xMiAzTDEgOWw0IDIuMTh2NkwxMiAyMWw3LTMuODJ2LTZsMi0xLjA5VjE3aDJWOUwxMiAzbTYuODIgNkwxMiAxMi43Mkw1LjE4IDlMMTIgNS4yOEwxOC44MiA5TTE3IDE2bC01IDIuNzJMNyAxNnYtMy43M0wxMiAxNWw1LTIuNzNWMTZaIi8+PC9zdmc+" />
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234EFFFE'%3E%3Cpath d='M12 3L2 9l10 6 10-6L12 3Zm0 3.84L17.55 10 12 12.16 6.45 10 12 6.84Z'/%3E%3Cpath d='M5 14.5v-2h14v2h-14Z'/%3E%3Cpath d='M10 15v5h4v-5h-4Z'/%3E%3C/svg%3E" />
     
     <!-- 安全相关元标签 -->
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
     
     <!-- 版权和所有权信息 -->
     <meta name="copyright" content="© 2025 PrepZen. All rights reserved.">
     <meta name="author" content="IhyaH">
-    <meta name="generator" content="PrepZen Protection System v1.0">
+    
+    <!-- 依赖库 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- 源代码保护脚本 -->
-    <script src="protect.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Noto Sans SC', sans-serif;
+            background-color: #0f172a; /* 深蓝灰色背景 */
+            color: #cbd5e1; /* 默认浅灰色文字 */
         }
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .feature-icon {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #3182ce 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
-        /* 源代码保护样式 */
-        * {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none;
-            -webkit-tap-highlight-color: transparent;
+        .card {
+            background-color: #1e293b; /* 卡片背景色 */
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #334155;
         }
-        
-        /* 防止图片拖拽 */
-        img {
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            /* `user-drag` 是一个非标准属性，已移除，使用 `pointer-events: none;` 即可实现类似效果 */
-            pointer-events: none;
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+            border-color: #38bdf8;
         }
-        
-        /* 隐藏滚动条但保持功能 */
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+        .btn-hover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(15, 23, 42, 0.85); /* 半透明深色背景 */
+            backdrop-filter: blur(10px); /* 毛玻璃效果 */
+            border-bottom: 1px solid #334155;
+        }
+        .section-bg-alt {
+            background-color: #1e293b;
+        }
+        /* 像素艺术字体样式 */
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+            text-shadow: 4px 4px 0px #0c1222; /* 增加像素感的阴影 */
+            -webkit-font-smoothing: none; /* 关闭抗锯齿以保持像素感 */
+            -moz-osx-font-smoothing: grayscale;
+            image-rendering: pixelated; /* 确保图片渲染也是像素风格 */
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
+
     <!-- Header -->
-    <header class="gradient-bg text-white">
+    <header class="sticky-header text-slate-200">
         <nav class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-graduation-cap text-2xl"></i>
+                <div class="flex items-center space-x-3">
+                    <span class="iconify text-cyan-400 text-3xl" data-icon="streamline-pixel:school-science-graduation-cap"></span>
                     <h1 class="text-2xl font-bold">PrepZen</h1>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div class="hidden md:flex space-x-6">
-                        <a href="#subjects" class="hover:text-gray-200 transition-colors">题库</a>
-                        <a href="#features" class="hover:text-gray-200 transition-colors">功能特色</a>
-                        <a href="#about" class="hover:text-gray-200 transition-colors">关于</a>
-                    </div>
+                <div class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="#subjects" class="hover:text-cyan-400 transition-colors">专业题库</a>
+                    <a href="#features" class="hover:text-cyan-400 transition-colors">功能特色</a>
+                    <a href="#about" class="hover:text-cyan-400 transition-colors">关于我们</a>
                 </div>
             </div>
         </nav>
     </header>
 
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-20">
+    <section class="bg-gradient-to-br from-slate-900 to-blue-900 text-white py-24 sm:py-32">
         <div class="container mx-auto px-6 text-center">
-            <h2 class="text-5xl md:text-6xl font-bold mb-6">
+            <h2 class="pixel-font text-5xl md:text-6xl mb-10 text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">
                 PrepZen
             </h2>
-            <p class="text-xl md:text-2xl mb-4 opacity-90">
+            <p class="text-xl md:text-2xl mb-6 opacity-90">
                 Prep (准备) + Zen (禅)
             </p>
-            <p class="text-lg md:text-xl mb-8 opacity-80 max-w-2xl mx-auto">
-                专为大学生打造的在线刷题平台，帮助你达到专注、高效的备考状态
+            <p class="text-lg md:text-xl mb-10 text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                专为大学生打造的在线刷题平台，我们融合前沿技术与教育理念，助你达到专注、高效的备考状态。
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="#subjects" 
-                   class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center">
-                    <i class="fas fa-calculator mr-2"></i>
-                    开始刷题
+                   class="btn-hover bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg inline-flex items-center justify-center">
+                    <i class="fas fa-bolt mr-2"></i>
+                    立即开始
                 </a>
                 <a href="#features" 
-                   class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-colors inline-flex items-center justify-center">
+                   class="btn-hover bg-slate-700/50 hover:bg-slate-700 text-slate-100 px-8 py-3 rounded-full font-bold text-lg inline-flex items-center justify-center">
                     <i class="fas fa-info-circle mr-2"></i>
                     了解更多
                 </a>
@@ -119,12 +120,12 @@
     </section>
 
     <!-- Subjects Section -->
-    <section id="subjects" class="py-20 bg-gray-50">
+    <section id="subjects" class="py-24 section-bg-alt">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-gray-800 mb-4">专业题库</h3>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    精心整理的专业题库，覆盖多个学科领域
+                <h3 class="text-4xl font-bold text-white mb-4">精选专业题库</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    覆盖多个核心学科领域，由专业人士精心整理和校对。
                 </p>
             </div>
             
@@ -135,153 +136,85 @@
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-20 bg-white">
+    <section id="features" class="py-24 bg-slate-900">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-gray-800 mb-4">功能特色</h3>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    为大学生量身定制的刷题体验，让学习更高效、更专注
+                <h3 class="text-4xl font-bold text-white mb-4">核心功能特色</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    为大学生量身定制的刷题体验，让学习更高效、更专注。
                 </p>
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="card-hover bg-gray-50 p-8 rounded-2xl text-center">
-                    <div class="feature-icon text-5xl mb-4">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">智能题库</h4>
-                    <p class="text-gray-600">
-                        多种题型支持，包括单选题、多选题、判断题、填空题、简答题，满足不同学习需求
-                    </p>
+                <!-- Feature Cards -->
+                <div class="card p-8 rounded-2xl text-center">
+                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-brain"></i></div>
+                    <h4 class="text-xl font-semibold mb-3 text-white">智能题库</h4>
+                    <p class="text-slate-400">支持单选、多选、判断、填空等多种题型，满足不同学习需求。</p>
                 </div>
-
-                <!-- Feature 2 -->
-                <div class="card-hover bg-gray-50 p-8 rounded-2xl text-center">
-                    <div class="feature-icon text-5xl mb-4">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">实时统计</h4>
-                    <p class="text-gray-600">
-                        实时显示答题进度、正确率，帮助你掌握学习状态
-                    </p>
+                <div class="card p-8 rounded-2xl text-center">
+                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-chart-line"></i></div>
+                    <h4 class="text-xl font-semibold mb-3 text-white">实时统计</h4>
+                    <p class="text-slate-400">实时显示答题进度、正确率，帮助你即时掌握学习状态。</p>
                 </div>
-
-                <!-- Feature 3 -->
-                <div class="card-hover bg-gray-50 p-8 rounded-2xl text-center">
-                    <div class="feature-icon text-5xl mb-4">
-                        <i class="fas fa-redo-alt"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">错题回顾</h4>
-                    <p class="text-gray-600">
-                        智能收集错题，支持重复练习，巩固薄弱知识点
-                    </p>
+                <div class="card p-8 rounded-2xl text-center">
+                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-redo-alt"></i></div>
+                    <h4 class="text-xl font-semibold mb-3 text-white">错题回顾</h4>
+                    <p class="text-slate-400">智能收集错题，支持重复练习，精准巩固薄弱知识点。</p>
                 </div>
-
-                <!-- Feature 4 -->
-                <div class="card-hover bg-gray-50 p-8 rounded-2xl text-center">
-                    <div class="feature-icon text-5xl mb-4">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">响应式设计</h4>
-                    <p class="text-gray-600">
-                        完美适配手机、平板、电脑，随时随地开始学习
-                    </p>
+                <div class="card p-8 rounded-2xl text-center">
+                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-mobile-alt"></i></div>
+                    <h4 class="text-xl font-semibold mb-3 text-white">全端响应式</h4>
+                    <p class="text-slate-400">完美适配手机、平板、电脑，让你随时随地进入学习状态。</p>
                 </div>
-
-                <!-- Feature 5 -->
-                <div class="card-hover bg-gray-50 p-8 rounded-2xl text-center">
-                    <div class="feature-icon text-5xl mb-4">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">灵活配置</h4>
-                    <p class="text-gray-600">
-                        自定义题目数量、题型选择，个性化学习体验
-                    </p>
+                <div class="card p-8 rounded-2xl text-center">
+                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-cogs"></i></div>
+                    <h4 class="text-xl font-semibold mb-3 text-white">灵活配置</h4>
+                    <p class="text-slate-400">自定义题目数量、题型，打造个性化、高效率的学习体验。</p>
                 </div>
-
-                <!-- Feature 6 -->
-                <div class="card-hover bg-gray-50 p-8 rounded-2xl text-center">
-                    <div class="feature-icon text-5xl mb-4">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-800">快速加载</h4>
-                    <p class="text-gray-600">
-                        纯前端实现，无需安装，打开即用，学习零门槛
-                    </p>
+                <div class="card p-8 rounded-2xl text-center">
+                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-rocket"></i></div>
+                    <h4 class="text-xl font-semibold mb-3 text-white">极速加载</h4>
+                    <p class="text-slate-400">纯前端实现，无需后端和数据库，打开即用，学习零门槛。</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-white">
+    <section id="about" class="py-24 section-bg-alt">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto text-center">
-                <h3 class="text-4xl font-bold text-gray-800 mb-8">关于 PrepZen</h3>
-                <div class="text-lg text-gray-600 space-y-6">
-                    <p>
-                        PrepZen 是一个专为大学生设计的在线刷题平台。项目名称融合了 "Prep"（准备）和 "Zen"（禅）的理念，
-                        旨在帮助学生在备考过程中达到专注、高效的学习状态。
-                    </p>
-                    <p>
-                        我们相信，优质的学习工具应该简单易用、功能强大。PrepZen 采用现代化的前端技术，
-                        提供流畅的用户体验，让学习变得更加轻松愉快。
-                    </p>
-                    <p>
-                        无论你是准备期末考试、资格认证，还是想要巩固专业知识，PrepZen 都能为你提供有效的学习支持。
-                    </p>
+                <h3 class="text-4xl font-bold text-white mb-8">关于 PrepZen</h3>
+                <div class="text-lg text-slate-300 space-y-6 leading-relaxed">
+                    <p>PrepZen 是一个专为大学生设计的在线刷题平台。项目名称融合了 "Prep"（准备）和 "Zen"（禅）的理念，旨在帮助学生在备考过程中达到专注、高效的学习状态。</p>
+                    <p>我们相信，优质的学习工具应该简单易用、功能强大。PrepZen 采用现代化的前端技术，提供流畅的用户体验，让学习变得更加轻松愉快。</p>
+                    <p>无论你是准备期末考试、资格认证，还是想要巩固专业知识，PrepZen 都能为你提供有效的学习支持。</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <i class="fas fa-graduation-cap text-2xl"></i>
-                        <h4 class="text-xl font-bold">PrepZen</h4>
-                    </div>
-                    <p class="text-gray-400">
-                        专注高效的在线刷题平台，助力大学生学习成长。
-                    </p>
-                </div>
-                
-                <div>
-                    <h5 class="text-lg font-semibold mb-4">快速链接</h5>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#subjects" class="hover:text-white transition-colors">题库</a></li>
-                        <li><a href="#features" class="hover:text-white transition-colors">功能特色</a></li>
-                        <li><a href="Interactive-Practice-for-Engineering-Estimation-and-Budgeting.html" class="hover:text-white transition-colors">开始刷题</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h5 class="text-lg font-semibold mb-4">技术栈</h5>
-                    <ul class="space-y-2 text-gray-400">
-                        <li>HTML5 + CSS3 + JavaScript</li>
-                        <li>Tailwind CSS</li>
-                        <li>Font Awesome</li>
-                        <li>响应式设计</li>
-                    </ul>
-                </div>
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex justify-center items-center space-x-3 mb-4">
+                <span class="iconify text-cyan-400 text-3xl" data-icon="streamline-pixel:school-science-graduation-cap"></span>
+                <h4 class="text-xl font-bold text-white">PrepZen</h4>
             </div>
-            
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <div class="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-6">
-                    <p>&copy; <span id="current-year"></span> PrepZen. 专注学习，成就未来。</p>
-                    <div class="flex items-center space-x-4 text-sm">
-                        <a href="mailto:ihyah@foxmail.com" class="hover:text-white transition-colors">
-                            <i class="fas fa-envelope mr-1"></i>ihyah@foxmail.com
-                        </a>
-                        <a href="https://github.com/IhyaH" target="_blank" class="hover:text-white transition-colors">
-                            <i class="fab fa-github mr-1"></i>GitHub
-                        </a>
-                    </div>
-                </div>
+            <p class="max-w-lg mx-auto mb-8">
+                专注学习，成就未来。
+            </p>
+            <div class="flex justify-center items-center space-x-6 mb-8">
+                <a href="#subjects" class="hover:text-cyan-400 transition-colors">题库</a>
+                <a href="#features" class="hover:text-cyan-400 transition-colors">功能</a>
+                <a href="mailto:ihyah@foxmail.com" class="hover:text-cyan-400 transition-colors">联系我们</a>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-slate-500">
+                <p>&copy; <span id="current-year"></span> PrepZen. All Rights Reserved.</p>
+                <a href="https://github.com/IhyaH" target="_blank" class="hover:text-cyan-400 transition-colors inline-block mt-2">
+                    <i class="fab fa-github mr-1"></i> GitHub
+                </a>
             </div>
         </div>
     </footer>
@@ -290,122 +223,92 @@
     <script src="./data/question-loader.js"></script>
     
     <script>
-        // 源代码保护措施
+        // --- 核心功能脚本 ---
         (function() {
             'use strict';
             
             // 禁用右键菜单
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                return false;
-            });
+            document.addEventListener('contextmenu', e => e.preventDefault());
             
-            // 禁用常用开发者工具快捷键
-            document.addEventListener('keydown', function(e) {
-                // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
-                if (e.key === 'F12' ||
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-                    (e.ctrlKey && e.key === 'u')) {
+            // 禁用部分开发者工具快捷键
+            document.addEventListener('keydown', e => {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key === 'u')) {
                     e.preventDefault();
-                    return false;
                 }
             });
             
-            // 防止选择文本
-            document.addEventListener('selectstart', function(e) {
-                e.preventDefault();
-                return false;
+            // 打印友好的控制台警告信息
+            if (window.console) {
+                console.log('%c PrepZen %c 学习使我快乐 ', 'background:#0e7490;color:#fff;padding:5px 10px;border-radius:3px 0 0 3px;', 'background:#0f172a;color:#fff;padding:5px 10px;border-radius:0 3px 3px 0;');
+            }
+            
+            // 设置页脚年份
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
             });
-            
-            // 防止拖拽
-            document.addEventListener('dragstart', function(e) {
-                e.preventDefault();
-                return false;
-            });
-            
-            // 控制台警告信息
-            console.clear();
-            console.log('%c⚠️ 警告', 'color: red; font-size: 30px; font-weight: bold;');
-            console.log('%c此功能专为开发者设计。如果有人告诉您在此处复制粘贴内容以启用某项功能或"破解"某个人的账户，这是一种诈骗行为，会导致您的账户被盗。', 'color: red; font-size: 16px;');
-            
-        })();
-        
-        // 设置当前年份
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-        
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+
+            // 动态加载题库卡片
+            async function loadSubjectCards() {
+                const container = document.getElementById('subject-cards-container');
+                if (!container || !window.questionLoader) {
+                    console.error("无法找到容器或 questionLoader");
+                    return;
                 }
-            });
-        });
+                const subjects = window.questionLoader.getAvailableSubjects();
 
-        // 动态加载题库卡片
-        document.addEventListener('DOMContentLoaded', async () => {
-            const subjectCardsContainer = document.getElementById('subject-cards-container');
-            const availableSubjects = window.questionLoader.getAvailableSubjects();
-
-            for (const subjectInfo of availableSubjects) {
-                try {
-                    // 使用 getQuestionBankInfo 获取基本信息，不需要密码
-                    const data = await window.questionLoader.getQuestionBankInfo(subjectInfo.id);
-                    const totalQuestions = data.questionCount; // getQuestionBankInfo 返回 questionCount
-                    
-                    const iconClass = subjectInfo.iconClass || 'fas fa-question text-gray-600'; // Default icon
-                    const bgColorClass = subjectInfo.bgColorClass || 'bg-gray-100';
-                    const textColorClass = subjectInfo.textColorClass || 'text-gray-600';
-
-                    const cardHtml = `
-                        <div class="card-hover bg-white p-8 rounded-2xl border border-gray-200">
-                            <div class="flex items-center mb-4">
-                                <div class="${bgColorClass} p-3 rounded-full mr-4">
-                                    <i class="${iconClass} text-2xl"></i>
+                for (const subject of subjects) {
+                    try {
+                        const info = await window.questionLoader.getQuestionBankInfo(subject.id);
+                        const cardHtml = `
+                            <a href="practice.html?bank=${subject.id}" class="card block p-8 rounded-2xl">
+                                <div class="flex items-start mb-4">
+                                    <div class="bg-slate-700 text-cyan-400 p-3 rounded-xl mr-5">
+                                        <i class="${subject.iconClass || 'fas fa-book'} text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-bold text-white">${subject.name}</h4>
+                                        <p class="text-slate-400">${info.questionCount}道专业题目</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-xl font-semibold text-gray-800">${subjectInfo.name}</h4>
-                                    <p class="text-gray-600">${totalQuestions}道专业题目</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 mb-6">
-                                ${subjectInfo.description}
-                            </p>
-                            <a href="practice.html?bank=${subjectInfo.id}"
-                               class="inline-flex items-center ${textColorClass} hover:${textColorClass.replace('-600', '-800')} font-semibold">
-                                开始练习 <i class="fas fa-arrow-right ml-2"></i>
+                                <p class="text-slate-300 mb-6">${subject.description}</p>
+                                <span class="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors">
+                                    开始练习 <i class="fas fa-arrow-right ml-1"></i>
+                                </span>
                             </a>
-                        </div>
-                    `;
-                    subjectCardsContainer.insertAdjacentHTML('beforeend', cardHtml);
-                } catch (error) {
-                    console.error(`加载题库 ${subjectInfo.id} 信息失败:`, error);
-                    // 显示一个错误卡片，而不是完全空白
-                    const errorCardHtml = `
-                        <div class="card-hover bg-red-100 p-8 rounded-2xl border border-red-300 text-red-800">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-red-200 p-3 rounded-full mr-4">
-                                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-semibold">加载失败: ${subjectInfo.name}</h4>
-                                    <p class="text-sm">无法加载题库信息。</p>
+                        `;
+                        container.insertAdjacentHTML('beforeend', cardHtml);
+                    } catch (error) {
+                        console.error(`加载题库 ${subject.id} 信息失败:`, error);
+                        const errorCardHtml = `
+                            <div class="card bg-red-900/50 p-8 rounded-2xl border border-red-500/50 text-red-300">
+                                <div class="flex items-center mb-4">
+                                     <div class="bg-red-500/20 p-3 rounded-xl mr-5">
+                                        <i class="fas fa-exclamation-triangle text-red-400 text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-red-200">加载失败: ${subject.name}</h4>
+                                        <p class="text-sm">无法加载此题库信息。</p>
+                                    </div>
                                 </div>
                             </div>
-                            <p class="text-red-700 mb-6">
-                                请检查控制台错误信息或确保题库文件存在且格式正确。
-                            </p>
-                        </div>
-                    `;
-                    subjectCardsContainer.insertAdjacentHTML('beforeend', errorCardHtml);
+                        `;
+                        container.insertAdjacentHTML('beforeend', errorCardHtml);
+                    }
                 }
             }
-        });
+            
+            // 页面加载完成后执行
+            document.addEventListener('DOMContentLoaded', loadSubjectCards);
+        })();
     </script>
 </body>
 </html>
