@@ -295,7 +295,8 @@
         let currentQuestionIndex = 0;
         let correctCount = 0;
         let wrongCount = 0;
-        let wrongAnswers = [];
+        let wrongAnswers = []; // Persistent list for the next review session
+        let sessionWrongAnswers = []; // Temp list for the CURRENT session
         let selectedAnswers = [];
         let isAnswered = false;
         let selectedQuestionCount = 'all';
@@ -379,11 +380,11 @@
             });
         }
 
-        async function initQuiz(questionSet, isReviewMode = false) {
+        function initQuiz(questionSet) {
             currentQuestionIndex = 0;
             correctCount = 0;
             wrongCount = 0;
-            if (!isReviewMode) wrongAnswers = [];
+            sessionWrongAnswers = []; // Reset session-specific wrong answers
             questions = questionSet;
             startScreen.classList.add('hidden');
             browseContainer.classList.add('hidden');
@@ -521,8 +522,12 @@
                 });
             }
             
-            if (isCorrect) correctCount++;
-            else { wrongCount++; if (!wrongAnswers.includes(q)) wrongAnswers.push(q); }
+            if (isCorrect) {
+                correctCount++;
+            } else {
+                wrongCount++;
+                sessionWrongAnswers.push(q);
+            }
             
             const explanationHtml = `<div class="mt-4 p-4 bg-slate-800 border border-slate-700 rounded-lg"><p class="text-green-300 font-semibold">正确答案：${correct.join(', ')}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> ${q.explanation.replace(/\n/g, '<br>')}</p>` : ''}</div>`;
             optionsContainerEl.insertAdjacentHTML('beforeend', explanationHtml);
@@ -545,10 +550,14 @@
         function showResults() {
             questionCard.classList.add('hidden');
             resultScreen.classList.remove('hidden');
+
+            wrongAnswers = sessionWrongAnswers; // Update the persistent wrong answers list
+
             const score = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
             finalScoreEl.textContent = `${score}%`;
             wrongTotalEl.textContent = wrongAnswers.length;
             reviewWrongBtn.disabled = wrongAnswers.length === 0;
+            
             wrongQuestionsListEl.innerHTML = wrongAnswers.length > 0 ? '<h3 class="text-xl font-bold mb-4 text-center text-white">错题回顾</h3>' : '';
             wrongAnswers.forEach((q, index) => {
                 wrongQuestionsListEl.innerHTML += `<div class="card p-4 mb-4"><p class="font-semibold text-white">${index + 1}. ${q.question}</p><p class="text-green-300 mt-2">答案: ${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</p>${q.explanation ? `<p class="text-slate-300 mt-2">解析: ${q.explanation}</p>` : ''}</div>`;
@@ -570,7 +579,6 @@
                 
                 if (bankInfo.hasPassword) {
                     document.getElementById('password-section').classList.remove('hidden');
-                    // 设置密码提示
                     const passwordHintElement = document.getElementById('password-hint');
                     if (bankInfo.passwordHint) {
                         passwordHintElement.textContent = bankInfo.passwordHint;
@@ -688,8 +696,15 @@
             startBtn.addEventListener('click', () => loadAndStart('quiz'));
             browseBtn.addEventListener('click', () => loadAndStart('browse'));
             confirmBtn.addEventListener('click', () => isAnswered ? (currentQuestionIndex++, displayQuestion()) : checkAnswer());
-            restartBtn.addEventListener('click', () => { quizContainer.classList.add('hidden'); startScreen.classList.remove('hidden'); });
-            reviewWrongBtn.addEventListener('click', () => initQuiz(shuffleArray(wrongAnswers), true));
+            restartBtn.addEventListener('click', () => { 
+                quizContainer.classList.add('hidden'); 
+                startScreen.classList.remove('hidden'); 
+                // Reset to initial state for a new session from scratch
+                if(bankInfo && !bankInfo.hasPassword) {
+                     settingsContainer.classList.remove('hidden');
+                }
+            });
+            reviewWrongBtn.addEventListener('click', () => initQuiz(shuffleArray(wrongAnswers)));
             backToStartBtn.addEventListener('click', () => { browseContainer.classList.add('hidden'); startScreen.classList.remove('hidden'); });
         });
     </script>
