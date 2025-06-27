@@ -286,7 +286,8 @@
     <script src="./data/question-loader.js"></script>
     
     <script>
-        // 源代码保护措施
+        // 源代码保护措施 (暂时禁用以便调试)
+        /*
         (function() {
             'use strict';
             
@@ -299,7 +300,7 @@
             // 禁用常用开发者工具快捷键
             document.addEventListener('keydown', function(e) {
                 // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
-                if (e.key === 'F12' || 
+                if (e.key === 'F12' ||
                     (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
                     (e.ctrlKey && e.key === 'u')) {
                     e.preventDefault();
@@ -378,6 +379,7 @@
             console.log('%c此功能专为开发者设计。如果有人告诉您在此处复制粘贴内容以启用某项功能或"破解"某个人的账户，这是一种诈骗行为，会导致您的账户被盗。', 'color: red; font-size: 16px;');
             
         })();
+        */
         
         // 设置当前年份
         document.getElementById('current-year').textContent = new Date().getFullYear();
