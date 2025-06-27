@@ -100,6 +100,12 @@ class QuestionLoader {
                 name: '示例题库',
                 description: '示例题库，用于测试',
                 file: 'sample-questions.json'
+            },
+            {
+                id: 'jdbh',
+                name: '机动部队',
+                description: '机动部队题库',
+                file: 'jdbh-questions.json'
             }
             // 可以在这里添加更多科目
         ];
