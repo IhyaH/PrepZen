@@ -7,7 +7,7 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234EFFFE'%3E%3Cpath d='M12 3L2 9l10 6 10-6L12 3Zm0 3.84L17.55 10 12 12.16 6.45 10 12 6.84Z'/%3E%3Cpath d='M5 14.5v-2h14v2h-14Z'/%3E%3Cpath d='M10 15v5h4v-5h-4Z'/%3E%3C/svg%3E" />
     
-    <!-- 安全相关元标签 -->
+    <!-- 安全与版权元标签 -->
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -19,7 +19,6 @@
     <!-- 依赖库 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
@@ -28,12 +27,8 @@
             font-family: 'Noto Sans SC', sans-serif;
             background-color: #0f172a; /* 深蓝灰色背景 */
             color: #cbd5e1; /* 默认浅灰色文字 */
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #38bdf8 0%, #3182ce 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 30px 30px;
         }
         .card {
             background-color: #1e293b; /* 卡片背景色 */
@@ -45,12 +40,12 @@
             box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
             border-color: #38bdf8;
         }
-        .btn-hover {
+        .btn-primary {
             transition: all 0.3s ease;
         }
-        .btn-hover:hover {
+        .btn-primary:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
         }
         .sticky-header {
             position: sticky;
@@ -60,16 +55,21 @@
             backdrop-filter: blur(10px); /* 毛玻璃效果 */
             border-bottom: 1px solid #334155;
         }
-        .section-bg-alt {
-            background-color: #1e293b;
-        }
-        /* 像素艺术字体样式 */
         .pixel-font {
             font-family: 'Press Start 2P', cursive;
             text-shadow: 4px 4px 0px #0c1222; /* 增加像素感的阴影 */
             -webkit-font-smoothing: none; /* 关闭抗锯齿以保持像素感 */
             -moz-osx-font-smoothing: grayscale;
-            image-rendering: pixelated; /* 确保图片渲染也是像素风格 */
+        }
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background-image: radial-gradient(circle, rgba(29, 78, 216, 0.3) 0%, rgba(15, 23, 42, 0) 60%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -84,8 +84,8 @@
                     <h1 class="text-2xl font-bold">PrepZen</h1>
                 </div>
                 <div class="hidden md:flex items-center space-x-8 font-medium">
-                    <a href="#subjects" class="hover:text-cyan-400 transition-colors">专业题库</a>
-                    <a href="#features" class="hover:text-cyan-400 transition-colors">功能特色</a>
+                    <a href="#subjects" class="hover:text-cyan-400 transition-colors">题库中心</a>
+                    <a href="#features" class="hover:text-cyan-400 transition-colors">核心优势</a>
                     <a href="#about" class="hover:text-cyan-400 transition-colors">关于我们</a>
                 </div>
             </div>
@@ -93,39 +93,71 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-slate-900 to-blue-900 text-white py-24 sm:py-32">
-        <div class="container mx-auto px-6 text-center">
+    <section class="relative overflow-hidden text-white py-24 sm:py-32">
+        <div class="glow-effect"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
             <h2 class="pixel-font text-5xl md:text-6xl mb-10 text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">
                 PrepZen
             </h2>
-            <p class="text-xl md:text-2xl mb-6 opacity-90">
-                Prep (准备) + Zen (禅)
+            <p class="text-xl md:text-2xl mb-6 opacity-90 font-light">
+                用<span class="text-cyan-300 font-semibold">禅</span>的专注，为备考<span class="text-cyan-300 font-semibold">赋能</span>
             </p>
             <p class="text-lg md:text-xl mb-10 text-slate-300 max-w-3xl mx-auto leading-relaxed">
-                专为大学生打造的在线刷题平台，我们融合前沿技术与教育理念，助你达到专注、高效的备考状态。
+                告别题海战术，我们用智能化的练习与分析工具，助你精准定位薄弱点，高效备考，轻松拿分。
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="#subjects" 
-                   class="btn-hover bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg inline-flex items-center justify-center">
-                    <i class="fas fa-bolt mr-2"></i>
-                    立即开始
-                </a>
-                <a href="#features" 
-                   class="btn-hover bg-slate-700/50 hover:bg-slate-700 text-slate-100 px-8 py-3 rounded-full font-bold text-lg inline-flex items-center justify-center">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    了解更多
+                   class="btn-primary bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg inline-flex items-center justify-center">
+                   <span class="iconify mr-2 text-xl" data-icon="mdi:compass-outline"></span>
+                    探索题库
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Subjects Section -->
-    <section id="subjects" class="py-24 section-bg-alt">
+     <!-- Why Choose Us Section -->
+    <section id="features" class="py-24 bg-slate-900">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white mb-4">精选专业题库</h3>
+                <h3 class="text-4xl font-bold text-white mb-4">为高效学习而设计</h3>
                 <p class="text-xl text-slate-400 max-w-2xl mx-auto">
-                    覆盖多个核心学科领域，由专业人士精心整理和校对。
+                    我们相信，好的工具能让学习事半功倍。
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                        <span class="iconify text-4xl text-cyan-400" data-icon="mdi:brain"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">智能练习</h4>
+                    <p class="text-slate-400 leading-relaxed">自定义题型、数量和模式，更有错题重练机制，让你专注于真正需要提升的部分。</p>
+                </div>
+                <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                       <span class="iconify text-4xl text-cyan-400" data-icon="mdi:chart-line"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">即时反馈</h4>
+                    <p class="text-slate-400 leading-relaxed">答题后立即获得包含解析的详细反馈，实时统计正确率与进度，全面掌握学习状态。</p>
+                </div>
+                 <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                        <span class="iconify text-4xl text-cyan-400" data-icon="mdi:compass-off-outline"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">极简专注</h4>
+                    <p class="text-slate-400 leading-relaxed">无广告、无干扰的纯净学习环境。极速加载，无需等待，让你随时随地进入心流状态。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subjects Section -->
+    <section id="subjects" class="py-24 bg-slate-900/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">题库中心</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    覆盖多个核心学科领域，由专业人士精心整理和校对，持续更新中。
                 </p>
             </div>
             
@@ -135,61 +167,15 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-24 bg-slate-900">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white mb-4">核心功能特色</h3>
-                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
-                    为大学生量身定制的刷题体验，让学习更高效、更专注。
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature Cards -->
-                <div class="card p-8 rounded-2xl text-center">
-                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-brain"></i></div>
-                    <h4 class="text-xl font-semibold mb-3 text-white">智能题库</h4>
-                    <p class="text-slate-400">支持单选、多选、判断、填空等多种题型，满足不同学习需求。</p>
-                </div>
-                <div class="card p-8 rounded-2xl text-center">
-                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-chart-line"></i></div>
-                    <h4 class="text-xl font-semibold mb-3 text-white">实时统计</h4>
-                    <p class="text-slate-400">实时显示答题进度、正确率，帮助你即时掌握学习状态。</p>
-                </div>
-                <div class="card p-8 rounded-2xl text-center">
-                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-redo-alt"></i></div>
-                    <h4 class="text-xl font-semibold mb-3 text-white">错题回顾</h4>
-                    <p class="text-slate-400">智能收集错题，支持重复练习，精准巩固薄弱知识点。</p>
-                </div>
-                <div class="card p-8 rounded-2xl text-center">
-                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-mobile-alt"></i></div>
-                    <h4 class="text-xl font-semibold mb-3 text-white">全端响应式</h4>
-                    <p class="text-slate-400">完美适配手机、平板、电脑，让你随时随地进入学习状态。</p>
-                </div>
-                <div class="card p-8 rounded-2xl text-center">
-                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-cogs"></i></div>
-                    <h4 class="text-xl font-semibold mb-3 text-white">灵活配置</h4>
-                    <p class="text-slate-400">自定义题目数量、题型，打造个性化、高效率的学习体验。</p>
-                </div>
-                <div class="card p-8 rounded-2xl text-center">
-                    <div class="gradient-text text-5xl mb-4"><i class="fas fa-rocket"></i></div>
-                    <h4 class="text-xl font-semibold mb-3 text-white">极速加载</h4>
-                    <p class="text-slate-400">纯前端实现，无需后端和数据库，打开即用，学习零门槛。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- About Section -->
-    <section id="about" class="py-24 section-bg-alt">
+    <section id="about" class="py-24">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto text-center">
-                <h3 class="text-4xl font-bold text-white mb-8">关于 PrepZen</h3>
+                <span class="iconify text-cyan-400 text-5xl mb-4" data-icon="streamline-pixel:school-science-graduation-cap-solid"></span>
+                <h3 class="text-4xl font-bold text-white mb-6">关于 PrepZen</h3>
                 <div class="text-lg text-slate-300 space-y-6 leading-relaxed">
-                    <p>PrepZen 是一个专为大学生设计的在线刷题平台。项目名称融合了 "Prep"（准备）和 "Zen"（禅）的理念，旨在帮助学生在备考过程中达到专注、高效的学习状态。</p>
-                    <p>我们相信，优质的学习工具应该简单易用、功能强大。PrepZen 采用现代化的前端技术，提供流畅的用户体验，让学习变得更加轻松愉快。</p>
-                    <p>无论你是准备期末考试、资格认证，还是想要巩固专业知识，PrepZen 都能为你提供有效的学习支持。</p>
+                    <p>PrepZen 的诞生源于一个简单的想法：为大学生创造一个纯粹、高效、无干扰的在线刷题平台。我们深知备考路上的艰辛与不易，因此致力于用技术和设计，为你扫清学习障碍。</p>
+                    <p>我们坚持用户体验至上，永久免费，无广告。你的每一次进步，都是我们前行的最大动力。欢迎加入我们，一起用更“禅”的方式，迎接每一次挑战。</p>
                 </div>
             </div>
         </div>
@@ -212,8 +198,8 @@
             </div>
             <div class="border-t border-slate-800 pt-8 text-slate-500">
                 <p>&copy; <span id="current-year"></span> PrepZen. All Rights Reserved.</p>
-                <a href="https://github.com/IhyaH" target="_blank" class="hover:text-cyan-400 transition-colors inline-block mt-2">
-                    <i class="fab fa-github mr-1"></i> GitHub
+                <a href="https://github.com/IhyaH" target="_blank" class="hover:text-cyan-400 transition-colors inline-flex items-center mt-2">
+                    <span class="iconify mr-1" data-icon="mdi:github"></span> GitHub
                 </a>
             </div>
         </div>
@@ -269,19 +255,20 @@
                     try {
                         const info = await window.questionLoader.getQuestionBankInfo(subject.id);
                         const cardHtml = `
-                            <a href="practice.html?bank=${subject.id}" class="card block p-8 rounded-2xl">
-                                <div class="flex items-start mb-4">
-                                    <div class="bg-slate-700 text-cyan-400 p-3 rounded-xl mr-5">
-                                        <i class="${subject.iconClass || 'fas fa-book'} text-2xl"></i>
+                            <a href="practice.html?bank=${subject.id}" class="card block p-8 rounded-2xl group">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="bg-slate-700/50 text-cyan-400 p-4 rounded-xl">
+                                        <span class="iconify text-3xl" data-icon="${subject.iconClass || 'mdi:book-open-page-variant-outline'}"></span>
                                     </div>
-                                    <div>
-                                        <h4 class="text-xl font-bold text-white">${subject.name}</h4>
-                                        <p class="text-slate-400">${info.questionCount}道专业题目</p>
-                                    </div>
+                                    ${subject.tag ? `<span class="text-xs font-semibold ${subject.tag === '热门' ? 'bg-red-500/80' : 'bg-cyan-500/80'} text-white px-3 py-1 rounded-full">${subject.tag}</span>` : ''}
                                 </div>
-                                <p class="text-slate-300 mb-6">${subject.description}</p>
-                                <span class="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors">
-                                    开始练习 <i class="fas fa-arrow-right ml-1"></i>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-white mb-2">${subject.name}</h4>
+                                    <p class="text-slate-400">${info.questionCount} 道专业题目</p>
+                                </div>
+                                <p class="text-slate-300 my-6 text-base leading-relaxed">${subject.description}</p>
+                                <span class="font-semibold text-cyan-400 group-hover:text-white transition-colors flex items-center">
+                                    进入练习 <span class="iconify ml-2 transition-transform duration-300 group-hover:translate-x-1" data-icon="mdi:arrow-right"></span>
                                 </span>
                             </a>
                         `;
@@ -292,7 +279,7 @@
                             <div class="card bg-red-900/50 p-8 rounded-2xl border border-red-500/50 text-red-300">
                                 <div class="flex items-center mb-4">
                                      <div class="bg-red-500/20 p-3 rounded-xl mr-5">
-                                        <i class="fas fa-exclamation-triangle text-red-400 text-2xl"></i>
+                                        <span class="iconify text-red-400 text-3xl" data-icon="mdi:alert-circle-outline"></span>
                                     </div>
                                     <div>
                                         <h4 class="text-xl font-semibold text-red-200">加载失败: ${subject.name}</h4>

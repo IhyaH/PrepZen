@@ -98,7 +98,7 @@
         .shake-animation .feedback-icon.wrong { animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both; }
 
         /* 按钮激活状态 */
-        .active-count-btn, .active-type-btn {
+        .active-btn {
             background-color: #38bdf8 !important;
             color: #0f172a !important;
             font-weight: bold;
@@ -139,9 +139,9 @@
                 <button id="answer-sheet-btn" class="hidden font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
                     <span class="iconify mr-2" data-icon="mdi:grid"></span>答题卡
                 </button>
-                <a href="index.html" class="font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
-                    <span class="iconify mr-2" data-icon="mdi:home"></span>返回首页
-                </a>
+                <button id="return-to-settings-btn" class="font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
+                    <span class="iconify mr-2" data-icon="mdi:cog-outline"></span>返回设置
+                </button>
             </div>
         </nav>
         <!-- Quiz Progress Header -->
@@ -205,8 +205,16 @@
                 <div class="space-y-8 mb-10 text-center">
                     <!-- Question Type Selection -->
                     <div>
-                        <h2 class="text-xl font-semibold text-white mb-4">题型选择</h2>
+                        <h2 class="text-xl font-semibold text-white mb-4">题型选择 (可多选)</h2>
                         <div id="question-type-selector" class="flex flex-wrap justify-center gap-3"></div>
+                    </div>
+                     <!-- Practice Mode Selection -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-white mb-4">练习模式</h2>
+                        <div id="practice-mode-selector" class="flex flex-wrap justify-center gap-3">
+                             <button data-mode="sequential" class="mode-btn active-btn bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-full inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:sort-numeric-ascending"></span>顺序练习</button>
+                             <button data-mode="random" class="mode-btn bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-full inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:shuffle-variant"></span>随机练习</button>
+                        </div>
                     </div>
                     <!-- Question Count Selection -->
                     <div>
@@ -316,6 +324,8 @@
         const accuracyEl = document.getElementById('accuracy');
         const progressTextEl = document.getElementById('progress-text');
         const progressBarEl = document.getElementById('progress-bar');
+        const questionTypeSelector = document.getElementById('question-type-selector');
+        const practiceModeSelector = document.getElementById('practice-mode-selector');
         const questionTypeEl = document.getElementById('question-type');
         const questionTextEl = document.getElementById('question-text');
         const optionsContainerEl = document.getElementById('options-container');
@@ -325,6 +335,7 @@
         const backFromListBtn = document.getElementById('back-from-list-btn');
         const statsDetailsWrapper = document.getElementById('stats-details-wrapper');
         const answerSheetBtn = document.getElementById('answer-sheet-btn');
+        const returnToSettingsBtn = document.getElementById('return-to-settings-btn');
         const listViewTitle = document.getElementById('list-view-title');
         const listViewSubtitle = document.getElementById('list-view-subtitle');
         const listViewFilters = document.getElementById('list-view-filters');
@@ -343,7 +354,8 @@
         let selectedAnswers = [];
         let isAnswered = false;
         let selectedQuestionCount = 'all';
-        let selectedQuestionType = 'all';
+        let selectedQuestionTypes = ['all'];
+        let practiceMode = 'sequential';
         let isAnswerCardMode = false;
         
         // --- Functions ---
@@ -375,7 +387,7 @@
 
             if (isAnswerCardMode) {
                 listViewTitle.textContent = '答题卡';
-                listViewSubtitle.textContent = '查看答题情况或跳转到指定题目。';
+                listViewSubtitle.textContent = '查看答题情况。点击题目不会跳转，请按顺序答题。';
                 backFromListBtn.textContent = '返回答题';
                 generateAnswerCardFilterButtons();
                 renderQuestionList(questions);
@@ -401,11 +413,11 @@
             Object.entries(statuses).forEach(([status, { label, icon, count }]) => {
                 const btn = document.createElement('button');
                 btn.dataset.status = status;
-                btn.className = `type-btn ${status === 'all' ? 'active-type-btn' : 'bg-slate-800'} text-slate-300 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
+                btn.className = `type-btn ${status === 'all' ? 'active-btn' : 'bg-slate-800'} text-slate-300 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
                 btn.innerHTML = `<span class="iconify mr-2" data-icon="${icon}"></span>${label} (${count})`;
                 btn.addEventListener('click', () => {
-                    listViewFilters.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-type-btn'));
-                    btn.classList.add('active-type-btn');
+                    listViewFilters.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-btn'));
+                    btn.classList.add('active-btn');
                     const filteredQuestions = status === 'all' ? questions : questions.filter((q, i) => questionStates[i] === status);
                     renderQuestionList(filteredQuestions);
                 });
@@ -423,11 +435,11 @@
             const createBtn = (type, count, icon) => {
                 const btn = document.createElement('button');
                 btn.dataset.type = type;
-                btn.className = `type-btn ${type === 'all' ? 'active-type-btn' : 'bg-slate-800'} text-slate-300 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
+                btn.className = `type-btn ${type === 'all' ? 'active-btn' : 'bg-slate-800'} text-slate-300 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
                 btn.innerHTML = `<span class="iconify mr-2" data-icon="${icon}"></span>${type === 'all' ? '全部题型' : type} (${count})`;
                 btn.addEventListener('click', () => {
-                    listViewFilters.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-type-btn'));
-                    btn.classList.add('active-type-btn');
+                    listViewFilters.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-btn'));
+                    btn.classList.add('active-btn');
                     const filtered = type === 'all' ? questionsData : questionsData.filter(q => q.type === type);
                     renderQuestionList(filtered);
                 });
@@ -444,8 +456,7 @@
             listViewQuestions.innerHTML = questionSet.length === 0 ? '<p class="text-center text-slate-400 py-4">该分类下没有题目。</p>' : '';
             questionSet.forEach((q) => {
                 const item = document.createElement('div');
-                item.className = 'browse-question-item border-b border-slate-700 pb-6 last:border-0 last:pb-0';
-                if (isAnswerCardMode) item.classList.add('cursor-pointer', 'hover:bg-slate-700/50', 'p-4', 'rounded-lg');
+                item.className = 'browse-question-item border-b border-slate-700 pb-6 last:border-0 last:pb-0 p-4 rounded-lg';
                 
                 const optionsHtml = q.options ? q.options.map((opt, i) => `<div class="option-btn block w-full text-left p-3 border border-slate-600 rounded-lg bg-slate-800 mt-2">${opt}</div>`).join('') : '';
 
@@ -475,15 +486,6 @@
                     ${q.options ? `<div class="options-container space-y-2 mb-4">${optionsHtml}</div>` : ''}
                     ${answerHtmlBlock}`;
                 
-                if(isAnswerCardMode) {
-                    item.addEventListener('click', () => {
-                        const originalIndex = questions.findIndex(ques => ques === q);
-                        currentQuestionIndex = originalIndex;
-                        displayQuestion();
-                        listViewContainer.classList.add('hidden');
-                        quizContainer.classList.remove('hidden');
-                    });
-                }
                 listViewQuestions.appendChild(item);
             });
         }
@@ -693,6 +695,24 @@
             });
             wrongQuestionsListEl.classList.toggle('hidden', wrongAnswers.length === 0);
         }
+
+        function showStartScreen() {
+            quizContainer.classList.add('hidden');
+            quizProgressHeader.classList.add('hidden');
+            listViewContainer.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            answerSheetBtn.classList.add('hidden');
+
+            startScreen.classList.remove('hidden');
+            
+            if (bankInfo && bankInfo.hasPassword && !currentBankPassword) {
+                settingsContainer.classList.add('hidden');
+                document.getElementById('password-section').classList.remove('hidden');
+            } else {
+                settingsContainer.classList.remove('hidden');
+                document.getElementById('password-section').classList.add('hidden');
+            }
+        }
         
         // --- Event Listeners and Initialization ---
         const urlParams = new URLSearchParams(window.location.search);
@@ -728,29 +748,60 @@
         }
         
         function updateQuestionTypeSelector(bankInfo) {
-            const container = document.getElementById('question-type-selector');
-            container.innerHTML = '';
+            const container = questionTypeSelector;
+            // This function now only handles updating the class states, not re-rendering.
             const stats = bankInfo.questionStats || { totalQuestions: 0, questionTypesCount: {} };
-            const addButton = (type, count, icon, color) => {
-                const isActive = type === 'all';
-                container.innerHTML += `<button data-type="${type}" class="type-btn ${isActive ? 'active-type-btn' : 'bg-slate-700'} text-slate-200 font-semibold py-2 px-4 rounded-full inline-flex items-center"><span class="iconify mr-2" data-icon="${icon}"></span>${type === 'all' ? '全部题型' : type} <span class="bg-slate-800/50 text-xs px-1.5 py-0.5 rounded-full ml-1">${count}</span></button>`;
-            };
-            addButton('all', stats.totalQuestions, 'mdi:format-list-bulleted');
-            Object.entries(stats.questionTypesCount).forEach(([type, count]) => {
-                if (count > 0) {
-                    const config = getTypeConfig(type);
-                    addButton(type, count, config.icon, config.color);
-                }
-            });
-            container.querySelectorAll('.type-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    container.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-type-btn', 'bg-cyan-500'));
-                    this.classList.add('active-type-btn');
-                    selectedQuestionType = this.dataset.type;
-                    const countForType = selectedQuestionType === 'all' ? stats.totalQuestions : (stats.questionTypesCount[selectedQuestionType] || 0);
-                    generateQuestionCountButtons(countForType);
+            
+            if(container.children.length === 0) { // Only render buttons once
+                 const addButton = (type, count, icon) => {
+                    const btn = document.createElement('button');
+                    btn.dataset.type = type;
+                    btn.className = `type-btn ${selectedQuestionTypes.includes(type) ? 'active-btn' : 'bg-slate-700'} text-slate-200 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
+                    btn.innerHTML = `<span class="iconify mr-2" data-icon="${icon}"></span>${type === 'all' ? '全部题型' : type} <span class="bg-slate-800/50 text-xs px-1.5 py-0.5 rounded-full ml-1">${count}</span>`;
+                    container.appendChild(btn);
+                };
+                addButton('all', stats.totalQuestions, 'mdi:format-list-bulleted');
+                Object.entries(stats.questionTypesCount).forEach(([type, count]) => {
+                    if (count > 0) {
+                        addButton(type, count, getTypeConfig(type).icon);
+                    }
                 });
-            });
+                
+                container.addEventListener('click', (e) => {
+                    const target = e.target.closest('.type-btn');
+                    if(!target) return;
+
+                    const type = target.dataset.type;
+                    const allBtn = container.querySelector('[data-type="all"]');
+                    const otherBtns = Array.from(container.querySelectorAll('.type-btn:not([data-type="all"])'));
+
+                    if (type === 'all') {
+                        selectedQuestionTypes = ['all'];
+                    } else {
+                        selectedQuestionTypes = selectedQuestionTypes.filter(t => t !== 'all');
+                        if (selectedQuestionTypes.includes(type)) {
+                            selectedQuestionTypes = selectedQuestionTypes.filter(t => t !== type);
+                        } else {
+                            selectedQuestionTypes.push(type);
+                        }
+                    }
+
+                    if (selectedQuestionTypes.length === 0 || selectedQuestionTypes.length === otherBtns.length) {
+                        selectedQuestionTypes = ['all'];
+                    }
+
+                    // Update UI state
+                    container.querySelectorAll('.type-btn').forEach(btn => {
+                        if (selectedQuestionTypes.includes(btn.dataset.type)) {
+                            btn.classList.add('active-btn');
+                            btn.classList.remove('bg-slate-700');
+                        } else {
+                            btn.classList.remove('active-btn');
+                            btn.classList.add('bg-slate-700');
+                        }
+                    });
+                });
+            }
         }
         
         function generateQuestionCountButtons(total) {
@@ -760,12 +811,12 @@
             options.forEach(count => {
                 if (count < total) container.innerHTML += `<button data-count="${count}" class="count-btn bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-full">${count} 题</button>`;
             });
-            container.innerHTML += `<button data-count="all" class="count-btn active-count-btn bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-full">全部</button>`;
+            container.innerHTML += `<button data-count="all" class="count-btn active-btn bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-full">全部</button>`;
             selectedQuestionCount = 'all';
             container.querySelectorAll('.count-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    container.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active-count-btn'));
-                    this.classList.add('active-type-btn');
+                    container.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active-btn'));
+                    this.classList.add('active-btn');
                     selectedQuestionCount = this.dataset.count;
                 });
             });
@@ -818,14 +869,49 @@
             try {
                 const data = await questionLoader.loadQuestions(selectedQuestionBank, currentBankPassword);
                 questionsData = data.questions;
+
                 if (mode === 'quiz') {
-                    let filtered = selectedQuestionType === 'all' ? questionsData : questionsData.filter(q => q.type === selectedQuestionType);
-                    let shuffled = shuffleArray(filtered);
-                    let set = selectedQuestionCount === 'all' ? shuffled : shuffled.slice(0, parseInt(selectedQuestionCount));
-                    if (set.length === 0) alert('没有找到符合条件的题目！'); else initQuiz(set);
-                } else { showListView('browse'); }
-            } catch (error) { alert('加载题目失败！'); }
-            finally { btn.disabled = false; btn.innerHTML = originalHtml; }
+                    let filteredQuestions = [];
+                    if (selectedQuestionTypes.includes('all')) {
+                        filteredQuestions = [...questionsData];
+                    } else {
+                        filteredQuestions = questionsData.filter(q => selectedQuestionTypes.includes(q.type));
+                    }
+                    
+                    let finalQuestionSet = [];
+                    if (practiceMode === 'random') {
+                        const questionGroups = filteredQuestions.reduce((acc, q) => {
+                            if (!acc[q.type]) acc[q.type] = [];
+                            acc[q.type].push(q);
+                            return acc;
+                        }, {});
+
+                        const typeOrder = Object.keys(bankInfo.questionStats.questionTypesCount);
+                        typeOrder.forEach(type => {
+                            if (questionGroups[type]) {
+                                finalQuestionSet.push(...shuffleArray(questionGroups[type]));
+                            }
+                        });
+                    } else {
+                        finalQuestionSet = filteredQuestions;
+                    }
+
+                    let set = selectedQuestionCount === 'all' ? finalQuestionSet : finalQuestionSet.slice(0, parseInt(selectedQuestionCount));
+                    if (set.length === 0) {
+                        alert('没有找到符合条件的题目！请检查题型选择。');
+                    } else {
+                        initQuiz(set);
+                    }
+                } else { 
+                    showListView('browse'); 
+                }
+            } catch (error) { 
+                console.error("Failed to load and start:", error);
+                alert('加载题目失败！'); 
+            } finally { 
+                btn.disabled = false; 
+                btn.innerHTML = originalHtml; 
+            }
         }
         
         document.addEventListener('DOMContentLoaded', () => {
@@ -851,30 +937,31 @@
             browseBtn.addEventListener('click', () => loadAndStart('browse'));
             confirmBtn.addEventListener('click', () => isAnswered ? (currentQuestionIndex++, displayQuestion()) : handleAnswer());
             skipBtn.addEventListener('click', () => handleAnswer(true));
-            restartBtn.addEventListener('click', () => { 
-                quizContainer.classList.add('hidden');
-                quizProgressHeader.classList.add('hidden');
-                startScreen.classList.remove('hidden');
-                answerSheetBtn.classList.add('hidden'); 
-                if(bankInfo && !bankInfo.hasPassword) {
-                     settingsContainer.classList.remove('hidden');
-                }
-            });
+            restartBtn.addEventListener('click', showStartScreen);
             reviewWrongBtn.addEventListener('click', () => initQuiz(shuffleArray(wrongAnswers)));
             backFromListBtn.addEventListener('click', () => {
                 listViewContainer.classList.add('hidden');
                 if(isAnswerCardMode){
                     quizContainer.classList.remove('hidden');
                 } else {
-                    startScreen.classList.remove('hidden');
+                    showStartScreen();
                 }
             });
             
             progressBarContainer.addEventListener('click', () => {
                 statsDetailsWrapper.classList.toggle('collapsed');
             });
+            
+            practiceModeSelector.addEventListener('click', (e) => {
+                const target = e.target.closest('.mode-btn');
+                if(!target) return;
+                practiceModeSelector.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active-btn'));
+                target.classList.add('active-btn');
+                practiceMode = target.dataset.mode;
+            });
 
             answerSheetBtn.addEventListener('click', () => showListView('answer-sheet'));
+            returnToSettingsBtn.addEventListener('click', showStartScreen);
         });
     </script>
 </body>
