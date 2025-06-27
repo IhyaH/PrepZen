@@ -54,14 +54,18 @@ def update_question_stats(file_path):
     except Exception as e:
         print(f"处理文件 {file_path} 时发生错误: {e}")
 
-if __name__ == "__main__":
-    # 题库文件路径列表
-    # 假设脚本在项目根目录运行，题库在 data/ 目录下
-    question_bank_files = [
-        'data/sample-questions.json',
-        'data/engineering-budget-questions.json',
-        'data/jdbh-questions.json'
-    ]
+import glob
 
+if __name__ == "__main__":
+    # 获取data目录下所有题库文件（以-questions.json结尾）
+    question_bank_files = glob.glob('data/*-questions.json')
+    
+    if not question_bank_files:
+        print("未找到题库文件！请检查data目录下是否存在*-questions.json文件")
+    else:
+        print(f"找到 {len(question_bank_files)} 个题库文件:")
+        for file in question_bank_files:
+            print(f" - {file}")
+    
     for file in question_bank_files:
         update_question_stats(file)

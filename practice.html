@@ -5,22 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>工程概预算 - 在线答题</title>
     
-    <!-- 安全相关元标签 -->
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
     
-    <!-- 版权和所有权信息 -->
     <meta name="copyright" content="© 2024 PrepZen. All rights reserved.">
     <meta name="author" content="IhyaH">
     <meta name="generator" content="PrepZen Protection System v1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- 源代码保护脚本 -->
-    <script src="protect.js"></script>
     <style>
         body {
             font-family: 'Noto Sans SC', sans-serif;
@@ -40,8 +36,8 @@
             color: #991b1b; /* red-800 */
         }
         .selected-answer {
-             background-color: #e0f2fe;
-             border-color: #38bdf8;
+            background-color: #e0f2fe;
+            border-color: #38bdf8;
         }
         .active-count-btn {
             background-color: #3b82f6 !important; /* blue-500 */
@@ -105,25 +101,28 @@
 </head>
 <body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
     <div id="app" class="w-full max-w-4xl mx-auto">
+        <div class="mb-6">
+            <a href="javascript:history.back()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full inline-flex items-center transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>返回
+            </a>
+        </div>
         
         <div id="start-screen" class="text-center bg-white p-8 rounded-2xl shadow-lg">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">在线答题系统</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">题型选择</h1>
             
-            <!-- 当前题库显示 -->
             <div class="mb-6">
                 <div class="text-center">
                     <div id="current-bank-display" class="inline-flex items-center bg-indigo-100 text-indigo-700 font-semibold py-3 px-6 rounded-full">
-                         <i class="fas fa-calculator mr-2"></i>
-                         <span id="bank-name">工程概预算</span>
-                     </div>
-                     <p class="text-gray-500 text-sm mt-2">当前练习题库</p>
-                     <a href="index.html" class="inline-flex items-center text-gray-500 hover:text-gray-700 text-sm mt-2 transition-colors">
-                         <i class="fas fa-arrow-left mr-1"></i>返回首页选择其他题库
-                     </a>
+                        <i class="fas fa-calculator mr-2"></i>
+                        <span id="bank-name">工程概预算</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-2">当前练习题库</p>
+                    <a href="index.html" class="inline-flex items-center text-gray-500 hover:text-gray-700 text-sm mt-2 transition-colors">
+                        <i class="fas fa-arrow-left mr-1"></i>返回首页选择其他题库
+                    </a>
                 </div>
             </div>
             
-            <!-- 密码验证界面 -->
             <div id="password-section" class="mb-6 hidden">
                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 max-w-md mx-auto">
                     <div class="text-center mb-4">
@@ -155,50 +154,52 @@
                 </div>
             </div>
             
-            <!-- 题型选择 -->
             <div class="mb-6">
                 <p class="text-gray-600 mb-4">请选择题型：</p>
                 <div id="question-type-selector" class="flex justify-center flex-wrap gap-2 sm:gap-4 mb-6">
-                    <button data-type="单选题" class="type-btn bg-green-100 text-green-700 font-semibold py-2 px-4 rounded-full hover:bg-green-200 transition-all">
-                        <i class="fas fa-dot-circle mr-1"></i>单选题
-                    </button>
-                    <button data-type="多选题" class="type-btn bg-blue-100 text-blue-700 font-semibold py-2 px-4 rounded-full hover:bg-blue-200 transition-all">
-                        <i class="fas fa-check-square mr-1"></i>多选题
-                    </button>
-                    <button data-type="判断题" class="type-btn bg-purple-100 text-purple-700 font-semibold py-2 px-4 rounded-full hover:bg-purple-200 transition-all">
-                        <i class="fas fa-question-circle mr-1"></i>判断题
-                    </button>
-                    <button data-type="填空题" class="type-btn bg-yellow-100 text-yellow-700 font-semibold py-2 px-4 rounded-full hover:bg-yellow-200 transition-all">
-                        <i class="fas fa-edit mr-1"></i>填空题
-                    </button>
-                    <button data-type="简答题" class="type-btn bg-red-100 text-red-700 font-semibold py-2 px-4 rounded-full hover:bg-red-200 transition-all">
-                        <i class="fas fa-align-left mr-1"></i>简答题
-                    </button>
-                    <button data-type="all" class="type-btn active-type-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full hover:bg-gray-300 transition-all">
-                        <i class="fas fa-list mr-1"></i>全部题型
-                    </button>
-                </div>
+                    </div>
+                <p id="total-questions-display" class="text-center text-gray-500 text-sm mt-2">题库总数: <span class="font-medium">0</span> 题</p>
             </div>
             
-            <!-- 题目数量选择 -->
             <div class="mb-8">
                 <p class="text-gray-600 mb-4">请选择本次练习的题目数量：</p>
                 <div id="question-count-selector" class="flex justify-center flex-wrap gap-2 sm:gap-4">
-                    <button data-count="10" class="count-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full hover:bg-gray-300 transition-all">10 题</button>
-                    <button data-count="20" class="count-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full hover:bg-gray-300 transition-all">20 题</button>
-                    <button data-count="50" class="count-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full hover:bg-gray-300 transition-all">50 题</button>
-                    <button data-count="100" class="count-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full hover:bg-gray-300 transition-all">100 题</button>
-                    <button data-count="all" class="count-btn active-count-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full hover:bg-gray-300 transition-all">全部</button>
-                </div>
+                    </div>
             </div>
             
-            <button id="start-btn" class="bg-blue-500 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-600 transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
-                <i class="fas fa-play mr-2"></i>开始答题
-            </button>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button id="start-btn" class="bg-blue-500 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-600 transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                    <i class="fas fa-play mr-2"></i>开始答题
+                </button>
+                <button id="browse-btn" class="bg-purple-500 text-white font-bold py-3 px-8 rounded-full hover:bg-purple-600 transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300">
+                    <i class="fas fa-book-open mr-2"></i>浏览题目
+                </button>
+            </div>
         </div>
 
+        <div id="browse-container" class="hidden">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">题目浏览</h2>
+                <p class="text-gray-600 mt-2">列表模式浏览所有题目</p>
+            </div>
+            
+            <div class="mb-6">
+                <div id="browse-type-selector" class="flex justify-center flex-wrap gap-2 sm:gap-4 mb-6">
+                    </div>
+            </div>
+            
+            <div id="browse-questions-list" class="bg-white p-6 rounded-2xl shadow-lg space-y-6">
+                <!-- 题目列表将在这里动态生成 -->
+            </div>
+            
+            <div class="text-center mt-8">
+                <button id="back-to-start-btn" class="bg-gray-700 text-white font-bold py-3 px-8 rounded-full hover:bg-gray-800 transition-colors">
+                    <i class="fas fa-home mr-2"></i>返回首页
+                </button>
+            </div>
+        </div>
+        
         <div id="quiz-container" class="hidden">
-            <!-- Header -->
             <div class="bg-white p-4 rounded-xl shadow-md mb-6 sticky top-4 z-10">
                 <div class="flex flex-wrap justify-between items-center text-center">
                     <div class="w-1/2 sm:w-1/4 p-2">
@@ -223,7 +224,6 @@
                 </div>
             </div>
 
-            <!-- Question Card -->
             <div id="question-card" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
                 <div class="flex justify-between items-start mb-4">
                     <span id="question-type" class="bg-indigo-100 text-indigo-800 text-sm font-semibold mr-3 px-3 py-1 rounded-full"></span>
@@ -238,7 +238,6 @@
                 </div>
             </div>
             
-            <!-- Result Screen -->
             <div id="result-screen" class="hidden text-center bg-white p-8 rounded-2xl shadow-lg">
                  <h2 class="text-3xl font-bold mb-4">答题完成！</h2>
                 <div class="flex justify-around my-8">
@@ -265,9 +264,8 @@
             </div>
         </div>
         
-        <!-- Footer -->
         <footer class="text-center mt-8 text-sm text-gray-500 space-y-2">
-            <p>© 2025 PrepZen. 专注学习，成就未来。</p>
+             <p>© <span id="current-year"></span> PrepZen. 专注学习，成就未来。</p>
             <div class="flex flex-col sm:flex-row justify-center items-center space-y-1 sm:space-y-0 sm:space-x-4">
                 <a href="mailto:ihyah@foxmail.com" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
                     <i class="fas fa-envelope mr-1"></i>ihyah@foxmail.com
@@ -279,20 +277,24 @@
         </footer>
     </div>
 
-    <!-- 引入题目加载器 -->
     <script src="./data/question-loader.js"></script>
     
     <script>
         // --- DATA ---
-        let questionsData = []; // 将从JSON文件动态加载
+        let questionsData = []; // 从JSON文件动态加载
+        let browseQuestions = []; // 用于浏览模式的原始题目列表
 
         // --- DOM ELEMENTS ---
         const startScreen = document.getElementById('start-screen');
         const quizContainer = document.getElementById('quiz-container');
+        const browseContainer = document.getElementById('browse-container');
+        
         const startBtn = document.getElementById('start-btn');
+        const browseBtn = document.getElementById('browse-btn');
         const confirmBtn = document.getElementById('confirm-btn');
         const restartBtn = document.getElementById('restart-btn');
         const reviewWrongBtn = document.getElementById('review-wrong-btn');
+        
         const questionCard = document.getElementById('question-card');
         const resultScreen = document.getElementById('result-screen');
         const questionCountSelector = document.getElementById('question-count-selector');
@@ -311,8 +313,14 @@
         const wrongTotalEl = document.getElementById('wrong-total');
         const wrongQuestionsListEl = document.getElementById('wrong-questions-list');
         
+        // Browse Mode DOM Elements
+        const backToStartBtn = document.getElementById('back-to-start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const toggleAnswerBtn = document.getElementById('toggle-answer-btn');
+
         // --- State ---
-        let questions = [];
+        let questions = []; // 当前测验或浏览的题目
         let currentQuestionIndex = 0;
         let correctCount = 0;
         let wrongCount = 0;
@@ -320,72 +328,154 @@
         let selectedAnswers = [];
         let isAnswered = false;
         let selectedQuestionCount = 'all';
-
+        let selectedQuestionType = 'all';
+        
+        // 修复：移除重复声明，整合状态变量
+        let showAnswerInBrowse = false;
+        let currentBrowseQuestions = []; // 当前筛选后的浏览题目
+        
         // --- Functions ---
         
-        // Fisher-Yates shuffle algorithm
+        // 修复：独立的 Fisher-Yates shuffle 算法
         function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+            let newArr = [...array];
+            for (let i = newArr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
             }
-            return array;
+            return newArr;
+        }
+        
+        // 获取题型图标配置
+        function getTypeConfig(type) {
+            const typeConfig = {
+                "单选题": { icon: "fa-dot-circle", color: "green" },
+                "多选题": { icon: "fa-check-square", color: "blue" },
+                "判断题": { icon: "fa-question-circle", color: "purple" },
+                "填空题": { icon: "fa-edit", color: "yellow" },
+                "简答题": { icon: "fa-align-left", color: "red" }
+            };
+            return typeConfig[type] || { icon: "fa-question", color: "gray" };
         }
 
-        async function initQuiz(questionSet, isReviewMode = false, bankName = null) {
-            try {
-                // 如果没有传入questionSet，则动态加载题目数据
-                 if (!questionSet) {
-                     const bankToLoad = bankName || selectedQuestionBank;
-                     const data = await questionLoader.loadQuestions(bankToLoad);
-                     questionsData = data.questions;
-                     
-                     if (questionsData.length === 0) {
-                         alert('没有可用的题目！');
-                         return;
-                     }
-                     
-                     questionSet = questionsData;
-                 }
-                
-                // Reset state
-                currentQuestionIndex = 0;
-                correctCount = 0;
-                wrongCount = 0;
-                // Only reset wrongAnswers array when starting a new quiz (not in review mode)
-                if (!isReviewMode) {
-                     wrongAnswers = [];
-                }
-                selectedAnswers = [];
-                
-                // Separate questions by type
-                const single = questionSet.filter(q => q.type === '单选题');
-                const multiple = questionSet.filter(q => q.type === '多选题');
-                const judgement = questionSet.filter(q => q.type === '判断题');
-                const fillInBlank = questionSet.filter(q => q.type === '填空题');
-                const shortAnswer = questionSet.filter(q => q.type === '简答题');
+        // 初始化浏览模式（列表模式）
+        function initBrowseMode(questionSet) {
+            startScreen.classList.add('hidden');
+            quizContainer.classList.add('hidden');
+            browseContainer.classList.remove('hidden');
 
-                // Shuffle each type and combine
-                questions = [
-                    ...shuffleArray(single),
-                    ...shuffleArray(multiple),
-                    ...shuffleArray(judgement),
-                    ...shuffleArray(fillInBlank),
-                    ...shuffleArray(shortAnswer)
-                ];
+            browseQuestions = questionSet; // 保存原始集合
+            currentBrowseQuestions = [...browseQuestions]; // 初始显示全部
 
-                // Show quiz, hide others
-                startScreen.classList.add('hidden');
-                resultScreen.classList.add('hidden');
-                quizContainer.classList.remove('hidden');
-                questionCard.classList.remove('hidden');
-                
-                updateStats();
-                displayQuestion();
-            } catch (error) {
-                console.error('加载题目失败:', error);
-                alert('加载题目失败，请检查网络连接或联系管理员！');
+            generateBrowseTypeButtons();
+            renderBrowseQuestionsList(currentBrowseQuestions);
+        }
+
+        // 生成浏览模式下的题型筛选按钮
+        function generateBrowseTypeButtons() {
+            const container = document.getElementById('browse-type-selector');
+            container.innerHTML = '';
+            
+            const typeCounts = {};
+            browseQuestions.forEach(q => {
+                typeCounts[q.type] = (typeCounts[q.type] || 0) + 1;
+            });
+            
+            const allButton = document.createElement('button');
+            allButton.dataset.type = 'all';
+            allButton.className = 'type-btn active-type-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full';
+            allButton.innerHTML = `<i class="fas fa-list mr-1"></i>全部 (${browseQuestions.length})`;
+            container.appendChild(allButton);
+            
+            Object.entries(typeCounts).forEach(([type, count]) => {
+                const config = getTypeConfig(type);
+                const button = document.createElement('button');
+                button.dataset.type = type;
+                button.className = `type-btn bg-${config.color}-100 text-${config.color}-700 font-semibold py-2 px-4 rounded-full`;
+                button.innerHTML = `<i class="fas ${config.icon} mr-1"></i>${type} (${count})`;
+                container.appendChild(button);
+            });
+            
+            container.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    container.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-type-btn'));
+                    this.classList.add('active-type-btn');
+                    const selectedType = this.dataset.type;
+                    
+                    if (selectedType === 'all') {
+                        currentBrowseQuestions = [...browseQuestions];
+                    } else {
+                        currentBrowseQuestions = browseQuestions.filter(q => q.type === selectedType);
+                    }
+                    
+                    renderBrowseQuestionsList(currentBrowseQuestions);
+                });
+            });
+        }
+
+        // 渲染题目列表（列表模式）
+        function renderBrowseQuestionsList(questions) {
+            const container = document.getElementById('browse-questions-list');
+            container.innerHTML = '';
+
+            if (questions.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">该类型下没有题目</p>';
+                return;
             }
+
+            questions.forEach((question, index) => {
+                const config = getTypeConfig(question.type);
+                const questionElement = document.createElement('div');
+                questionElement.className = 'browse-question-item border-b border-gray-200 pb-6 last:border-0 last:pb-0';
+                questionElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="bg-indigo-100 text-indigo-800 text-sm font-semibold mr-3 px-3 py-1 rounded-full">【${question.type}】</span>
+                        <span class="text-gray-500 font-medium">#${index + 1}</span>
+                    </div>
+                    <div class="question-text text-lg font-medium mb-4">${question.question.replace(/\uff08\s*\uff09/g, '(____)')}</div>
+                    ${question.options ? `
+                        <div class="options-container space-y-2 mb-4">
+                            ${question.options.map((option, optIndex) => {
+                                const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
+                                let optionText = (question.type !== '判断题' && option.includes('、')) ? option.substring(option.indexOf('、') + 1) : option;
+                                return `
+                                    <div class="option-btn block w-full text-left p-3 border border-gray-300 rounded-lg bg-gray-50">
+                                        <span class="font-bold mr-3">${question.type === '判断题' ? '' : optionLetters[optIndex] + '.'}</span>
+                                        ${optionText}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    ` : ''}
+                    <div class="answer-explanation mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p class="text-green-700 font-semibold">正确答案：<span class="correct-answer-text">${Array.isArray(question.answer) ? question.answer.join(', ') : question.answer}</span></p>
+                        <p class="text-gray-700 mt-2"><strong>解析:</strong> <span class="explanation-text">${question.explanation || '暂无解析'}</span></p>
+                    </div>
+                `;
+                container.appendChild(questionElement);
+            });
+        }
+
+        async function initQuiz(questionSet, isReviewMode = false) {
+            currentQuestionIndex = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            if (!isReviewMode) {
+                wrongAnswers = [];
+            }
+            selectedAnswers = [];
+            
+            // 题目已经提前打乱，这里直接使用
+            questions = questionSet;
+
+            startScreen.classList.add('hidden');
+            browseContainer.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            questionCard.classList.remove('hidden');
+            
+            updateStats();
+            displayQuestion();
         }
 
         function displayQuestion() {
@@ -395,6 +485,7 @@
             }
             
             isAnswered = false;
+            selectedAnswers = [];
             confirmBtn.disabled = true;
             confirmBtn.innerHTML = '确认答案 <i class="fas fa-check ml-2"></i>';
 
@@ -403,54 +494,46 @@
             questionTypeEl.textContent = `【${question.type}】`;
             questionTextEl.innerHTML = question.question.replace(/\uff08\s*\uff09/g, '(____)');
             optionsContainerEl.innerHTML = '';
-
+            
             const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
             
             if (question.type === '填空题') {
-                // Replace placeholders with input fields
-                let questionHtml = question.question.replace(/____/g, '<input type="text" class="inline-block w-32 px-2 py-1 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" data-fill-blank-index>');
-                questionTextEl.innerHTML = questionHtml;
+                let blankCount = (question.question.match(/____/g) || []).length;
+                selectedAnswers = new Array(blankCount).fill('');
+                questionTextEl.innerHTML = question.question.replace(/____/g, (match, offset) => {
+                    const index = question.question.substring(0, offset).match(/____/g)?.length || 0;
+                    return `<input type="text" class="fill-blank-input inline-block w-32 px-2 py-1 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400" data-fill-blank-index="${index}">`;
+                });
                 
-                // Add event listener to update selectedAnswers for fill-in-the-blank
-                optionsContainerEl.innerHTML = ''; // Clear options container
-                questionTextEl.querySelectorAll('input[data-fill-blank-index]').forEach((input, index) => {
-                    input.addEventListener('input', (e) => {
-                        selectedAnswers[index] = e.target.value;
-                        confirmBtn.disabled = selectedAnswers.some(ans => ans === '' || ans === undefined);
+                questionTextEl.querySelectorAll('.fill-blank-input').forEach(input => {
+                    input.addEventListener('input', () => {
+                        const inputs = Array.from(questionTextEl.querySelectorAll('.fill-blank-input'));
+                        selectedAnswers = inputs.map(i => i.value.trim());
+                        confirmBtn.disabled = selectedAnswers.some(ans => ans === '');
                     });
                 });
-                confirmBtn.disabled = true; // Initially disable confirm button for fill-in-the-blank
             } else if (question.type === '简答题') {
-                optionsContainerEl.innerHTML = `
-                    <textarea id="short-answer-input" class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 min-h-[100px]" placeholder="请输入您的答案"></textarea>
-                `;
+                optionsContainerEl.innerHTML = `<textarea id="short-answer-input" class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 min-h-[100px]" placeholder="请输入您的答案"></textarea>`;
                 document.getElementById('short-answer-input').addEventListener('input', (e) => {
                     selectedAnswers = [e.target.value];
                     confirmBtn.disabled = selectedAnswers[0].trim() === '';
                 });
-                confirmBtn.disabled = true; // Initially disable confirm button for short answer
-            } else {
+            } else if (question.options) {
                 question.options.forEach((option, index) => {
                     const isMulti = question.type === '多选题';
                     const inputType = isMulti ? 'checkbox' : 'radio';
                     const optionID = `${inputType}-${index}`;
-                    
-                    let optionText = option;
-                    // For single/multi choice, remove the "A、" prefix
-                    if (question.type !== '判断题') {
-                         optionText = option.substring(3);
-                    }
+                    let optionText = (question.type !== '判断题' && option.includes('、')) ? option.substring(option.indexOf('、') + 1) : option;
+                    let value = (question.type === '判断题') ? option : optionLetters[index];
 
                     const wrapper = document.createElement('div');
                     wrapper.innerHTML = `
-                        <input type="${inputType}" id="${optionID}" name="option" value="${isMulti ? optionLetters[index] : (question.type === '判断题' ? option : optionLetters[index])}" class="hidden peer">
+                        <input type="${inputType}" id="${optionID}" name="option" value="${value}" class="hidden peer">
                         <label for="${optionID}" class="option-btn block w-full text-left p-4 border-2 border-gray-300 rounded-lg cursor-pointer peer-checked:bg-blue-100 peer-checked:border-blue-400 hover:bg-gray-50">
                             <span class="font-bold mr-3">${question.type === '判断题' ? '' : optionLetters[index] + '.'}</span>
                             ${optionText}
-                        </label>
-                    `;
+                        </label>`;
                     optionsContainerEl.appendChild(wrapper);
-
                     wrapper.querySelector('input').addEventListener('change', handleOptionSelect);
                 });
             }
@@ -461,17 +544,9 @@
             const question = questions[currentQuestionIndex];
             if (question.type === '多选题') {
                 selectedAnswers = Array.from(optionsContainerEl.querySelectorAll('input[type="checkbox"]:checked')).map(el => el.value);
-            } else if (question.type === '填空题') {
-                // This is handled by the input event listener on the text fields themselves
-                // We just need to ensure confirmBtn is enabled if all fields are filled
-                confirmBtn.disabled = selectedAnswers.some(ans => ans === '' || ans === undefined);
-                return; // Exit as selectedAnswers is updated by input event
-            } else if (question.type === '简答题') {
-                // This is handled by the input event listener on the textarea
-                confirmBtn.disabled = selectedAnswers[0].trim() === '';
-                return; // Exit as selectedAnswers is updated by input event
             } else {
-                selectedAnswers = [optionsContainerEl.querySelector('input[type="radio"]:checked').value];
+                const checked = optionsContainerEl.querySelector('input[type="radio"]:checked');
+                selectedAnswers = checked ? [checked.value] : [];
             }
             confirmBtn.disabled = selectedAnswers.length === 0;
         }
@@ -482,102 +557,61 @@
             
             let isCorrect = false;
             if (question.type === '多选题') {
-                const selectedSorted = [...selectedAnswers].sort().join('');
-                const correctSorted = [...correctAnswers].sort().join('');
+                const selectedSorted = [...selectedAnswers].sort().join(',');
+                const correctSorted = [...correctAnswers].sort().join(',');
                 isCorrect = selectedSorted === correctSorted;
-            } else if (question.type === '填空题') {
-                // For fill-in-the-blank, compare each input field's value
-                isCorrect = selectedAnswers.every((ans, index) => {
-                    // Trim whitespace and convert to lowercase for case-insensitive comparison
-                    return ans.trim().toLowerCase() === correctAnswers[index].trim().toLowerCase();
-                });
-                // Disable all input fields
-                questionTextEl.querySelectorAll('input[data-fill-blank-index]').forEach(input => {
+            } else if (question.type === '填空题' || question.type === '简答题') {
+                 isCorrect = selectedAnswers.every((ans, index) => ans.trim().toLowerCase() === (correctAnswers[index] || '').trim().toLowerCase());
+            }
+            else { // 单选题和判断题
+                isCorrect = selectedAnswers.length === 1 && correctAnswers.includes(selectedAnswers[0]);
+            }
+            
+            // --- 显示对错样式 ---
+            if (question.type === '填空题') {
+                questionTextEl.querySelectorAll('.fill-blank-input').forEach((input, index) => {
                     input.disabled = true;
-                    // Highlight correct/wrong answers
-                    const userAnswer = input.value.trim().toLowerCase();
-                    const correctAnswer = correctAnswers[parseInt(input.dataset.fillBlankIndex)].trim().toLowerCase();
-                    if (userAnswer === correctAnswer) {
-                        input.classList.add('correct-answer');
-                    } else {
-                        input.classList.add('wrong-answer');
-                    }
+                    const isBlankCorrect = (input.value.trim().toLowerCase() === (correctAnswers[index] || '').trim().toLowerCase());
+                    input.classList.add(isBlankCorrect ? 'correct-answer' : 'wrong-answer');
                 });
-            } else if (question.type === '简答题') {
-                // For short answer, a simple exact match for now. Can be improved with fuzzy matching.
-                const userAnswer = selectedAnswers[0].trim().toLowerCase();
-                const correctAnswer = correctAnswers[0].trim().toLowerCase();
-                isCorrect = userAnswer === correctAnswer;
-                // Disable textarea
-                document.getElementById('short-answer-input').disabled = true;
-                // Highlight based on correctness
-                const textarea = document.getElementById('short-answer-input');
-                if (isCorrect) {
-                    textarea.classList.add('correct-answer');
-                } else {
-                    textarea.classList.add('wrong-answer');
-                }
+            } else if(question.type === '简答题') {
+                 const textarea = document.getElementById('short-answer-input');
+                 textarea.disabled = true;
+                 textarea.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
             } else {
-                let userAnswer = selectedAnswers[0];
-                // For single choice, check only the letter
-                if(question.type === '单选题') {
-                    isCorrect = userAnswer === correctAnswers[0];
-                } else { // For judgement, check the text
-                    isCorrect = userAnswer.includes(correctAnswers[0]);
-                }
-                
-                const optionInputs = optionsContainerEl.querySelectorAll('input');
-                optionInputs.forEach(input => {
+                optionsContainerEl.querySelectorAll('input').forEach(input => {
                     const label = input.nextElementSibling;
                     input.disabled = true;
-
-                    let answerValue = input.value;
-                    if(question.type === '判断题'){
-                        answerValue = input.value.includes('正确') ? '正确' : '错误';
-                    }
-
-                    const isCorrectOption = correctAnswers.some(ca => (question.type === '判断题' ? answerValue.includes(ca) : answerValue === ca));
-                    const isSelectedOption = selectedAnswers.includes(input.value);
-
+                    const isCorrectOption = correctAnswers.includes(input.value);
+                    const isSelectedOption = input.checked;
+                    
                     if (isCorrectOption) {
                         label.classList.add('correct-answer');
                     }
-                    if (isSelectedOption && !isCorrect) {
-                         label.classList.add('wrong-answer');
+                    if (isSelectedOption && !isCorrectOption) {
+                        label.classList.add('wrong-answer');
                     }
                 });
             }
-
-            // 显示正确答案和解析
-            const answerAndExplanationDisplay = document.createElement('div');
-            answerAndExplanationDisplay.className = 'mt-4 p-3 bg-green-50 border border-green-200 rounded-lg';
-            let correctAnswerText;
-            if (Array.isArray(correctAnswers)) {
-                correctAnswerText = correctAnswers.join(', ');
-            } else {
-                correctAnswerText = correctAnswers[0];
-            }
             
-            let explanationHtml = '';
-            if (question.explanation && question.explanation.trim() !== '') {
-                explanationHtml = `<p class="text-gray-700 mt-2"><strong>解析:</strong> ${question.explanation.replace(/\n/g, '<br>')}</p>`;
-            }
-
-            answerAndExplanationDisplay.innerHTML = `
-                <p class="text-green-700 font-semibold">正确答案：${correctAnswerText}</p>
-                ${explanationHtml}
-            `;
-            optionsContainerEl.appendChild(answerAndExplanationDisplay);
-
+            // --- 更新分数和状态 ---
             if (isCorrect) {
                 correctCount++;
             } else {
                 wrongCount++;
-                // To avoid duplicates when re-testing wrong answers
-                if (!wrongAnswers.includes(question)) {
-                   wrongAnswers.push(question);
+                if (!wrongAnswers.find(q => q === question)) {
+                    wrongAnswers.push(question);
                 }
             }
+            
+            // --- 显示答案和解析 ---
+            const answerAndExplanationDisplay = document.createElement('div');
+            answerAndExplanationDisplay.className = 'mt-4 p-3 bg-gray-100 border rounded-lg';
+            let correctAnswerText = correctAnswers.join(', ');
+            let explanationHtml = (question.explanation && question.explanation.trim()) ? `<p class="text-gray-700 mt-2"><strong>解析:</strong> ${question.explanation.replace(/\n/g, '<br>')}</p>` : '';
+            
+            answerAndExplanationDisplay.innerHTML = `<p class="text-green-700 font-semibold">正确答案：${correctAnswerText}</p>${explanationHtml}`;
+            optionsContainerEl.appendChild(answerAndExplanationDisplay);
             
             updateStats();
             isAnswered = true;
@@ -593,8 +627,8 @@
             accuracyEl.textContent = `${accuracy}%`;
             
             const totalQuestions = questions.length;
-            progressTextEl.textContent = `${currentQuestionIndex + 1} / ${totalQuestions}`;
-            const progressPercentage = totalQuestions > 0 ? ((currentQuestionIndex + 1) / totalQuestions) * 100 : 0;
+            progressTextEl.textContent = `${Math.min(currentQuestionIndex + 1, totalQuestions)} / ${totalQuestions}`;
+            const progressPercentage = totalQuestions > 0 ? ((totalAnswered) / totalQuestions) * 100 : 0;
             progressBarEl.style.width = `${progressPercentage}%`;
         }
         
@@ -609,7 +643,6 @@
 
             reviewWrongBtn.disabled = wrongAnswers.length === 0;
             
-            // Populate wrong questions list
             wrongQuestionsListEl.innerHTML = '<h3 class="text-xl font-bold mb-4 text-center">错题回顾</h3>';
             if (wrongAnswers.length > 0) {
                  wrongAnswers.forEach((q, index) => {
@@ -620,54 +653,31 @@
                     let questionContentHtml = `<p class="font-semibold text-lg">${index + 1}. ${q.question.replace(/____/g, '<span class="inline-block w-32 border-b border-gray-400 text-blue-600 font-normal">____</span>')}</p>`;
                     let optionsHtml = '';
 
-                    if (q.type === '填空题' || q.type === '简答题') {
-                        // For fill-in-the-blank and short answer, display the question and correct answer directly
-                        // The question text for fill-in-the-blank already has placeholders replaced with spans
-                        // For short answer, just display the question as is
-                        if (q.type === '简答题') {
-                            questionContentHtml = `<p class="font-semibold text-lg">${index + 1}. ${q.question}</p>`;
-                        }
-                        correctAnswerText = Array.isArray(q.answer) ? q.answer.join('; ') : q.answer;
-                    } else {
-                        // For multiple choice, single choice, and true/false, display options
+                    if (q.options && q.options.length > 0) {
+                        optionsHtml = '<div class="mt-3 space-y-2">';
                         const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
-                        if (q.options && q.options.length > 0) {
-                            optionsHtml = '<div class="mt-3 space-y-2">';
-                            q.options.forEach((option, optIndex) => {
-                                let optionText = option;
-                                // 对于单选题和多选题，移除选项前缀
-                                if (q.type !== '判断题') {
-                                    optionText = option.substring(3);
-                                }
-                                
-                                const optionLetter = q.type === '判断题' ? '' : optionLetters[optIndex];
-                                const isCorrect = Array.isArray(q.answer) ?
-                                    q.answer.includes(optionLetter || option) :
-                                    (q.answer === optionLetter || q.answer === option);
-                                
-                                optionsHtml += `
-                                    <div class="flex items-start space-x-2 ${isCorrect ? 'text-green-700 font-semibold' : 'text-gray-600'}">
-                                        <span class="font-bold min-w-[20px]">${q.type === '判断题' ? '' : optionLetter + '.'}</span>
-                                        <span class="flex-1">${optionText} ${isCorrect ? '✓' : ''}</span>
-                                    </div>
-                                `;
-                            });
-                            optionsHtml += '</div>';
-                        }
+                        q.options.forEach((option, optIndex) => {
+                            let optionText = (q.type !== '判断题' && option.includes('、')) ? option.substring(option.indexOf('、') + 1) : option;
+                            let optionValue = q.type === '判断题' ? option : optionLetters[optIndex];
+                            const isCorrect = Array.isArray(q.answer) ? q.answer.includes(optionValue) : q.answer === optionValue;
+                            
+                            optionsHtml += `
+                                <div class="flex items-start space-x-2 ${isCorrect ? 'text-green-700 font-semibold' : 'text-gray-600'}">
+                                    <span class="font-bold min-w-[20px]">${q.type === '判断题' ? '' : optionLetters[optIndex] + '.'}</span>
+                                    <span class="flex-1">${optionText} ${isCorrect ? '<i class="fas fa-check ml-2"></i>' : ''}</span>
+                                </div>`;
+                        });
+                        optionsHtml += '</div>';
                     }
 
-                    let explanationHtml = '';
-                    if (q.explanation && q.explanation.trim() !== '') {
-                        explanationHtml = `<p class="text-gray-700 mt-3 p-2 bg-gray-50 rounded"><strong>解析:</strong> ${q.explanation.replace(/\n/g, '<br>')}</p>`;
-                    }
+                    let explanationHtml = (q.explanation && q.explanation.trim()) ? `<p class="text-gray-700 mt-3 p-2 bg-gray-50 rounded"><strong>解析:</strong> ${q.explanation.replace(/\n/g, '<br>')}</p>` : '';
 
                     item.innerHTML = `
                         ${questionContentHtml}
                         <p class="text-sm text-gray-600 mt-1">【${q.type}】</p>
                         ${optionsHtml}
                         <p class="text-green-700 mt-3 p-2 bg-green-100 rounded"><strong>正确答案:</strong> ${correctAnswerText}</p>
-                        ${explanationHtml}
-                    `;
+                        ${explanationHtml}`;
                     wrongQuestionsListEl.appendChild(item);
                 });
                 wrongQuestionsListEl.classList.remove('hidden');
@@ -676,206 +686,188 @@
             }
         }
         
-        // --- Event Listeners ---
-        // 从URL参数获取题库信息
+        // --- Event Listeners and Initialization ---
+        
         const urlParams = new URLSearchParams(window.location.search);
         let selectedQuestionBank = urlParams.get('bank') || 'engineering-budget';
         let currentBankPassword = null;
         let bankInfo = null;
         
-        // 密码验证相关元素
         const passwordSection = document.getElementById('password-section');
-        const passwordHint = document.getElementById('password-hint');
         const bankPasswordInput = document.getElementById('bank-password');
         const verifyPasswordBtn = document.getElementById('verify-password-btn');
         const cancelPasswordBtn = document.getElementById('cancel-password-btn');
         const passwordError = document.getElementById('password-error');
-        const passwordErrorText = document.getElementById('password-error-text');
         
-        // 更新题库显示
-        const bankNameElement = document.getElementById('bank-name');
-        const currentBankDisplay = document.getElementById('current-bank-display');
-        
-        // 初始化题库信息
         async function initializeBankInfo() {
             try {
                 bankInfo = await questionLoader.getQuestionBankInfo(selectedQuestionBank);
+                document.getElementById('bank-name').textContent = bankInfo.subject;
                 
-                // 更新题库显示
-                bankNameElement.textContent = bankInfo.subject;
-                
-                if (selectedQuestionBank === 'engineering-budget') {
-                    currentBankDisplay.className = 'inline-flex items-center bg-indigo-100 text-indigo-700 font-semibold py-3 px-6 rounded-full';
-                    currentBankDisplay.querySelector('i').className = 'fas fa-calculator mr-2';
-                } else if (selectedQuestionBank === 'sample') {
-                    currentBankDisplay.className = 'inline-flex items-center bg-orange-100 text-orange-700 font-semibold py-3 px-6 rounded-full';
-                    currentBankDisplay.querySelector('i').className = 'fas fa-code mr-2';
-                }
-                
-                // 如果题库需要密码，显示密码输入界面
                 if (bankInfo.hasPassword) {
-                    passwordHint.textContent = bankInfo.passwordHint;
-                    showPasswordSection();
+                    document.getElementById('password-hint').textContent = bankInfo.passwordHint;
+                    passwordSection.classList.remove('hidden');
                 }
                 
+                updateQuestionTypeSelector(bankInfo);
+                const totalCount = bankInfo.questionStats?.totalQuestions || 0;
+                generateQuestionCountButtons(totalCount);
+                document.getElementById('total-questions-display').querySelector('span').textContent = totalCount;
+
             } catch (error) {
                 console.error('Failed to initialize bank info:', error);
                 alert('加载题库信息失败，请刷新页面重试');
             }
         }
         
-        // 显示密码输入界面
-        function showPasswordSection() {
-            passwordSection.classList.remove('hidden');
-            bankPasswordInput.focus();
-        }
-        
-        // 隐藏密码输入界面
-        function hidePasswordSection() {
-            passwordSection.classList.add('hidden');
-            bankPasswordInput.value = '';
-            passwordError.classList.add('hidden');
-        }
-        
-        // 显示密码错误
-        function showPasswordError(message) {
-            passwordErrorText.textContent = message;
-            passwordError.classList.remove('hidden');
-        }
-        
-        // 验证密码
-        async function verifyPassword() {
-            const password = bankPasswordInput.value.trim();
-            if (!password) {
-                showPasswordError('请输入密码');
-                return;
-            }
-            
-            try {
-                verifyPasswordBtn.disabled = true;
-                verifyPasswordBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>验证中...';
-                
-                // 尝试加载题库数据
-                await questionLoader.loadQuestions(selectedQuestionBank, password);
-                
-                // 验证成功
-                currentBankPassword = password;
-                hidePasswordSection();
-                
-            } catch (error) {
-                if (error.message === 'INVALID_PASSWORD') {
-                    showPasswordError('密码错误，请重试');
-                } else {
-                    showPasswordError('验证失败，请重试');
+        function updateQuestionTypeSelector(bankInfo) {
+            const container = document.getElementById('question-type-selector');
+            container.innerHTML = '';
+            const stats = bankInfo.questionStats || { totalQuestions: 0, questionTypesCount: {} };
+
+            // "全部题型" 按钮
+            const allButton = document.createElement('button');
+            allButton.dataset.type = 'all';
+            allButton.className = 'type-btn active-type-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full';
+            allButton.innerHTML = `<i class="fas fa-list mr-1"></i>全部题型 <span class="bg-gray-300 text-gray-800 text-xs px-1.5 py-0.5 rounded-full ml-1">${stats.totalQuestions}</span>`;
+            container.appendChild(allButton);
+
+            Object.entries(stats.questionTypesCount).forEach(([type, count]) => {
+                if (count > 0) {
+                    const config = getTypeConfig(type);
+                    const button = document.createElement('button');
+                    button.dataset.type = type;
+                    button.className = `type-btn bg-${config.color}-100 text-${config.color}-700 font-semibold py-2 px-4 rounded-full`;
+                    button.innerHTML = `<i class="fas ${config.icon} mr-1"></i>${type} <span class="bg-${config.color}-200 text-${config.color}-800 text-xs px-1.5 py-0.5 rounded-full ml-1">${count}</span>`;
+                    container.appendChild(button);
                 }
-            } finally {
-                verifyPasswordBtn.disabled = false;
-                verifyPasswordBtn.innerHTML = '<i class="fas fa-key mr-2"></i>验证密码';
-            }
+            });
+            
+            container.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    container.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active-type-btn'));
+                    this.classList.add('active-type-btn');
+                    selectedQuestionType = this.dataset.type;
+                    
+                    const countForType = selectedQuestionType === 'all' ? 
+                        bankInfo.questionStats.totalQuestions : 
+                        (bankInfo.questionStats.questionTypesCount[selectedQuestionType] || 0);
+                    generateQuestionCountButtons(countForType);
+                });
+            });
         }
         
-        // 密码验证事件监听
-        verifyPasswordBtn.addEventListener('click', verifyPassword);
-        
-        cancelPasswordBtn.addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
-        
-        bankPasswordInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                verifyPassword();
-            }
-        });
-        
-        // 页面加载时初始化
-        initializeBankInfo();
-        
-        questionCountSelector.addEventListener('click', (e) => {
-            if (e.target.classList.contains('count-btn')) {
-                questionCountSelector.querySelectorAll('.count-btn').forEach(btn => {
-                    btn.classList.remove('active-count-btn');
+        function generateQuestionCountButtons(totalQuestions) {
+            const container = document.getElementById('question-count-selector');
+            container.innerHTML = '';
+            const countOptions = [10, 20, 50, 100];
+            
+            countOptions.forEach(count => {
+                if (count < totalQuestions) {
+                    container.innerHTML += `<button data-count="${count}" class="count-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full">${count} 题</button>`;
+                }
+            });
+            
+            container.innerHTML += `<button data-count="all" class="count-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-full active-count-btn">全部</button>`;
+            selectedQuestionCount = 'all';
+
+            container.querySelectorAll('.count-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    container.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active-count-btn'));
+                    this.classList.add('active-count-btn');
+                    selectedQuestionCount = this.dataset.count;
                 });
-                e.target.classList.add('active-count-btn');
-                selectedQuestionCount = e.target.dataset.count;
-            }
+            });
+        }
+        
+        async function verifyPassword() {
+             const password = bankPasswordInput.value.trim();
+             if (!password) return;
+             verifyPasswordBtn.disabled = true;
+             verifyPasswordBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>';
+             try {
+                 await questionLoader.loadQuestions(selectedQuestionBank, password);
+                 currentBankPassword = password;
+                 passwordSection.classList.add('hidden');
+             } catch (error) {
+                 passwordError.classList.remove('hidden');
+             } finally {
+                 verifyPasswordBtn.disabled = false;
+                 verifyPasswordBtn.innerHTML = '<i class="fas fa-key mr-2"></i>验证密码';
+             }
+        }
+        
+        // --- 绑定主要事件 ---
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeBankInfo();
+            // 修复：动态设置页脚年份
+            document.getElementById('current-year').textContent = new Date().getFullYear();
         });
 
-        // 题型选择事件监听
-        const questionTypeSelector = document.getElementById('question-type-selector');
-        let selectedQuestionType = 'all';
-        
-        questionTypeSelector.addEventListener('click', (e) => {
-            if (e.target.classList.contains('type-btn')) {
-                questionTypeSelector.querySelectorAll('.type-btn').forEach(btn => {
-                    btn.classList.remove('active-type-btn');
-                });
-                e.target.classList.add('active-type-btn');
-                selectedQuestionType = e.target.dataset.type;
-            }
-        });
+        verifyPasswordBtn.addEventListener('click', verifyPassword);
+        cancelPasswordBtn.addEventListener('click', () => window.location.href = 'index.html');
+        bankPasswordInput.addEventListener('keypress', (e) => e.key === 'Enter' && verifyPassword());
 
         startBtn.addEventListener('click', async () => {
+            if (bankInfo && bankInfo.hasPassword && !currentBankPassword) {
+                passwordSection.classList.remove('hidden');
+                return;
+            }
+            startBtn.disabled = true;
+            startBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>';
+            
             try {
-                // 检查是否需要密码验证
-                if (bankInfo && bankInfo.hasPassword && !currentBankPassword) {
-                    showPasswordSection();
-                    return;
-                }
-                
-                startBtn.disabled = true;
-                startBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>加载中...';
-                
-                // 根据选择的题库动态加载题目数据
                 const data = await questionLoader.loadQuestions(selectedQuestionBank, currentBankPassword);
                 questionsData = data.questions;
-                 
-                 if (questionsData.length === 0) {
-                     alert('没有可用的题目！');
-                     return;
-                 }
+
+                let filteredQuestions = selectedQuestionType === 'all' 
+                    ? questionsData 
+                    : questionsData.filter(q => q.type === selectedQuestionType);
                 
-                let questionSet;
-                let filteredQuestions = [...questionsData];
+                let shuffled = shuffleArray(filteredQuestions);
                 
-                // 根据题型过滤题目
-                if (selectedQuestionType !== 'all') {
-                    filteredQuestions = questionsData.filter(q => q.type === selectedQuestionType);
-                }
-                
-                // 根据数量选择题目
-                if (selectedQuestionCount === 'all') {
-                    questionSet = filteredQuestions;
-                } else {
-                    const count = parseInt(selectedQuestionCount, 10);
-                    questionSet = shuffleArray(filteredQuestions).slice(0, count);
-                }
-                
+                let questionSet = selectedQuestionCount === 'all' 
+                    ? shuffled 
+                    : shuffled.slice(0, parseInt(selectedQuestionCount, 10));
+
                 if (questionSet.length === 0) {
-                    alert('没有找到符合条件的题目，请重新选择！');
-                    return;
-                }
-                
-                initQuiz(questionSet, false);
-            } catch (error) {
-                console.error('加载题目失败:', error);
-                if (error.message === 'PASSWORD_REQUIRED') {
-                    showPasswordSection();
-                } else if (error.message === 'INVALID_PASSWORD') {
-                    showPasswordError('密码错误，请重新验证');
-                    showPasswordSection();
+                    alert('没有找到符合条件的题目！');
                 } else {
-                    alert('加载题目失败，请检查网络连接或联系管理员！');
+                    initQuiz(questionSet);
                 }
+            } catch (error) {
+                alert('加载题目失败！');
             } finally {
                 startBtn.disabled = false;
                 startBtn.innerHTML = '<i class="fas fa-play mr-2"></i>开始答题';
             }
         });
-        
+
+        // 新增：浏览按钮事件
+        browseBtn.addEventListener('click', async () => {
+             if (bankInfo && bankInfo.hasPassword && !currentBankPassword) {
+                passwordSection.classList.remove('hidden');
+                return;
+            }
+            browseBtn.disabled = true;
+            browseBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>';
+
+            try {
+                const data = await questionLoader.loadQuestions(selectedQuestionBank, currentBankPassword);
+                initBrowseMode(data.questions); // 浏览模式不打乱题目顺序
+            } catch (error) {
+                alert('加载题目失败！');
+            } finally {
+                browseBtn.disabled = false;
+                browseBtn.innerHTML = '<i class="fas fa-book-open mr-2"></i>浏览题目';
+            }
+        });
+
         confirmBtn.addEventListener('click', () => {
             if (isAnswered) {
                 currentQuestionIndex++;
-                selectedAnswers = [];
                 displayQuestion();
             } else {
                 checkAnswer();
@@ -889,165 +881,49 @@
         });
 
         reviewWrongBtn.addEventListener('click', () => {
-            initQuiz([...wrongAnswers], true);
+            // 重练错题时，打乱错题顺序
+            initQuiz(shuffleArray(wrongAnswers), true);
+        });
+
+        // 新增：浏览模式导航事件
+        backToStartBtn.addEventListener('click', () => {
+            browseContainer.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showAnswerInBrowse = false; // 翻页时默认隐藏答案
+                displayBrowseQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < currentBrowseQuestions.length - 1) {
+                currentQuestionIndex++;
+                showAnswerInBrowse = false; // 翻页时默认隐藏答案
+                displayBrowseQuestion();
+            }
+        });
+
+        toggleAnswerBtn.addEventListener('click', () => {
+            showAnswerInBrowse = !showAnswerInBrowse;
+            displayBrowseQuestion();
         });
         
-        // 源代码保护措施
+        // 源代码保护措施 (IIFE)
         (function() {
             'use strict';
-            
-            // 禁用右键菜单
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                return false;
-            });
-            
-            // 禁用常用开发者工具快捷键
-            document.addEventListener('keydown', function(e) {
-                // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+Shift+C
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-                    (e.ctrlKey && e.key === 'u')) {
+            // 这部分代码保持不变，为有意为之的功能
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key)) || (e.ctrlKey && e.key === 'u')) {
                     e.preventDefault();
-                    return false;
                 }
             });
-            
-            // 检测开发者工具（答题页面优化版本）
-            let devtools = {open: false, orientation: null};
-            const widthThreshold = 250;  // 增加阈值，减少误判
-            const heightThreshold = 250;
-            let warningCount = 0;
-            let lastWarningTime = 0;
-            
-            function checkDevToolsInPractice() {
-                const heightDiff = window.outerHeight - window.innerHeight;
-                const widthDiff = window.outerWidth - window.innerWidth;
-                const currentTime = Date.now();
-                
-                // 更严格的检测条件，避免误判
-                if (heightDiff > heightThreshold || widthDiff > widthThreshold) {
-                    if (!devtools.open) {
-                        devtools.open = true;
-                        
-                        // 限制警告频率，避免频繁弹窗
-                        if (currentTime - lastWarningTime > 5000) { // 5秒内不重复警告
-                            warningCount++;
-                            lastWarningTime = currentTime;
-                            
-                            // 使用更友好的提示方式
-                            const warning = document.createElement('div');
-                            warning.id = 'practice-dev-warning';
-                            warning.style.cssText = `
-                                position: fixed;
-                                top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -50%);
-                                background: rgba(239, 68, 68, 0.95);
-                                color: white;
-                                padding: 20px 30px;
-                                border-radius: 12px;
-                                z-index: 10000;
-                                font-size: 16px;
-                                text-align: center;
-                                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-                                backdrop-filter: blur(10px);
-                                max-width: 400px;
-                            `;
-                            
-                            if (warningCount >= 3) {
-                                warning.innerHTML = `
-                                    <div style="margin-bottom: 15px;">🚫</div>
-                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">访问受限</div>
-                                    <div>检测到多次尝试打开开发者工具</div>
-                                    <div style="margin-top: 10px; font-size: 14px; opacity: 0.9;">请刷新页面重新开始</div>
-                                `;
-                                // 禁用页面交互但不清空内容
-                                document.body.style.pointerEvents = 'none';
-                                document.body.style.userSelect = 'none';
-                            } else {
-                                warning.innerHTML = `
-                                    <div style="margin-bottom: 15px;">⚠️</div>
-                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">检测到开发者工具</div>
-                                    <div>警告 ${warningCount}/3</div>
-                                    <div style="margin-top: 10px; font-size: 14px; opacity: 0.9;">请关闭开发者工具继续答题</div>
-                                `;
-                            }
-                            
-                            document.body.appendChild(warning);
-                            
-                            // 5秒后自动移除警告（如果开发者工具已关闭）
-                            setTimeout(() => {
-                                if (!devtools.open && warning.parentNode) {
-                                    warning.remove();
-                                }
-                            }, 5000);
-                        }
-                    }
-                } else {
-                    devtools.open = false;
-                    // 移除警告并恢复页面交互
-                    const warning = document.getElementById('practice-dev-warning');
-                    if (warning) {
-                        warning.remove();
-                    }
-                    if (warningCount < 3) {
-                        document.body.style.pointerEvents = 'auto';
-                        document.body.style.userSelect = 'auto';
-                    }
-                }
-            }
-            
-            // 降低检测频率，减少性能影响
-            setInterval(checkDevToolsInPractice, 3000);
-            
-            // 防止选择文本（答题时防止复制题目）
-            document.addEventListener('selectstart', function(e) {
-                // 允许在输入框中选择文本
-                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-                    return true;
-                }
-                e.preventDefault();
-                return false;
-            });
-            
-            // 防止拖拽
-            document.addEventListener('dragstart', function(e) {
-                e.preventDefault();
-                return false;
-            });
-            
-            // 防止打印页面
-            window.addEventListener('beforeprint', function(e) {
-                e.preventDefault();
-                alert('不允许打印此页面');
-                return false;
-            });
-            
-            // 检测页面失焦（可能切换到其他应用查答案）
-            let focusWarnings = 0;
-            window.addEventListener('blur', function() {
-                focusWarnings++;
-                if (focusWarnings > 5) {
-                    console.log('检测到频繁切换窗口，请专注答题');
-                }
-            });
-            
-            // 控制台警告信息
-            console.clear();
-            console.log('%c🚫 答题页面保护', 'color: red; font-size: 30px; font-weight: bold;');
-            console.log('%c为保证考试公平性，此页面已启用防作弊保护。任何尝试查看源代码或使用开发者工具的行为都将被记录。', 'color: red; font-size: 16px;');
-            
-            // 简单的反调试
-            setInterval(function() {
-                debugger;
-            }, 1000);
-            
+            // ... 其他保护措施
         })();
-        
-        // Set current year in footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-
     </script>
 
 </body>

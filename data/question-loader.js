@@ -67,7 +67,7 @@ class QuestionLoader {
             
             const data = await response.json();
             
-            // 返回基本信息，不包含题目内容
+            // 返回基本信息，包含题型统计
             return {
                 subject: data.subject,
                 description: data.description,
@@ -75,7 +75,17 @@ class QuestionLoader {
                 lastUpdated: data.lastUpdated,
                 hasPassword: !!data.password,
                 passwordHint: data.passwordHint || '请输入题库密码',
-                questionCount: data.questions ? data.questions.length : 0
+                questionCount: data.questions ? data.questions.length : 0,
+                questionStats: data.questionStats || {
+                    totalQuestions: data.questions ? data.questions.length : 0,
+                    questionTypesCount: {
+                        "单选题": 0,
+                        "多选题": 0,
+                        "判断题": 0,
+                        "填空题": 0,
+                        "简答题": 0
+                    }
+                }
             };
         } catch (error) {
             console.error(`Failed to get info for subject: ${subject}`, error);
@@ -93,21 +103,39 @@ class QuestionLoader {
                 id: 'engineering-budget',
                 name: '工程概预算',
                 description: '工程概预算练习题库',
-                file: 'engineering-budget-questions.json'
+                file: 'engineering-budget-questions.json',
+                iconClass: 'fas fa-calculator',
+                bgColorClass: 'bg-blue-100',
+                textColorClass: 'text-blue-600'
             },
             {
                 id: 'sample',
                 name: '示例题库',
                 description: '示例题库，用于测试',
-                file: 'sample-questions.json'
+                file: 'sample-questions.json',
+                iconClass: 'fas fa-code',
+                bgColorClass: 'bg-orange-100',
+                textColorClass: 'text-orange-600'
             },
             {
                 id: 'jdbh',
-                name: '机动部队',
-                description: '机动部队题库',
-                file: 'jdbh-questions.json'
-            }
-            // 可以在这里添加更多科目
+                name: '继电保护',
+                description: '继电保护题库',
+                file: 'jdbh-questions.json',
+                iconClass: 'fas fa-bolt',
+                bgColorClass: 'bg-green-100',
+                textColorClass: 'text-green-600'
+            },
+            {
+                id: 'zndw',
+                name: '智能电网',
+                description: '智能电网题库',
+                file: 'zndw-questions.json',
+                iconClass: 'fas fa-lightbulb', // 假设智能电网使用灯泡图标
+                bgColorClass: 'bg-purple-100',
+                textColorClass: 'text-purple-600'
+            },
+// 可以在这里添加更多科目
         ];
     }
 

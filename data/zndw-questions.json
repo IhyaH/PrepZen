@@ -1,10 +1,19 @@
 {
-  "subject": "智能电网题库",
-  "description": "这是一个根据“智能电网.md”文件生成的题库。",
+  "subject": "智能电网",
+  "questionStats": {
+    "totalQuestions": 319,
+    "questionTypesCount": {
+      "单选题": 114,
+      "判断题": 132,
+      "简答题": 24,
+      "填空题": 49
+    }
+  },
+  "description": "智能电网题库",
   "version": "1.0.0",
-  "lastUpdated": "2025-06-26",
-  "password": "148565",
-  "passwordHint": "6位数密码",
+  "lastUpdated": "2025-06-27",
+  "password": "145896",
+  "passwordHint": "",
   "questions": [
     {
       "type": "单选题",
