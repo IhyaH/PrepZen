@@ -448,7 +448,24 @@
                     subjectCardsContainer.insertAdjacentHTML('beforeend', cardHtml);
                 } catch (error) {
                     console.error(`加载题库 ${subjectInfo.id} 信息失败:`, error);
-                    // 可以选择显示一个错误卡片或跳过此题库
+                    // 显示一个错误卡片，而不是完全空白
+                    const errorCardHtml = `
+                        <div class="card-hover bg-red-100 p-8 rounded-2xl border border-red-300 text-red-800">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-red-200 p-3 rounded-full mr-4">
+                                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold">加载失败: ${subjectInfo.name}</h4>
+                                    <p class="text-sm">无法加载题库信息。</p>
+                                </div>
+                            </div>
+                            <p class="text-red-700 mb-6">
+                                请检查控制台错误信息或确保题库文件存在且格式正确。
+                            </p>
+                        </div>
+                    `;
+                    subjectCardsContainer.insertAdjacentHTML('beforeend', errorCardHtml);
                 }
             }
         });
