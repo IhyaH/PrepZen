@@ -23,6 +23,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: 'Noto Sans SC', sans-serif;
             background-color: #0f172a; /* 深蓝灰色背景 */
@@ -74,6 +77,23 @@
         .tech-card {
              background: linear-gradient(145deg, #1e293b, #2c3e50);
         }
+        .architecture-node:hover .architecture-icon-wrapper {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        .architecture-icon-wrapper {
+             transition: all 0.3s ease;
+        }
+        /* Scroll Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -86,10 +106,14 @@
                     <span class="iconify text-cyan-400 text-3xl" data-icon="streamline-pixel:school-science-graduation-cap"></span>
                     <h1 class="text-2xl font-bold">PrepZen</h1>
                 </div>
-                <div class="hidden md:flex items-center space-x-8 font-medium">
-                    <a href="#project-overview" class="hover:text-cyan-400 transition-colors">项目概览</a>
+                <div class="hidden md:flex items-center space-x-8 font-medium text-sm">
+                    <a href="#features" class="hover:text-cyan-400 transition-colors">核心优势</a>
+                    <a href="#how-it-works" class="hover:text-cyan-400 transition-colors">工作流程</a>
                     <a href="#subjects" class="hover:text-cyan-400 transition-colors">功能演示</a>
+                    <a href="#project-overview" class="hover:text-cyan-400 transition-colors">项目概览</a>
+                    <a href="#architecture" class="hover:text-cyan-400 transition-colors">项目架构</a>
                     <a href="#tech-stack" class="hover:text-cyan-400 transition-colors">技术栈</a>
+                    <a href="#roadmap" class="hover:text-cyan-400 transition-colors">未来蓝图</a>
                 </div>
             </div>
         </nav>
@@ -123,8 +147,101 @@
         </div>
     </section>
 
-     <!-- Project Overview Section -->
-    <section id="project-overview" class="py-24 bg-slate-900">
+     <!-- Features Section -->
+    <section id="features" class="py-24 bg-slate-900 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">为高效学习而设计</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    我们相信，好的工具能让学习事半功倍。
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                        <span class="iconify text-4xl text-cyan-400" data-icon="mdi:brain"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">智能练习</h4>
+                    <p class="text-slate-400 leading-relaxed">自定义题型、数量和模式，更有错题重练机制，让你专注于真正需要提升的部分。</p>
+                </div>
+                <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                       <span class="iconify text-4xl text-cyan-400" data-icon="mdi:chart-line"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">即时反馈</h4>
+                    <p class="text-slate-400 leading-relaxed">答题后立即获得包含解析的详细反馈，实时统计正确率与进度，全面掌握学习状态。</p>
+                </div>
+                 <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                        <span class="iconify text-4xl text-cyan-400" data-icon="mdi:compass-off-outline"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">极简专注</h4>
+                    <p class="text-slate-400 leading-relaxed">无广告、无干扰的纯净学习环境。极速加载，无需等待，让你随时随地进入心流状态。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24 reveal">
+        <div class="container mx-auto px-6">
+             <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">工作流程</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    三步开启你的高效备考之旅。
+                </p>
+            </div>
+            <div class="relative max-w-5xl mx-auto">
+                <div class="absolute top-12 left-0 w-full h-0.5 bg-slate-700 hidden md:block" aria-hidden="true"></div>
+                <div class="grid md:grid-cols-3 gap-12 relative">
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full bg-slate-800 border-2 border-cyan-500/30 flex items-center justify-center mx-auto mb-4 relative z-10">
+                             <span class="iconify text-4xl text-cyan-400" data-icon="mdi:bookshelf"></span>
+                        </div>
+                        <h4 class="text-2xl font-semibold text-white mb-2">1. 选择题库</h4>
+                        <p class="text-slate-400">从丰富的题库中心选择你的目标学科。</p>
+                    </div>
+                    <div class="text-center">
+                         <div class="w-24 h-24 rounded-full bg-slate-800 border-2 border-cyan-500/30 flex items-center justify-center mx-auto mb-4 relative z-10">
+                             <span class="iconify text-4xl text-cyan-400" data-icon="mdi:tune-variant"></span>
+                        </div>
+                        <h4 class="text-2xl font-semibold text-white mb-2">2. 配置练习</h4>
+                        <p class="text-slate-400">自由组合题型、数量和练习模式。</p>
+                    </div>
+                    <div class="text-center">
+                         <div class="w-24 h-24 rounded-full bg-slate-800 border-2 border-cyan-500/30 flex items-center justify-center mx-auto mb-4 relative z-10">
+                             <span class="iconify text-4xl text-cyan-400" data-icon="mdi:school-outline"></span>
+                        </div>
+                        <h4 class="text-2xl font-semibold text-white mb-2">3. 开始学习</h4>
+                        <p class="text-slate-400">进入答题界面，利用答题卡、错题回顾等功能高效提升。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Subjects Section (Live Demo) -->
+    <section id="subjects" class="py-24 bg-slate-900/50 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">功能演示</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    选择一个题库，亲自体验平台的各项功能。
+                </p>
+            </div>
+            
+            <div id="subject-cards-container" class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- 题库卡片将由 JavaScript 动态生成 -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Developer-focused sections start here -->
+    <div class="border-t-2 border-dashed border-slate-700 my-16"></div>
+
+    <!-- Project Overview Section -->
+    <section id="project-overview" class="py-24 bg-slate-900 reveal">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
                 <h3 class="text-4xl font-bold text-white mb-4">项目概览</h3>
@@ -167,25 +284,65 @@
             </div>
         </div>
     </section>
-
-    <!-- Subjects Section (Live Demo) -->
-    <section id="subjects" class="py-24 bg-slate-900/50">
+    
+    <!-- Architecture Section -->
+    <section id="architecture" class="py-24 reveal">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold text-white mb-4">功能演示</h3>
+                <h3 class="text-4xl font-bold text-white mb-4">项目架构</h3>
                 <p class="text-xl text-slate-400 max-w-2xl mx-auto">
-                    选择一个题库，亲自体验平台的各项功能。
+                    清晰的数据流与模块化的代码结构。
                 </p>
             </div>
-            
-            <div id="subject-cards-container" class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <!-- 题库卡片将由 JavaScript 动态生成 -->
+            <div class="bg-slate-800/50 p-8 rounded-2xl max-w-4xl mx-auto border border-slate-700">
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8 text-center text-white">
+                    <div class="flex flex-col items-center architecture-node">
+                        <div class="h-20 w-20 flex items-center justify-center bg-cyan-900/50 rounded-full border-2 border-cyan-500 architecture-icon-wrapper">
+                           <span class="iconify text-4xl text-cyan-300" data-icon="mdi:database-arrow-down-outline"></span>
+                        </div>
+                        <p class="mt-2 font-semibold">数据加载器</p>
+                        <p class="text-xs text-slate-400">question-loader.js</p>
+                    </div>
+                    
+                    <span class="iconify text-4xl text-slate-500" data-icon="mdi:arrow-right-thin"></span>
+
+                    <div class="flex flex-col items-center architecture-node">
+                        <div class="h-20 w-20 flex items-center justify-center bg-cyan-900/50 rounded-full border-2 border-cyan-500 architecture-icon-wrapper">
+                           <span class="iconify text-4xl text-cyan-300" data-icon="mdi:state-machine"></span>
+                        </div>
+                        <p class="mt-2 font-semibold">状态管理器</p>
+                         <p class="text-xs text-slate-400">原生JS对象</p>
+                    </div>
+
+                    <span class="iconify text-4xl text-slate-500" data-icon="mdi:arrow-right-thin"></span>
+
+                    <div class="flex flex-col items-center architecture-node">
+                        <div class="h-20 w-20 flex items-center justify-center bg-cyan-900/50 rounded-full border-2 border-cyan-500 architecture-icon-wrapper">
+                           <span class="iconify text-4xl text-cyan-300" data-icon="mdi:gesture-tap"></span>
+                        </div>
+                        <p class="mt-2 font-semibold">用户交互</p>
+                         <p class="text-xs text-slate-400">DOM事件监听</p>
+                    </div>
+                    
+                     <span class="iconify text-4xl text-slate-500" data-icon="mdi:arrow-right-thin"></span>
+
+                    <div class="flex flex-col items-center architecture-node">
+                        <div class="h-20 w-20 flex items-center justify-center bg-cyan-900/50 rounded-full border-2 border-cyan-500 architecture-icon-wrapper">
+                           <span class="iconify text-4xl text-cyan-300" data-icon="mdi:television-classic"></span>
+                        </div>
+                        <p class="mt-2 font-semibold">UI渲染器</p>
+                        <p class="text-xs text-slate-400">DOM操作</p>
+                    </div>
+                </div>
+                 <div class="mt-8 text-center text-slate-300 max-w-3xl mx-auto">
+                   <p>应用通过一个独立的<strong class="text-white">数据加载模块</strong>异步获取题库JSON，将其解析后送入<strong class="text-white">全局状态管理器</strong>。用户的任何操作（如选择题型、答题）都会更新状态，并触发相应的<strong class="text-white">UI渲染函数</strong>，实现数据与视图的单向流动，确保了逻辑的清晰和可预测性。</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Tech Stack Section -->
-    <section id="tech-stack" class="py-24">
+    <section id="tech-stack" class="py-24 reveal">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
                 <h3 class="text-4xl font-bold text-white mb-4">技术栈与实现</h3>
@@ -213,6 +370,48 @@
                     <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="simple-icons:iconify"></span>
                     <h4 class="text-xl font-bold text-white mb-2">Iconify</h4>
                     <p class="text-slate-400">按需加载海量图标，优化性能，保持视觉一致性。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="py-24 bg-slate-900 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">未来蓝图</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    探索更多可能，让学习体验更上一层楼。
+                </p>
+            </div>
+            <div class="max-w-3xl mx-auto grid md:grid-cols-2 gap-8">
+                <div class="card p-6 rounded-lg flex items-start">
+                    <span class="iconify text-3xl text-cyan-400 mr-4 mt-1" data-icon="mdi:account-circle-outline"></span>
+                    <div>
+                        <h4 class="font-semibold text-lg text-white">用户系统</h4>
+                        <p class="text-slate-400">引入用户账户，实现跨设备同步学习进度与错题本。</p>
+                    </div>
+                </div>
+                 <div class="card p-6 rounded-lg flex items-start">
+                    <span class="iconify text-3xl text-cyan-400 mr-4 mt-1" data-icon="mdi:chart-bar"></span>
+                    <div>
+                        <h4 class="font-semibold text-lg text-white">数据可视化</h4>
+                        <p class="text-slate-400">通过图表展示学习轨迹、知识点掌握情况，提供更深入的分析报告。</p>
+                    </div>
+                </div>
+                 <div class="card p-6 rounded-lg flex items-start">
+                    <span class="iconify text-3xl text-cyan-400 mr-4 mt-1" data-icon="mdi:lightbulb-on-outline"></span>
+                    <div>
+                        <h4 class="font-semibold text-lg text-white">智能推荐</h4>
+                        <p class="text-slate-400">根据用户的答题情况，智能推荐薄弱知识点的相关题目。</p>
+                    </div>
+                </div>
+                 <div class="card p-6 rounded-lg flex items-start">
+                    <span class="iconify text-3xl text-cyan-400 mr-4 mt-1" data-icon="mdi:file-import-outline"></span>
+                    <div>
+                        <h4 class="font-semibold text-lg text-white">自定义题库</h4>
+                        <p class="text-slate-400">允许用户导入自己的题库文件，创建个性化的练习集。</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -279,6 +478,22 @@
                 });
             });
 
+            // Icon compatibility mapping
+            const faToIconify = {
+                'fas fa-calculator': 'mdi:calculator-variant-outline',
+                'fas fa-code': 'mdi:code-tags',
+                'fas fa-cogs': 'mdi:cog-outline',
+                'fas fa-book': 'mdi:book-open-page-variant-outline'
+                // Add more mappings as needed
+            };
+
+            function getIcon(iconClass) {
+                const defaultIcon = 'mdi:book-open-page-variant-outline';
+                if (!iconClass) return defaultIcon;
+                // If it's an old Font Awesome class, translate it. Otherwise, use it directly.
+                return faToIconify[iconClass] || iconClass || defaultIcon;
+            }
+
             // 动态加载题库卡片
             async function loadSubjectCards() {
                 const container = document.getElementById('subject-cards-container');
@@ -291,11 +506,12 @@
                 for (const subject of subjects) {
                     try {
                         const info = await window.questionLoader.getQuestionBankInfo(subject.id);
+                        const iconName = getIcon(subject.iconClass); // Use the compatibility function
                         const cardHtml = `
                             <a href="practice.html?bank=${subject.id}" class="card block p-8 rounded-2xl group">
                                 <div class="flex justify-between items-start mb-4">
                                     <div class="bg-slate-700/50 text-cyan-400 p-4 rounded-xl">
-                                        <span class="iconify text-3xl" data-icon="${subject.iconClass || 'mdi:book-open-page-variant-outline'}"></span>
+                                        <span class="iconify text-3xl" data-icon="${iconName}"></span>
                                     </div>
                                     ${subject.tag ? `<span class="text-xs font-semibold ${subject.tag === '热门' ? 'bg-red-500/80' : 'bg-cyan-500/80'} text-white px-3 py-1 rounded-full">${subject.tag}</span>` : ''}
                                 </div>
@@ -329,6 +545,18 @@
                     }
                 }
             }
+             // Scroll reveal animation
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            revealElements.forEach(el => revealObserver.observe(el));
             
             // 页面加载完成后执行
             document.addEventListener('DOMContentLoaded', loadSubjectCards);

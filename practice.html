@@ -140,7 +140,7 @@
                     <span class="iconify mr-2" data-icon="mdi:grid"></span>答题卡
                 </button>
                 <button id="return-to-settings-btn" class="font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
-                    <span class="iconify mr-2" data-icon="mdi:cog-outline"></span>返回设置
+                    <span class="iconify mr-2" data-icon="mdi:home"></span>返回首页
                 </button>
             </div>
         </nav>
@@ -961,7 +961,7 @@
             });
 
             answerSheetBtn.addEventListener('click', () => showListView('answer-sheet'));
-            returnToSettingsBtn.addEventListener('click', showStartScreen);
+            returnToSettingsBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
         });
     </script>
 </body>
