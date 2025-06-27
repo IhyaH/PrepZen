@@ -131,7 +131,7 @@ class QuestionLoader {
                 name: '智能电网',
                 description: '智能电网题库',
                 file: 'zndw-questions.json',
-                iconClass: 'fas fa-lightbulb', // 假设智能电网使用灯泡图标
+                iconClass: 'fas fa-lightbulb',
                 bgColorClass: 'bg-purple-100',
                 textColorClass: 'text-purple-600'
             },
