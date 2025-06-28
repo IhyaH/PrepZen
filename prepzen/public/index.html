@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepZen - 专注高效的在线刷题平台</title>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234EFFFE'%3E%3Cpath d='M12 3L2 9l10 6 10-6L12 3Zm0 3.84L17.55 10 12 12.16 6.45 10 12 6.84Z'/%3E%3Cpath d='M5 14.5v-2h14v2h-14Z'/%3E%3Cpath d='M10 15v5h4v-5h-4Z'/%3E%3C/svg%3E" />
+    
+    <!-- 安全与版权元标签 -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- 版权和所有权信息 -->
+    <meta name="copyright" content="© 2025 PrepZen. All rights reserved.">
+    <meta name="author" content="IhyaH">
+    
+    <!-- 依赖库 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #0f172a; /* 深蓝灰色背景 */
+            color: #cbd5e1; /* 默认浅灰色文字 */
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .card, .tech-card {
+            background-color: rgba(30, 41, 59, 0.7); /* 半透明背景 */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.4);
+            border-color: rgba(56, 189, 248, 0.7);
+        }
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(15, 23, 42, 0.85); /* 半透明深色背景 */
+            backdrop-filter: blur(10px); /* 毛玻璃效果 */
+            border-bottom: 1px solid #334155;
+        }
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+            text-shadow: 4px 4px 0px #0c1222; /* 增加像素感的阴影 */
+            -webkit-font-smoothing: none; /* 关闭抗锯齿以保持像素感 */
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            background-image: radial-gradient(circle, rgba(29, 78, 216, 0.3) 0%, rgba(15, 23, 42, 0) 60%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        .architecture-node:hover .architecture-icon-wrapper {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        .architecture-icon-wrapper {
+             transition: all 0.3s ease;
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 8px; /* Space for the underline */
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: #38bdf8; /* cyan-400 */
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover, .nav-link.active-nav {
+            color: #38bdf8;
+        }
+        .nav-link:hover::after, .nav-link.active-nav::after {
+            width: 100%;
+        }
+        /* Scroll Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="sticky-header text-slate-200">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span class="iconify text-cyan-400 text-2xl" data-icon="streamline-pixel:school-science-graduation-cap"></span>
+                    <h1 class="text-xl font-bold pixel-font">PrepZen</h1>
+                </div>
+                <div id="main-nav" class="hidden md:flex items-center space-x-8 font-medium">
+                    <a href="#features" class="nav-link inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:star-outline"></span>核心优势</a>
+                    <a href="#how-it-works" class="nav-link inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:sitemap-outline"></span>工作流程</a>
+                    <a href="#subjects" class="nav-link inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:compass-outline"></span>功能演示</a>
+                    <a href="#project-overview" class="nav-link inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:file-document-outline"></span>项目概览</a>
+                    <a href="#architecture" class="nav-link inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:graph-outline"></span>项目架构</a>
+                    <a href="#tech-stack" class="nav-link inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:code-braces"></span>技术栈</a>
+                    <a href="#roadmap" class="nav-link inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:rocket-launch-outline"></span>未来蓝图</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden text-white py-24 sm:py-32">
+        <div class="glow-effect"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="pixel-font text-5xl md:text-6xl mb-10 text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">
+                PrepZen
+            </h2>
+            <p class="text-xl md:text-2xl mb-6 opacity-90 font-light">
+                用<span class="text-cyan-300 font-semibold">禅</span>的专注，为备考<span class="text-cyan-300 font-semibold">赋能。</span>
+                这是一个<span class="text-cyan-300 font-semibold">纯前端、轻量级</span>的在线刷题平台
+            </p>
+            <p class="text-lg md:text-xl mb-10 text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                本项目旨在演示一个完整的、无需后端服务的 Web 应用。它通过精巧的前端设计，实现了动态题库加载、多样化练习模式与即时反馈，展现了现代前端技术在构建交互式应用中的强大能力。
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#subjects" 
+                   class="btn-primary bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg inline-flex items-center justify-center">
+                   <span class="iconify mr-2 text-xl" data-icon="mdi:compass-outline"></span>
+                    功能体验
+                </a>
+                 <a href="https://github.com/IhyaH/PrepZen" target="_blank" 
+                   class="btn-primary bg-slate-700/50 hover:bg-slate-700 text-slate-100 px-8 py-4 rounded-full font-bold text-lg inline-flex items-center justify-center">
+                   <span class="iconify mr-2 text-xl" data-icon="mdi:github"></span>
+                    查看源码
+                </a>
+            </div>
+        </div>
+    </section>
+
+     <!-- Features Section -->
+    <section id="features" class="py-24 bg-slate-900 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">为高效学习而设计</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    我们相信，好的工具能让学习事半功倍。
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                        <span class="iconify text-4xl text-cyan-400" data-icon="mdi:brain"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">智能练习</h4>
+                    <p class="text-slate-400 leading-relaxed">自定义题型、数量和模式，更有错题重练机制，让你专注于真正需要提升的部分。</p>
+                </div>
+                <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                       <span class="iconify text-4xl text-cyan-400" data-icon="mdi:chart-line"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">即时反馈</h4>
+                    <p class="text-slate-400 leading-relaxed">答题后立即获得包含解析的详细反馈，实时统计正确率与进度，全面掌握学习状态。</p>
+                </div>
+                 <div class="text-center p-8">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-slate-800 border-2 border-cyan-500/30 mx-auto mb-6 shadow-inner">
+                        <span class="iconify text-4xl text-cyan-400" data-icon="mdi:compass-off-outline"></span>
+                    </div>
+                    <h4 class="text-2xl font-semibold mb-3 text-white">极简专注</h4>
+                    <p class="text-slate-400 leading-relaxed">无广告、无干扰的纯净学习环境。极速加载，无需等待，让你随时随地进入心流状态。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24 reveal">
+        <div class="container mx-auto px-6">
+             <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">工作流程</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    三步开启你的高效备考之旅。
+                </p>
+            </div>
+            <div class="relative max-w-5xl mx-auto">
+                <div class="absolute top-12 left-0 w-full h-0.5 bg-slate-700 hidden md:block" aria-hidden="true"></div>
+                <div class="grid md:grid-cols-3 gap-12 relative">
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full bg-slate-800 border-2 border-cyan-500/30 flex items-center justify-center mx-auto mb-4 relative z-10">
+                             <span class="iconify text-4xl text-cyan-400" data-icon="mdi:bookshelf"></span>
+                        </div>
+                        <h4 class="text-2xl font-semibold text-white mb-2">1. 选择题库</h4>
+                        <p class="text-slate-400">从丰富的题库中心选择你的目标学科。</p>
+                    </div>
+                    <div class="text-center">
+                         <div class="w-24 h-24 rounded-full bg-slate-800 border-2 border-cyan-500/30 flex items-center justify-center mx-auto mb-4 relative z-10">
+                             <span class="iconify text-4xl text-cyan-400" data-icon="mdi:tune-variant"></span>
+                        </div>
+                        <h4 class="text-2xl font-semibold text-white mb-2">2. 配置练习</h4>
+                        <p class="text-slate-400">自由组合题型、数量和练习模式。</p>
+                    </div>
+                    <div class="text-center">
+                         <div class="w-24 h-24 rounded-full bg-slate-800 border-2 border-cyan-500/30 flex items-center justify-center mx-auto mb-4 relative z-10">
+                             <span class="iconify text-4xl text-cyan-400" data-icon="mdi:school-outline"></span>
+                        </div>
+                        <h4 class="text-2xl font-semibold text-white mb-2">3. 开始学习</h4>
+                        <p class="text-slate-400">进入答题界面，利用答题卡、错题回顾等功能高效提升。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Subjects Section (Live Demo) -->
+    <section id="subjects" class="py-24 bg-slate-900/50 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">功能演示</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    选择一个题库，亲自体验平台的各项功能。
+                </p>
+            </div>
+            
+            <div id="subject-cards-container" class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- 题库卡片将由 JavaScript 动态生成 -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Developer-focused sections start here -->
+    <div class="border-t-2 border-dashed border-slate-700 my-16"></div>
+
+    <!-- Project Overview Section -->
+    <section id="project-overview" class="py-24 bg-slate-900 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">项目概览</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    解决特定问题，展示核心能力。
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto items-center">
+                <div class="prose prose-invert prose-lg text-slate-300">
+                    <h4>项目目标</h4>
+                    <p>核心目标是构建一个<strong class="text-cyan-400">零依赖、高性能</strong>的客户端刷题应用。它旨在解决传统刷题平台依赖服务器、加载缓慢、体验割裂的问题，证明仅通过浏览器端技术，也能实现丰富、流畅、个性化的学习体验。</p>
+                    <h4>核心挑战</h4>
+                    <ul>
+                        <li><strong>数据管理：</strong>在无后端的情况下，如何高效、安全地加载和管理不同学科的题库数据？</li>
+                        <li><strong>状态同步：</strong>如何构建一个健壮的状态管理系统，在复杂的练习流程中（如题型切换、错题重练、答题卡）保持数据的一致性？</li>
+                        <li><strong>UI/UX 设计：</strong>如何设计一个既美观又符合直觉的用户界面，让用户能够专注于学习本身？</li>
+                    </ul>
+                </div>
+                <div class="card p-8 rounded-2xl">
+                     <h4 class="text-2xl font-semibold mb-4 text-white">最终实现</h4>
+                     <p class="text-slate-400 mb-6">PrepZen 成功地应对了这些挑战，交付了一个完整的、可交互的 Web 应用。它不仅是一个实用的工具，更是我作为一名前端开发者，在架构设计、代码实现和产品思维上的一次综合展示。</p>
+                     <div class="border-t border-slate-700 pt-6 space-y-4">
+                         <div class="flex items-start">
+                            <span class="iconify text-green-400 mt-1 mr-3" data-icon="mdi:check-circle"></span>
+                            <div>
+                                <h5 class="font-semibold text-white">纯前端架构</h5>
+                                <p class="text-slate-400 text-sm">无需数据库，无服务器成本，部署简单，加载极速。</p>
+                            </div>
+                         </div>
+                         <div class="flex items-start">
+                            <span class="iconify text-green-400 mt-1 mr-3" data-icon="mdi:check-circle"></span>
+                            <div>
+                                <h5 class="font-semibold text-white">模块化设计</h5>
+                                <p class="text-slate-400 text-sm">逻辑清晰，代码解耦，易于维护和扩展新功能。</p>
+                            </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Architecture Section -->
+    <section id="architecture" class="py-24 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">项目架构</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    清晰的数据流与模块化的代码结构。
+                </p>
+            </div>
+            <div class="card p-8 rounded-2xl max-w-4xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8 text-center text-white">
+                    <div class="flex flex-col items-center architecture-node">
+                        <div class="h-20 w-20 flex items-center justify-center bg-cyan-900/50 rounded-full border-2 border-cyan-500 architecture-icon-wrapper">
+                           <span class="iconify text-4xl text-cyan-300" data-icon="mdi:database-arrow-down-outline"></span>
+                        </div>
+                        <p class="mt-2 font-semibold">数据加载器</p>
+                        <p class="text-xs text-slate-400">question-loader.js</p>
+                    </div>
+                    
+                    <span class="iconify text-4xl text-slate-500" data-icon="mdi:arrow-right-thin"></span>
+
+                    <div class="flex flex-col items-center architecture-node">
+                        <div class="h-20 w-20 flex items-center justify-center bg-cyan-900/50 rounded-full border-2 border-cyan-500 architecture-icon-wrapper">
+                           <span class="iconify text-4xl text-cyan-300" data-icon="mdi:state-machine"></span>
+                        </div>
+                        <p class="mt-2 font-semibold">状态管理器</p>
+                         <p class="text-xs text-slate-400">原生JS对象</p>
+                    </div>
+
+                    <span class="iconify text-4xl text-slate-500" data-icon="mdi:arrow-right-thin"></span>
+
+                    <div class="flex flex-col items-center architecture-node">
+                        <div class="h-20 w-20 flex items-center justify-center bg-cyan-900/50 rounded-full border-2 border-cyan-500 architecture-icon-wrapper">
+                           <span class="iconify text-4xl text-cyan-300" data-icon="mdi:gesture-tap"></span>
+                        </div>
+                        <p class="mt-2 font-semibold">用户交互</p>
+                         <p class="text-xs text-slate-400">DOM事件监听</p>
+                    </div>
+                    
+                     <span class="iconify text-4xl text-slate-500" data-icon="mdi:arrow-right-thin"></span>
+
+                    <div class="flex flex-col items-center architecture-node">
+                        <div class="h-20 w-20 flex items-center justify-center bg-cyan-900/50 rounded-full border-2 border-cyan-500 architecture-icon-wrapper">
+                           <span class="iconify text-4xl text-cyan-300" data-icon="mdi:television-classic"></span>
+                        </div>
+                        <p class="mt-2 font-semibold">UI渲染器</p>
+                        <p class="text-xs text-slate-400">DOM操作</p>
+                    </div>
+                </div>
+                 <div class="mt-8 text-center text-slate-300 max-w-3xl mx-auto">
+                   <p>应用通过一个独立的<strong class="text-white">数据加载模块</strong>异步获取题库JSON，将其解析后送入<strong class="text-white">全局状态管理器</strong>。用户的任何操作（如选择题型、答题）都会更新状态，并触发相应的<strong class="text-white">UI渲染函数</strong>，实现数据与视图的单向流动，确保了逻辑的清晰和可预测性。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="tech-stack" class="py-24 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">技术栈与实现</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    现代、高效、可靠的技术选型。
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <div class="tech-card p-6 rounded-lg">
+                    <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="logos:html-5"></span>
+                    <h4 class="text-xl font-bold text-white mb-2">HTML5</h4>
+                    <p class="text-slate-400">采用语义化标签构建清晰、无障碍的页面结构。</p>
+                </div>
+                <div class="tech-card p-6 rounded-lg">
+                    <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="logos:tailwindcss-icon"></span>
+                    <h4 class="text-xl font-bold text-white mb-2">Tailwind CSS</h4>
+                    <p class="text-slate-400">以原子化 CSS 的方式，快速构建响应式、可定制化的用户界面。</p>
+                </div>
+                <div class="tech-card p-6 rounded-lg">
+                    <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="logos:javascript"></span>
+                    <h4 class="text-xl font-bold text-white mb-2">原生 JavaScript (ES6+)</h4>
+                    <p class="text-slate-400">无框架依赖，通过模块化和现代 JS 特性，实现所有核心逻辑。</p>
+                </div>
+                <div class="tech-card p-6 rounded-lg">
+                    <span class="iconify text-5xl text-cyan-400 mb-4" data-icon="simple-icons:iconify"></span>
+                    <h4 class="text-xl font-bold text-white mb-2">Iconify</h4>
+                    <p class="text-slate-400">按需加载海量图标，优化性能，保持视觉一致性。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="py-24 bg-slate-900 reveal">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">未来蓝图</h3>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    探索更多可能，让学习体验更上一层楼。
+                </p>
+            </div>
+            <div class="max-w-3xl mx-auto grid md:grid-cols-2 gap-8">
+                <div class="card p-6 rounded-lg flex items-start">
+                    <span class="iconify text-3xl text-cyan-400 mr-4 mt-1" data-icon="mdi:account-circle-outline"></span>
+                    <div>
+                        <h4 class="font-semibold text-lg text-white">用户系统</h4>
+                        <p class="text-slate-400">引入用户账户，实现跨设备同步学习进度与错题本。</p>
+                    </div>
+                </div>
+                 <div class="card p-6 rounded-lg flex items-start">
+                    <span class="iconify text-3xl text-cyan-400 mr-4 mt-1" data-icon="mdi:chart-bar"></span>
+                    <div>
+                        <h4 class="font-semibold text-lg text-white">数据可视化</h4>
+                        <p class="text-slate-400">通过图表展示学习轨迹、知识点掌握情况，提供更深入的分析报告。</p>
+                    </div>
+                </div>
+                 <div class="card p-6 rounded-lg flex items-start">
+                    <span class="iconify text-3xl text-cyan-400 mr-4 mt-1" data-icon="mdi:lightbulb-on-outline"></span>
+                    <div>
+                        <h4 class="font-semibold text-lg text-white">智能推荐</h4>
+                        <p class="text-slate-400">根据用户的答题情况，智能推荐薄弱知识点的相关题目。</p>
+                    </div>
+                </div>
+                 <div class="card p-6 rounded-lg flex items-start">
+                    <span class="iconify text-3xl text-cyan-400 mr-4 mt-1" data-icon="mdi:file-import-outline"></span>
+                    <div>
+                        <h4 class="font-semibold text-lg text-white">自定义题库</h4>
+                        <p class="text-slate-400">允许用户导入自己的题库文件，创建个性化的练习集。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex justify-center items-center space-x-3 mb-4">
+                <span class="iconify text-cyan-400 text-3xl" data-icon="streamline-pixel:school-science-graduation-cap"></span>
+                <h4 class="text-xl font-bold text-white">PrepZen</h4>
+            </div>
+            <p class="max-w-lg mx-auto mb-8">
+                专注学习，成就未来。
+            </p>
+            <div class="flex justify-center items-center space-x-6 mb-8">
+                <a href="#subjects" class="hover:text-cyan-400 transition-colors inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:bookshelf"></span>题库</a>
+                <a href="#features" class="hover:text-cyan-400 transition-colors inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:star-outline"></span>功能</a>
+                <a href="mailto:ihyah@foxmail.com" class="hover:text-cyan-400 transition-colors inline-flex items-center"><span class="iconify mr-2" data-icon="mdi:email-outline"></span>联系我们</a>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-slate-500">
+                <p>&copy; <span id="current-year"></span> PrepZen. All Rights Reserved.</p>
+                <a href="https://github.com/IhyaH" target="_blank" class="hover:text-cyan-400 transition-colors inline-flex items-center mt-2">
+                    <span class="iconify mr-1" data-icon="mdi:github"></span> GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 引入题目加载器 -->
+    <script src="./data/question-loader.js"></script>
+    
+    <script>
+        // --- 核心功能脚本 ---
+        (function() {
+            'use strict';
+            
+            // 禁用右键菜单
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            
+            // 禁用部分开发者工具快捷键
+            document.addEventListener('keydown', e => {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                }
+            });
+            
+            // 打印友好的控制台警告信息
+            if (window.console) {
+                console.log('%c PrepZen %c 学习使我快乐 ', 'background:#0e7490;color:#fff;padding:5px 10px;border-radius:3px 0 0 3px;', 'background:#0f172a;color:#fff;padding:5px 10px;border-radius:0 3px 3px 0;');
+            }
+            
+            // 设置页脚年份
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // 平滑滚动与导航高亮
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            const sections = Array.from(navLinks).map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-50% 0px -50% 0px',
+                threshold: 0
+            };
+
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active-nav');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active-nav');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                if (section) sectionObserver.observe(section);
+            });
+            
+            // Icon compatibility mapping
+            const faToIconify = {
+                'fas fa-calculator': 'mdi:calculator-variant-outline',
+                'fas fa-code': 'mdi:code-tags',
+                'fas fa-cogs': 'mdi:cog-outline',
+                'fas fa-book': 'mdi:book-open-page-variant-outline',
+                'fas fa-bolt': 'mdi:flash', // 为继电保护添加闪电图标映射
+                'fas fa-lightbulb': 'mdi:lightbulb-on-outline' // 为智能电网添加灯泡图标映射
+                // Add more mappings as needed
+            };
+
+            function getIcon(iconClass) {
+                const defaultIcon = 'mdi:book-open-page-variant-outline';
+                if (!iconClass) return defaultIcon;
+                // If it's an old Font Awesome class, translate it. Otherwise, use it directly.
+                return faToIconify[iconClass] || iconClass || defaultIcon;
+            }
+
+            // 动态加载题库卡片
+            async function loadSubjectCards() {
+                const container = document.getElementById('subject-cards-container');
+                if (!container || !window.questionLoader) {
+                    console.error("无法找到容器或 questionLoader");
+                    return;
+                }
+                const subjects = window.questionLoader.getAvailableSubjects();
+
+                for (const subject of subjects) {
+                    try {
+                        const info = await window.questionLoader.getQuestionBankInfo(subject.id);
+                        const iconName = getIcon(subject.iconClass); // Use the compatibility function
+                        const cardHtml = `
+                            <a href="practice.html?bank=${subject.id}" class="card block p-8 rounded-2xl group">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="bg-slate-700/50 text-cyan-400 p-4 rounded-xl">
+                                        <span class="iconify text-3xl" data-icon="${iconName}"></span>
+                                    </div>
+                                    ${subject.tag ? `<span class="text-xs font-semibold ${subject.tag === '热门' ? 'bg-red-500/80' : 'bg-cyan-500/80'} text-white px-3 py-1 rounded-full">${subject.tag}</span>` : ''}
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-white mb-2">${subject.name}</h4>
+                                    <p class="text-slate-400">${info.questionCount} 道专业题目</p>
+                                </div>
+                                <p class="text-slate-300 my-6 text-base leading-relaxed">${subject.description}</p>
+                                <span class="font-semibold text-cyan-400 group-hover:text-white transition-colors flex items-center">
+                                    进入练习 <span class="iconify ml-2 transition-transform duration-300 group-hover:translate-x-1" data-icon="mdi:arrow-right"></span>
+                                </span>
+                            </a>
+                        `;
+                        container.insertAdjacentHTML('beforeend', cardHtml);
+                    } catch (error) {
+                        console.error(`加载题库 ${subject.id} 信息失败:`, error);
+                        const errorCardHtml = `
+                            <div class="card bg-red-900/50 p-8 rounded-2xl border border-red-500/50 text-red-300">
+                                <div class="flex items-center mb-4">
+                                     <div class="bg-red-500/20 p-3 rounded-xl mr-5">
+                                        <span class="iconify text-red-400 text-3xl" data-icon="mdi:alert-circle-outline"></span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-semibold text-red-200">加载失败: ${subject.name}</h4>
+                                        <p class="text-sm">无法加载此题库信息。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', errorCardHtml);
+                    }
+                }
+            }
+             // Scroll reveal animation
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            revealElements.forEach(el => revealObserver.observe(el));
+            
+            // 页面加载完成后执行
+            document.addEventListener('DOMContentLoaded', loadSubjectCards);
+        })();
+    </script>
+</body>
+</html>
