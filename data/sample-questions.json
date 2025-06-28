@@ -13,8 +13,8 @@
   "description": "这是一个示例题库，用于测试题库选择功能",
   "version": "1.0.0",
   "lastUpdated": "2024-12-24",
-  "password": "123",
-  "passwordHint": "示例密码：123",
+  "password": "123456",
+  "passwordHint": "示例密码：123456",
   "questions": [
     {
       "type": "单选题",
