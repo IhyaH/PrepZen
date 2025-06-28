@@ -131,6 +131,8 @@
         /* 源代码保护 */
         * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         button, input, textarea, select, a { pointer-events: auto; }
+        /* 允许输入框文本选择 */
+        input, textarea { -webkit-user-select: text !important; user-select: text !important; }
         ::selection { background: transparent; }
         ::-moz-selection { background: transparent; }
         img { pointer-events: none; }
