@@ -496,8 +496,11 @@
                     <div class="text-lg font-medium text-white mb-4">${q.question.replace(/\uff08\s*\uff09/g, '(____)')}</div>
                     ${q.options ? `<div class="options-container space-y-2 mb-4">${optionsHtml}</div>` : ''}
                     ${answerHtmlBlock}`;
-                
                 listViewQuestions.appendChild(item);
+                // 手动渲染mermaid图表
+                setTimeout(() => {
+                    mermaid.init(undefined, item.querySelectorAll('.mermaid'));
+                }, 0);
             });
         }
 
@@ -664,6 +667,8 @@
             if(!isSkipped){
                 const explanationHtml = `<div class="mt-4 p-4 bg-slate-800 border border-slate-700 rounded-lg"><p class="text-green-300 font-semibold">正确答案：${correct.join(', ')}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> ${q.explanation.replace(/\n/g, '<br>')}</p>` : ''}${q.mindmap ? `<div class="mermaid mt-4 p-4 bg-slate-800 rounded-lg text-white">${q.mindmap}</div>` : ''}</div>`;
                 optionsContainerEl.insertAdjacentHTML('beforeend', explanationHtml);
+                // 手动渲染mermaid图表
+                mermaid.init(undefined, optionsContainerEl.querySelectorAll('.mermaid'));
             }
             
             updateStats();
@@ -702,8 +707,12 @@
             
             wrongQuestionsListEl.innerHTML = wrongAnswers.length > 0 ? '<h3 class="text-xl font-bold mb-4 text-center text-white">错题回顾</h3>' : '';
             wrongAnswers.forEach((q, index) => {
-                wrongQuestionsListEl.innerHTML += `<div class="card p-4 mb-4"><p class="font-semibold text-white">${index + 1}. ${q.question}</p><p class="text-green-300 mt-2">答案: ${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> <span class="explanation-text">${q.explanation.replace(/\n/g, '<br>')}</span></p>` : ''}${q.mindmap ? `<div class="mermaid mt-4 p-4 bg-slate-800 rounded-lg text-white">${q.mindmap}</div>` : ''}</p></div>`;
+                wrongQuestionsListEl.innerHTML += `<div class="card p-4 mb-4"><p class="font-semibold text-white">${index + 1}. ${q.question}</p><p class="text-green-300 mt-2">答案: ${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> <span class="explanation-text">${q.explanation.replace(/\n/g, '<br>')}</span></p>` : ''}${q.mindmap ? `<div class="mermaid mt-4 p-4 bg-slate-800 rounded-lg text-white">${q.mindmap}</div>` : ''}</div>`;
             });
+            // 手动渲染错题回顾区域的mermaid图表
+            setTimeout(() => {
+                mermaid.init(undefined, wrongQuestionsListEl.querySelectorAll('.mermaid'));
+            }, 0);
             wrongQuestionsListEl.classList.toggle('hidden', wrongAnswers.length === 0);
         }
 
