@@ -20,6 +20,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
     
     <style>
         body {
@@ -34,7 +36,7 @@
             -webkit-font-smoothing: none; /* 关闭抗锯齿以保持像素感 */
             -moz-osx-font-smoothing: grayscale;
         }
-        /* 交互动效 */
+        /* 交動效果 */
         .btn-hover { transition: all 0.3s ease; }
         .btn-hover:hover {
             transform: scale(1.05);
@@ -484,6 +486,7 @@
                         <div class="answer-explanation mt-4 p-4 bg-green-900/30 border border-green-500/30 rounded-lg">
                             <p class="text-green-300 font-semibold">正确答案：<span class="correct-answer-text">${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</span></p>
                             ${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> <span class="explanation-text">${q.explanation.replace(/\n/g, '<br>')}</span></p>` : ''}
+                            ${q.mindmap ? `<div class="mermaid mt-4 p-4 bg-slate-800 rounded-lg text-white">${q.mindmap}</div>` : ''}
                         </div>`;
                     }
                 }
@@ -659,7 +662,7 @@
             }
             
             if(!isSkipped){
-                const explanationHtml = `<div class="mt-4 p-4 bg-slate-800 border border-slate-700 rounded-lg"><p class="text-green-300 font-semibold">正确答案：${correct.join(', ')}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> ${q.explanation.replace(/\n/g, '<br>')}</p>` : ''}</div>`;
+                const explanationHtml = `<div class="mt-4 p-4 bg-slate-800 border border-slate-700 rounded-lg"><p class="text-green-300 font-semibold">正确答案：${correct.join(', ')}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> ${q.explanation.replace(/\n/g, '<br>')}</p>` : ''}${q.mindmap ? `<div class="mermaid mt-4 p-4 bg-slate-800 rounded-lg text-white">${q.mindmap}</div>` : ''}</div>`;
                 optionsContainerEl.insertAdjacentHTML('beforeend', explanationHtml);
             }
             
@@ -699,7 +702,7 @@
             
             wrongQuestionsListEl.innerHTML = wrongAnswers.length > 0 ? '<h3 class="text-xl font-bold mb-4 text-center text-white">错题回顾</h3>' : '';
             wrongAnswers.forEach((q, index) => {
-                wrongQuestionsListEl.innerHTML += `<div class="card p-4 mb-4"><p class="font-semibold text-white">${index + 1}. ${q.question}</p><p class="text-green-300 mt-2">答案: ${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</p>${q.explanation ? `<p class="text-slate-300 mt-2">解析: ${q.explanation}</p>` : ''}</div>`;
+                wrongQuestionsListEl.innerHTML += `<div class="card p-4 mb-4"><p class="font-semibold text-white">${index + 1}. ${q.question}</p><p class="text-green-300 mt-2">答案: ${Array.isArray(q.answer) ? q.answer.join(', ') : q.answer}</p>${q.explanation ? `<p class="text-slate-300 mt-2"><strong>解析:</strong> <span class="explanation-text">${q.explanation.replace(/\n/g, '<br>')}</span></p>` : ''}${q.mindmap ? `<div class="mermaid mt-4 p-4 bg-slate-800 rounded-lg text-white">${q.mindmap}</div>` : ''}</p></div>`;
             });
             wrongQuestionsListEl.classList.toggle('hidden', wrongAnswers.length === 0);
         }
@@ -764,7 +767,7 @@
                  const addButton = (type, count, icon) => {
                     const btn = document.createElement('button');
                     btn.dataset.type = type;
-                    btn.className = `type-btn ${selectedQuestionTypes.includes(type) ? 'active-btn' : 'bg-slate-700'} text-slate-200 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
+                    btn.className = `type-btn ${selectedQuestionTypes.includes(type) ? 'active-btn' : 'bg-slate-800'} text-slate-200 font-semibold py-2 px-4 rounded-full inline-flex items-center`;
                     btn.innerHTML = `<span class="iconify mr-2" data-icon="${icon}"></span>${type === 'all' ? '全部题型' : type} <span class="bg-slate-800/50 text-xs px-1.5 py-0.5 rounded-full ml-1">${count}</span>`;
                     container.appendChild(btn);
                 };
