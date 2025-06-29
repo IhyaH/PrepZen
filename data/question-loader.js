@@ -135,6 +135,15 @@ class QuestionLoader {
                 bgColorClass: 'bg-purple-100',
                 textColorClass: 'text-purple-600'
             },
+            {
+                id: 'dianli-falv',
+                name: '电力法律法规',
+                description: '电力法律法规知识题库',
+                file: 'dianli-falv-questions.json',
+                iconClass: 'fas fa-gavel',
+                bgColorClass: 'bg-red-100',
+                textColorClass: 'text-red-600'
+            }
 // 可以在这里添加更多科目
         ];
     }
