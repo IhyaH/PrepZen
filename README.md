@@ -4,7 +4,9 @@
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white" alt="Cloudflare Workers">
 </div>
 
 <div align="center">
@@ -15,14 +17,15 @@
 
 ## ✨ 项目简介
 
-PrepZen 是一个专为大学生设计的在线刷题系统，采用现代化的前端技术栈，提供流畅的学习体验。系统支持多种题型、实时统计、错题回顾等功能，帮助学生高效备考。
+PrepZen 是一个专为大学生设计的全栈在线刷题系统，采用现代化的技术栈，提供从题库管理到在线练习的完整解决方案。系统支持多种题型、实时统计、错题回顾等功能，帮助学生高效备考。
 
 ## 🚀 功能特色
 
-### 📚 多样化题库
-- **工程概预算专业题库**：644道精选题目，涵盖工程造价核心知识
-- **示例题库**：演示系统功能的多领域题目
+### 📚 多样化题库管理
+- **题库管理脚本**：Python脚本支持题库的添加和更新
+- **多领域题库**：包含工程概预算、电力法律等专业题库
 - **可扩展设计**：支持轻松添加新的题库
+- **数据统计**：自动更新题目统计信息
 
 ### 🎯 智能答题体验
 - **多种题型**：单选题、多选题、判断题
@@ -30,45 +33,59 @@ PrepZen 是一个专为大学生设计的在线刷题系统，采用现代化的
 - **题型筛选**：按需选择特定题型练习
 - **实时反馈**：即时显示答题结果
 
-### 📊 学习数据统计
-- **实时进度**：动态显示答题进度条
-- **正确率统计**：实时计算答题准确率
-- **成绩分析**：详细的答题结果报告
+### 📊 学习辅助工具
+- **思维导图生成**：自动生成知识体系思维导图
+- **学习数据统计**：实时计算答题准确率
 - **错题回顾**：智能收集错题，支持重复练习
+- **答题报告**：生成详细的答题结果分析
 
-### 💻 现代化界面
-- **响应式设计**：完美适配手机、平板、电脑
-- **美观UI**：基于 Tailwind CSS 的现代化界面
-- **流畅交互**：优化的用户体验和动画效果
-- **无障碍访问**：良好的可访问性设计
+### 🚀 部署与扩展
+- **Cloudflare Workers**：支持无服务器部署
+- **现代化前端**：基于Tailwind CSS的响应式界面
+- **模块化架构**：易于功能扩展和维护
 
 ## 🛠️ 技术栈
 
-- **前端框架**：原生 HTML5 + CSS3 + JavaScript
+- **前端**：HTML5 + CSS3 + JavaScript
 - **样式框架**：Tailwind CSS
+- **后端脚本**：Python 3
+- **部署平台**：Cloudflare Workers
+- **数据格式**：JSON
 - **图标库**：Font Awesome
 - **字体**：Google Fonts (Noto Sans SC)
-- **数据格式**：JSON
-- **架构模式**：模块化设计
 
-## 📁 项目结构
+## 📁 项目结构（更新版）
 
 ```
 PrepZen/
-├── index.html                          # 项目首页
-├── Interactive-Practice-for-Engineering-Estimation-and-Budgeting.html  # 答题系统主页面
-├── README.md                            # 项目说明文档
 ├── .gitattributes                       # Git 属性配置
-└── data/                                # 数据目录
-    ├── question-loader.js               # 题目数据加载器
-    ├── engineering-budget-questions.json # 工程概预算题库
-    └── sample-questions.json            # 示例题库
+├── README.md                            # 项目说明文档
+├── PrepZen.zip                          # 项目压缩包
+└── prepzen/                             # 项目主目录
+    ├── add_question_bank.py             # 题库添加脚本
+    ├── generate_mindmaps.py             # 思维导图生成脚本
+    ├── update_question_stats.py         # 题目统计更新脚本
+    ├── package-lock.json                # npm 依赖锁文件
+    ├── package.json                     # npm 项目配置
+    ├── wrangler.jsonc                   # Cloudflare Workers配置
+    └── public/                          # 前端资源
+        ├── index.html                   # 项目首页
+        ├── practice.html                # 答题页面
+        ├── project-architecture.html    # 项目架构图
+        ├── protect.js                   # 保护脚本
+        └── data/                        # 题库数据
+            ├── question-loader.js       # 题目加载器
+            ├── dianli-falv-questions.json      # 电力法律题库
+            ├── engineering-budget-questions.json # 工程概预算题库
+            ├── jdbh-questions.json              # 机电保护题库
+            ├── sample-questions.json            # 示例题库
+            └── zndw-questions.json              # 智能电网题库
 ```
 
-## 🚀 快速开始
+## 🚀 快速开始（更新版）
 
 ### 在线体验
-1. 访问项目首页：`index.html`
+1. 访问项目首页：[index.html](prepzen/public/index.html)
 2. 点击「开始刷题」按钮
 3. 选择题库、题型和题目数量
 4. 开始答题练习
@@ -80,37 +97,58 @@ PrepZen/
    cd PrepZen
    ```
 
-2. **启动服务**
+2. **安装依赖**
    ```bash
-   # 使用 Python 启动本地服务器
-   python -m http.server 8000
-   
-   # 或使用 Node.js
-   npx serve .
+   cd prepzen
+   npm install
    ```
 
-3. **访问应用**
-   - 打开浏览器访问 `http://localhost:8000`
-   - 或直接双击 `index.html` 文件
+3. **启动服务**
+   ```bash
+   # 使用 Node.js
+   npx serve .
+
+   # 或使用 Python
+   python -m http.server 8000
+   ```
+
+4. **访问应用**
+   - 打开浏览器访问 `http://localhost:3000` (Node.js) 或 `http://localhost:8000` (Python)
+   - 或直接双击 `public/index.html` 文件
+
+### Cloudflare Workers 部署
+1. 安装 [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/)
+2. 配置wrangler.jsonc
+3. 部署到Cloudflare
+   ```bash
+   cd prepzen
+   wrangler deploy
+   ```
 
 ## 📖 使用指南
 
-### 基本操作
-1. **选择题库**：在首页选择想要练习的题库
-2. **配置练习**：选择题型（单选/多选/判断/全部）和题目数量
-3. **开始答题**：点击选项进行答题，点击「确认答案」提交
-4. **查看结果**：实时查看正确率和答题进度
-5. **错题回顾**：练习结束后可重新练习错题
+### 题库管理
+1. **添加新题库**：
+   ```bash
+   python add_question_bank.py 新题库名称
+   ```
+2. **更新统计信息**：
+   ```bash
+   python update_question_stats.py
+   ```
+3. **生成思维导图**：
+   ```bash
+   python generate_mindmaps.py
+   ```
 
-### 高级功能
-- **自定义题库**：在 `data/` 目录添加新的 JSON 题库文件
-- **题目格式**：参考现有题库的 JSON 格式添加题目
-- **样式定制**：修改 CSS 样式实现个性化界面
+### 前端开发
+1. **修改样式**：编辑 `public/` 目录下的CSS文件
+2. **添加功能**：修改 `public/` 目录下的JavaScript文件
+3. **添加页面**：在 `public/` 目录创建新的HTML文件
 
 ## 📝 题库格式
 
 题库采用标准 JSON 格式：
-
 ```json
 {
   "subject": "科目名称",
@@ -129,12 +167,6 @@ PrepZen/
       "question": "题目内容",
       "options": ["选项A", "选项B", "选项C", "选项D"],
       "answer": ["A", "C"]
-    },
-    {
-      "type": "判断题",
-      "question": "题目内容",
-      "options": ["正确", "错误"],
-      "answer": "正确"
     }
   ]
 }
@@ -143,33 +175,33 @@ PrepZen/
 ## 🔧 自定义开发
 
 ### 添加新题库
-1. 在 `data/` 目录创建新的 JSON 文件
+1. 在 `prepzen/public/data/` 目录创建新的 JSON 文件
 2. 按照标准格式添加题目数据
 3. 在 `question-loader.js` 中注册新题库
-4. 更新界面中的题库选择器
+4. 运行题库添加脚本：`python add_question_bank.py 新题库名称`
 
 ### 扩展功能
 - **新题型支持**：在答题逻辑中添加新的题型处理
-- **数据统计**：扩展学习数据的统计和分析功能
 - **用户系统**：添加用户注册、登录和学习记录功能
-- **社交功能**：添加题目分享、讨论等社交元素
+- **API扩展**：创建REST API支持移动端访问
+- **数据分析**：添加学习行为分析功能
 
 ## 🎯 适用场景
 
-- **期末复习**：课程知识点巩固练习
-- **资格考试**：专业资格认证备考
-- **知识检测**：学习效果自我评估
-- **教学辅助**：教师课堂练习和作业布置
-- **团队学习**：小组学习和知识竞赛
+- **期末考试**：课程知识点强化练习
+- **资格认证**：专业资格考试备考
+- **教学实验**：教师课堂练习工具
+- **知识管理**：构建专业知识体系
+- **团队培训**：企业员工技能考核
 
 ## 🤝 贡献指南
 
 欢迎贡献代码、题库或提出改进建议！
 
 1. **Fork 项目**
-2. **创建功能分支** (`git checkout -b feature/AmazingFeature`)
-3. **提交更改** (`git commit -m 'Add some AmazingFeature'`)
-4. **推送分支** (`git push origin feature/AmazingFeature`)
+2. **创建功能分支** (`git checkout -b feature/NewFeature`)
+3. **提交更改** (`git commit -m 'Add NewFeature'`)
+4. **推送分支** (`git push origin feature/NewFeature`)
 5. **创建 Pull Request**
 
 ### 贡献类型
@@ -187,8 +219,9 @@ PrepZen/
 ## 🙏 致谢
 
 - [Tailwind CSS](https://tailwindcss.com/) - 现代化的 CSS 框架
-- [Font Awesome](https://fontawesome.com/) - 优秀的图标库
-- [Google Fonts](https://fonts.google.com/) - 网页字体服务
+- [Cloudflare Workers](https://workers.cloudflare.com/) - 无服务器部署平台
+- [Font Awesome](https://fontawesome.com/) - 图标库
+- [Python](https://www.python.org/) - 脚本语言
 
 ## 👨‍💻 作者信息
 
@@ -200,7 +233,6 @@ PrepZen/
 - 💬 Discussions: [GitHub Discussions](https://github.com/IhyaH/PrepZen/discussions)
 
 ---
-
 <div align="center">
   <p>⭐ 如果这个项目对你有帮助，请给它一个星标！</p>
   <p>🎓 <strong>PrepZen - 专注学习，成就未来</strong> 🎓</p>
