@@ -45,6 +45,13 @@ Thumbs.db
 *.swp
 *.swo
 
+# VS Code specific
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+.vscode/*.sqlite
+
 # PrepZen specific
 prepzen/public/data/*.json.backup
 *.zip
