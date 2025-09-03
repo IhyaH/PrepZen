@@ -3,10 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 基础SEO信息 -->
     <title>PrepZen - 在线练习</title>
+    <meta name="description" content="PrepZen在线练习平台，支持多种题型、实时统计和错题回顾。无需注册，即开即用，帮助学生高效备考和练习。">
+    <meta name="keywords" content="在线刷题,题库系统,考试准备,学习平台,练习系统,免费题库,单选题,多选题,判断题">
+    <meta name="author" content="IhyaH">
+    <link rel="canonical" href="https://prepzen.ihyah.top/practice.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://prepzen.ihyah.top/practice.html">
+    <meta property="og:title" content="PrepZen - 在线练习">
+    <meta property="og:description" content="纯前端的在线刷题平台，支持多种题型、实时统计和错题回顾。无需注册，即开即用。">
+    <meta property="og:image" content="https://prepzen.ihyah.top/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://prepzen.ihyah.top/practice.html">
+    <meta property="twitter:title" content="PrepZen - 在线练习">
+    <meta property="twitter:description" content="纯前端的在线刷题平台，支持多种题型、实时统计和错题回顾。无需注册，即开即用。">
+    <meta property="twitter:image" content="https://prepzen.ihyah.top/og-image.jpg">
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'%3E%3Cpath d='M9 2V4H5V20H19V4H15V2H9ZM7 6H17V18H7V6ZM9 8V10H15V8H9ZM9 12V14H15V12H9ZM9 16V18H13V16H9Z'/%3E%3C/svg%3E" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'%3E%3Cpath d='M9 2V4H5V20H19V4H15V2H9ZM7 6H17V18H7V6ZM9 8V10H15V8H9ZM9 12V14H15V12H9ZM9 16V18H13V16H9Z'/%3E%3C/svg%3E">
 
     <!-- 安全与版权元标签 -->
     <meta http-equiv="X-Frame-Options" content="DENY">
@@ -17,11 +38,31 @@
     
     <!-- 依赖库 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@2"></script>
+    <!-- 延迟加载Iconify以提高性能 -->
+    <script>
+        // 延迟加载Iconify图标库
+        setTimeout(() => {
+            const iconifyScript = document.createElement('script');
+            iconifyScript.src = 'https://cdn.jsdelivr.net/npm/@iconify/iconify@2';
+            iconifyScript.async = true;
+            document.head.appendChild(iconifyScript);
+        }, 100);
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+    <!-- 延迟加载Mermaid以提高性能 -->
+    <script>
+        // 延迟加载Mermaid图表库
+        setTimeout(() => {
+            const mermaidScript = document.createElement('script');
+            mermaidScript.src = 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js';
+            mermaidScript.async = true;
+            mermaidScript.onload = () => {
+                mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+            };
+            document.head.appendChild(mermaidScript);
+        }, 200);
+    </script>
     
     <style>
         body {
@@ -140,23 +181,23 @@
     </head>
 <body class="min-h-screen">
     <!-- Header -->
-    <header class="sticky-header text-slate-200">
-        <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
+    <header class="sticky-header text-slate-200" role="banner">
+        <nav class="container mx-auto px-6 py-4 flex items-center justify-between" role="navigation" aria-label="主导航">
             <div class="flex items-center space-x-2">
-                <span class="iconify text-cyan-400 text-2xl" data-icon="streamline-pixel:school-science-graduation-cap"></span>
-                <a href="index.html" class="text-xl font-bold pixel-font text-white hover:text-cyan-400 transition-colors">PrepZen</a>
+                <span class="iconify text-cyan-400 text-2xl" data-icon="streamline-pixel:school-science-graduation-cap" aria-hidden="true"></span>
+                <a href="index.html" class="text-xl font-bold pixel-font text-white hover:text-cyan-400 transition-colors" aria-label="返回首页">PrepZen</a>
             </div>
             <div class="flex items-center space-x-4">
-                <button id="answer-sheet-btn" class="hidden font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
-                    <span class="iconify mr-2" data-icon="mdi:grid"></span>答题卡
+                <button id="answer-sheet-btn" class="hidden font-medium hover:text-cyan-400 transition-colors inline-flex items-center" aria-label="查看答题卡">
+                    <span class="iconify mr-2" data-icon="mdi:grid" aria-hidden="true"></span>答题卡
                 </button>
-                <button id="return-to-settings-btn" class="font-medium hover:text-cyan-400 transition-colors inline-flex items-center">
-                    <span class="iconify mr-2" data-icon="mdi:cog-outline"></span>返回设置
+                <button id="return-to-settings-btn" class="font-medium hover:text-cyan-400 transition-colors inline-flex items-center" aria-label="返回设置">
+                    <span class="iconify mr-2" data-icon="mdi:cog-outline" aria-hidden="true"></span>返回设置
                 </button>
             </div>
         </nav>
         <!-- Quiz Progress Header -->
-        <div id="quiz-progress-header" class="hidden">
+        <div id="quiz-progress-header" class="hidden" role="region" aria-labelledby="progress-heading">
             <div id="stats-details-wrapper" class="pt-2 pb-3">
                  <div class="container mx-auto px-6">
                     <div class="flex flex-wrap justify-between items-center text-center -mx-2">
@@ -167,7 +208,7 @@
                     </div>
                 </div>
             </div>
-             <div id="progress-bar-container" class="w-full bg-slate-700/50 h-1.5 cursor-pointer">
+             <div id="progress-bar-container" class="w-full bg-slate-700/50 h-1.5 cursor-pointer" aria-label="答题进度条" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                 <div id="progress-bar" class="bg-cyan-500 h-full transition-all duration-300"></div>
             </div>
         </div>
@@ -370,6 +411,20 @@
         let isAnswerCardMode = false;
         
         // --- Functions ---
+        // 创建节流函数以提高性能
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+        
         function shuffleArray(array) {
             let newArr = [...array];
             for (let i = newArr.length - 1; i > 0; i--) {
@@ -975,9 +1030,9 @@
                 }
             });
             
-            progressBarContainer.addEventListener('click', () => {
+            progressBarContainer.addEventListener('click', throttle(() => {
                 statsDetailsWrapper.classList.toggle('collapsed');
-            });
+            }, 200));
             
             practiceModeSelector.addEventListener('click', (e) => {
                 const target = e.target.closest('.mode-btn');
