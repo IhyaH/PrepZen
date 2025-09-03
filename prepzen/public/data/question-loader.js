@@ -100,42 +100,6 @@ class QuestionLoader {
     getAvailableSubjects() {
         return [
             {
-                id: 'zndw',
-                name: '智能电网',
-                description: '智能电网题库',
-                file: 'zndw-questions.json',
-                iconClass: 'fas fa-lightbulb',
-                bgColorClass: 'bg-purple-100',
-                textColorClass: 'text-purple-600'
-            },
-            {
-                id: 'jdbh',
-                name: '继电保护',
-                description: '继电保护题库',
-                file: 'jdbh-questions.json',
-                iconClass: 'fas fa-bolt',
-                bgColorClass: 'bg-green-100',
-                textColorClass: 'text-green-600'
-            },
-            {
-                id: 'dianli-falv',
-                name: '电力法律法规',
-                description: '电力法律法规知识题库',
-                file: 'dianli-falv-questions.json',
-                iconClass: 'fas fa-gavel',
-                bgColorClass: 'bg-red-100',
-                textColorClass: 'text-red-600'
-            },
-            {
-                id: 'engineering-budget',
-                name: '工程概预算',
-                description: '工程概预算练习题库',
-                file: 'engineering-budget-questions.json',
-                iconClass: 'fas fa-calculator',
-                bgColorClass: 'bg-blue-100',
-                textColorClass: 'text-blue-600'
-            },
-            {
                 id: 'sample',
                 name: '示例题库',
                 description: '示例题库，用于测试',
@@ -144,8 +108,6 @@ class QuestionLoader {
                 bgColorClass: 'bg-orange-100',
                 textColorClass: 'text-orange-600'
             }
-
-// 可以在这里添加更多科目
         ];
     }
 
