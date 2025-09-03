@@ -17,50 +17,44 @@
 
 ## ✨ 项目简介
 
-PrepZen 是一个专为大学生设计的全栈在线刷题系统，采用现代化的技术栈，提供从题库管理到在线练习的完整解决方案。系统支持多种题型、实时统计、错题回顾等功能，帮助学生高效备考。
+PrepZen 是一个专为学生设计的现代化在线刷题系统，采用纯前端架构，提供从题库管理到在线练习的完整解决方案。系统支持多种题型、实时统计、错题回顾等功能，帮助学生高效备考。
 
-## 🚀 功能特色
+## 🚀 核心特性
 
-### 📚 多样化题库管理
-- **题库管理脚本**：Python脚本支持题库的添加和更新
-- **多领域题库**：包含工程概预算、电力法律等专业题库
-- **可扩展设计**：支持轻松添加新的题库
-- **数据统计**：自动更新题目统计信息
+### 📚 灵活的题库管理
+- **多格式题库支持**：支持单选题、多选题、判断题、填空题、简答题
+- **动态题库加载**：基于JSON的题库结构，易于扩展和维护
+- **自动化统计**：Python脚本自动计算题目统计信息
+- **智能思维导图**：为简答题自动生成Mermaid知识体系图
 
-### 🎯 智能答题体验
-- **多种题型**：单选题、多选题、判断题
-- **灵活配置**：自定义题目数量（10/20/50/全部）
-- **题型筛选**：按需选择特定题型练习
-- **实时反馈**：即时显示答题结果
+### 🎯 沉浸式学习体验
+- **多样化练习模式**：顺序练习、随机练习、错题重练
+- **个性化配置**：自定义题目数量和题型筛选
+- **实时反馈系统**：即时显示答题结果和详细解析
+- **进度追踪**：实时计算答题准确率和学习进度
 
-### 📊 学习辅助工具
-- **思维导图生成**：自动生成知识体系思维导图
-- **学习数据统计**：实时计算答题准确率
-- **错题回顾**：智能收集错题，支持重复练习
-- **答题报告**：生成详细的答题结果分析
-
-### 🚀 部署与扩展
-- **Cloudflare Workers**：支持无服务器部署
-- **现代化前端**：基于Tailwind CSS的响应式界面
-- **模块化架构**：易于功能扩展和维护
+### 🛠️ 技术优势
+- **零依赖架构**：纯前端实现，无需后端服务器
+- **高性能优化**：图标和图表库延迟加载，提升页面响应速度
+- **响应式设计**：基于Tailwind CSS的现代化界面
+- **无障碍访问**：完善的语义化HTML和ARIA标签
 
 ## 🛠️ 技术栈
 
-- **前端**：HTML5 + CSS3 + JavaScript
+- **前端**：HTML5 + CSS3 + 原生 JavaScript
 - **样式框架**：Tailwind CSS
+- **图标库**：Iconify
+- **图表渲染**：Mermaid.js
 - **后端脚本**：Python 3
 - **部署平台**：Cloudflare Workers
 - **数据格式**：JSON
-- **图标库**：Font Awesome
-- **字体**：Google Fonts (Noto Sans SC)
+- **字体**：Google Fonts (Noto Sans SC, Press Start 2P)
 
-## 📁 项目结构（更新版）
+## 📁 项目结构
 
 ```
 PrepZen/
-├── .gitattributes                       # Git 属性配置
 ├── README.md                            # 项目说明文档
-├── PrepZen.zip                          # 项目压缩包
 └── prepzen/                             # 项目主目录
     ├── add_question_bank.py             # 题库添加脚本
     ├── generate_mindmaps.py             # 思维导图生成脚本
@@ -71,7 +65,6 @@ PrepZen/
     └── public/                          # 前端资源
         ├── index.html                   # 项目首页
         ├── practice.html                # 答题页面
-        ├── project-architecture.html    # 项目架构图
         ├── protect.js                   # 保护脚本
         └── data/                        # 题库数据
             ├── question-loader.js       # 题目加载器
@@ -82,11 +75,11 @@ PrepZen/
             └── zndw-questions.json              # 智能电网题库
 ```
 
-## 🚀 快速开始（更新版）
+## 🚀 快速开始
 
 ### 在线体验
 1. 访问在线预览网站：[https://prepzen.ihyah.top/](https://prepzen.ihyah.top/)
-2. 点击「开始刷题」按钮
+2. 点击「功能体验」按钮
 3. 选择题库、题型和题目数量
 4. 开始答题练习
 
@@ -155,18 +148,28 @@ PrepZen/
   "description": "题库描述",
   "version": "1.0",
   "lastUpdated": "2024-12-24",
+  "questionStats": {
+    "totalQuestions": 100,
+    "questionTypesCount": {
+      "单选题": 50,
+      "多选题": 30,
+      "判断题": 20
+    }
+  },
   "questions": [
     {
       "type": "单选题",
       "question": "题目内容",
       "options": ["选项A", "选项B", "选项C", "选项D"],
-      "answer": "B"
+      "answer": "B",
+      "explanation": "题目解析"
     },
     {
       "type": "多选题",
       "question": "题目内容",
       "options": ["选项A", "选项B", "选项C", "选项D"],
-      "answer": ["A", "C"]
+      "answer": ["A", "C"],
+      "explanation": "题目解析"
     }
   ]
 }
@@ -220,7 +223,8 @@ PrepZen/
 
 - [Tailwind CSS](https://tailwindcss.com/) - 现代化的 CSS 框架
 - [Cloudflare Workers](https://workers.cloudflare.com/) - 无服务器部署平台
-- [Font Awesome](https://fontawesome.com/) - 图标库
+- [Iconify](https://iconify.design/) - 图标库
+- [Mermaid.js](https://mermaid-js.github.io/) - 图表渲染库
 - [Python](https://www.python.org/) - 脚本语言
 
 ## 👨‍💻 作者信息
