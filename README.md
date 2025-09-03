@@ -13,11 +13,6 @@
   <h3>🎓 专注高效的在线刷题平台</h3>
   <p><strong>Prep (准备) + Zen (禅)</strong></p>
   <p>寓意系统能帮助学生达到一种专注、高效的备考状态</p>
-  <p>
-    <a href="https://deploy.cloudflare.com/?url=https://github.com/IhyaH/PrepZen" target="_blank">
-      <img src="https://deploy.cloudflare.com/button" alt="Deploy to Cloudflare Workers">
-    </a>
-  </p>
 </div>
 
 ## ✨ 项目简介
