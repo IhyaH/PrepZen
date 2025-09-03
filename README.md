@@ -13,6 +13,11 @@
   <h3>🎓 专注高效的在线刷题平台</h3>
   <p><strong>Prep (准备) + Zen (禅)</strong></p>
   <p>寓意系统能帮助学生达到一种专注、高效的备考状态</p>
+  <p>
+    <a href="https://deploy.cloudflare.com/?url=https://github.com/IhyaH/PrepZen" target="_blank">
+      <img src="https://deploy.cloudflare.com/button" alt="Deploy to Cloudflare Workers">
+    </a>
+  </p>
 </div>
 
 ## ✨ 项目简介
@@ -85,7 +90,7 @@ PrepZen/
 ## 🚀 快速开始（更新版）
 
 ### 在线体验
-1. 访问项目首页：[index.html](prepzen/public/index.html)
+1. 访问在线预览网站：[https://prepzen.ihyah.top/](https://prepzen.ihyah.top/)
 2. 点击「开始刷题」按钮
 3. 选择题库、题型和题目数量
 4. 开始答题练习
