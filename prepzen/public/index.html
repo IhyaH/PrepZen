@@ -26,8 +26,8 @@
     <meta property="twitter:image" content="https://prepzen.ihyah.top/og-image.jpg">
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'%3E%3Cpath d='M9 2V4H5V20H19V4H15V2H9ZM7 6H17V18H7V6ZM9 8V10H15V8H9ZM9 12V14H15V12H9ZM9 16V18H13V16H9Z'/%3E%3C/svg%3E" />
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'%3E%3Cpath d='M9 2V4H5V20H19V4H15V2H9ZM7 6H17V18H7V6ZM9 8V10H15V8H9ZM9 12V14H15V12H9ZM9 16V18H13V16H9Z'/%3E%3C/svg%3E">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
     
     <!-- 安全与版权元标签 -->
     <meta http-equiv="X-Frame-Options" content="DENY">
@@ -295,7 +295,7 @@
     </section>
     
     <!-- Developer-focused sections start here -->
-    <div class="border-t-2 border-dashed border-slate-700 my-16"></div>
+    <hr class="border-t-2 border-dashed border-slate-700 my-16" />
 
     <!-- Project Overview Section -->
     <section id="project-overview" class="py-24 bg-slate-900 reveal">
@@ -506,16 +506,7 @@
         (function() {
             'use strict';
             
-            // 禁用右键菜单
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            
-            // 禁用部分开发者工具快捷键
-            document.addEventListener('keydown', e => {
-                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) || (e.ctrlKey && e.key === 'u')) {
-                    e.preventDefault();
-                }
-            });
-            
+                        
             // 打印友好的控制台警告信息
             if (window.console) {
                 console.log('%c PrepZen %c 学习使我快乐 ', 'background:#0e7490;color:#fff;padding:5px 10px;border-radius:3px 0 0 3px;', 'background:#0f172a;color:#fff;padding:5px 10px;border-radius:0 3px 3px 0;');
@@ -593,6 +584,18 @@
                 const container = document.getElementById('subject-cards-container');
                 if (!container || !window.questionLoader) {
                     console.error("无法找到容器或 questionLoader");
+                    // 显示用户友好的错误提示
+                    if (container) {
+                        container.innerHTML = `
+                            <div class="card bg-red-900/50 p-8 rounded-2xl border border-red-500/50 text-center">
+                                <div class="flex justify-center mb-4">
+                                    <span class="iconify text-red-400 text-4xl" data-icon="mdi:alert-circle-outline"></span>
+                                </div>
+                                <h4 class="text-xl font-semibold text-red-200 mb-2">题库加载失败</h4>
+                                <p class="text-red-300">无法加载题库列表，请检查网络连接后刷新页面重试。</p>
+                            </div>
+                        `;
+                    }
                     return;
                 }
                 
