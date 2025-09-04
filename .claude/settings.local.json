@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/C:\\Users\\17843\\Documents\\GitHub\\PrepZen\\prepzen/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

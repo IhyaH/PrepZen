@@ -6,8 +6,7 @@
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
-  <img src="https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white" alt="Cloudflare Workers">
-</div>
+  </div>
 
 <div align="center">
   <h3>🎓 专注高效的在线刷题平台</h3>
@@ -46,7 +45,7 @@ PrepZen 是一个专为学生设计的现代化在线刷题系统，采用纯前
 - **图标库**：Iconify
 - **图表渲染**：Mermaid.js
 - **后端脚本**：Python 3
-- **部署平台**：Cloudflare Workers
+- **本地服务器**：Node.js / Python
 - **数据格式**：JSON
 - **字体**：Google Fonts (Noto Sans SC, Press Start 2P)
 
@@ -61,8 +60,7 @@ PrepZen/
     ├── update_question_stats.py         # 题目统计更新脚本
     ├── package-lock.json                # npm 依赖锁文件
     ├── package.json                     # npm 项目配置
-    ├── wrangler.jsonc                   # Cloudflare Workers配置
-    └── public/                          # 前端资源
+        └── public/                          # 前端资源
         ├── index.html                   # 项目首页
         ├── practice.html                # 答题页面
         ├── protect.js                   # 保护脚本
@@ -109,14 +107,6 @@ PrepZen/
    - 打开浏览器访问 `http://localhost:3000` (Node.js) 或 `http://localhost:8000` (Python)
    - 或直接双击 `public/index.html` 文件
 
-### Cloudflare Workers 部署
-1. 安装 [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/)
-2. 配置wrangler.jsonc
-3. 部署到Cloudflare
-   ```bash
-   cd prepzen
-   wrangler deploy
-   ```
 
 ## 📖 使用指南
 
@@ -222,7 +212,7 @@ PrepZen/
 ## 🙏 致谢
 
 - [Tailwind CSS](https://tailwindcss.com/) - 现代化的 CSS 框架
-- [Cloudflare Workers](https://workers.cloudflare.com/) - 无服务器部署平台
+- [npm serve](https://www.npmjs.com/package/serve) - 简单的静态文件服务器
 - [Iconify](https://iconify.design/) - 图标库
 - [Mermaid.js](https://mermaid-js.github.io/) - 图表渲染库
 - [Python](https://www.python.org/) - 脚本语言

@@ -3,11 +3,8 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"deploy": "wrangler deploy",
-		"dev": "wrangler dev",
-		"start": "wrangler dev"
+		"start": "npx serve .",
+		"dev": "python -m http.server 8000"
 	},
-	"devDependencies": {
-		"wrangler": "^4.22.0"
-	}
+	"devDependencies": {}
 }
